@@ -6,10 +6,11 @@ following libraries:
 
 	- github.com/stretchr/testify/suite
 	- github.com/smartystreets/gunit
- */
+*/
 package suite
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -71,6 +72,10 @@ func Run(fixture interface{}, options ...option) {
 		return
 	}
 
+	if config.parallelFixture {
+		t.Parallel()
+	}
+
 	setup, hasSetup := fixture.(setupSuite)
 	if hasSetup {
 		setup.SetupSuite()
@@ -91,21 +96,27 @@ func Run(fixture interface{}, options ...option) {
 		}
 	}
 	for _, testMethodName := range testNames {
-		if config.freshFixture {
-			fixtureValue = reflect.New(fixtureType.Elem())
-		}
-
 		testMethod := fixtureValue.MethodByName(testMethodName)
-		test, isNiladic := testMethod.Interface().(func())
-		if isNiladic {
+		_, isNiladic := testMethod.Interface().(func())
+		if isNiladic { // TODO: perform this filter/check earlier (when we decide test/skip/long/focus)
 			if (strings.HasPrefix(testMethodName, "Long") || strings.HasPrefix(testMethodName, "FocusLong")) && testing.Short() {
 				t.Run(testMethodName, func(t *testing.T) {
 					t.Skip("Skipping long-running test in -test.short mode.")
 				})
 			} else {
 				t.Run(testMethodName, func(t *testing.T) {
+					if config.parallelTests {
+						t.Parallel()
+					}
+
+					fixtureValue := fixtureValue
+					if config.freshFixture {
+						fixtureValue = reflect.New(fixtureType.Elem())
+					}
 					fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
+
 					setup, hasSetup := fixtureValue.Interface().(setupTest)
+					fmt.Printf("%#v\n", setup)
 					if hasSetup {
 						setup.Setup()
 					}
@@ -115,7 +126,7 @@ func Run(fixture interface{}, options ...option) {
 						defer teardown.Teardown()
 					}
 
-					test()
+					fixtureValue.MethodByName(testMethodName).Interface().(func())()
 				})
 			}
 		}
@@ -174,7 +185,6 @@ func (Opt) SharedFixture() option {
 func (Opt) ParallelFixture() option {
 	return func(c *config) {
 		c.parallelFixture = true
-		c.freshFixture = false
 	}
 }
 
@@ -187,7 +197,7 @@ func (Opt) ParallelFixture() option {
 func (Opt) ParallelTests() option {
 	return func(c *config) {
 		c.parallelTests = true
-		c.freshFixture = false
+		c.freshFixture = true
 	}
 }
 
