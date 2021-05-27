@@ -1,3 +1,3 @@
-module testing
+module github.com/mdwhatcott/testing
 
 go 1.16
