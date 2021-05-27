@@ -1,9 +1,12 @@
-// Package suite implements an xUnit-style test
-// runner, aiming for an optimum balance between
-// simplicity and utility. It is based on the
-// following libraries:
-// - github.com/stretchr/testify/suite
-// - github.com/smartystreets/gunit
+/*
+Package suite implements an xUnit-style test
+runner, aiming for an optimum balance between
+simplicity and utility. It is based on the
+following libraries:
+
+	- github.com/stretchr/testify/suite
+	- github.com/smartystreets/gunit
+ */
 package suite
 
 import (
@@ -12,27 +15,26 @@ import (
 	"testing"
 )
 
-// Run accepts a fixture with Test* methods and
-// optional setup/teardown methods and executes
-// the suite. Fixtures must be struct types which
-// embed a *testing.T. Assuming a fixture struct
-// with test methods 'Test1' and 'Test2' execution
-// would proceed as follows:
-//
-// fixture.SetupSuite()    // if implemented
-//
-// fixture.Setup()         // if implemented
-// fixture.Test1()
-// fixture.Teardown()      // if implemented
-//
-// fixture.Setup()         // if implemented
-// fixture.Test2()
-// fixture.Teardown()      // if implemented
-//
-// fixture.TeardownSuite() // if implemented
-//
-// The methods provided by Options may be supplied
-// to this function to tweak the execution.
+/*
+Run accepts a fixture with Test* methods and
+optional setup/teardown methods and executes
+the suite. Fixtures must be struct types which
+embed a *testing.T. Assuming a fixture struct
+with test methods 'Test1' and 'Test2' execution
+would proceed as follows:
+
+	1. fixture.SetupSuite()
+	2. fixture.Setup()
+	3. fixture.Test1()
+	4. fixture.Teardown()
+	5. fixture.Setup()
+	6. fixture.Test2()
+	7. fixture.Teardown()
+	8. fixture.TeardownSuite()
+
+The methods provided by Options may be supplied
+to this function to tweak the execution.
+*/
 func Run(fixture interface{}, options ...option) {
 	config := new(config)
 	for _, option := range options {
@@ -128,12 +130,12 @@ type config struct {
 
 type option func(*config)
 
-type options struct{}
+type Opt struct{}
 
 // Options provides the sole entrypoint
 // to the option functions provided by
 // this package.
-var Options options
+var Options Opt
 
 // FreshFixture signals to Run that the
 // new instances of the provided fixture
@@ -145,7 +147,7 @@ var Options options
 // methods are always run on the provided
 // fixture instance, regardless of this
 // options having been provided.
-func (options) FreshFixture() option {
+func (Opt) FreshFixture() option {
 	return func(c *config) {
 		c.freshFixture = true
 	}
@@ -156,7 +158,7 @@ func (options) FreshFixture() option {
 // to run all test methods. This mode is
 // not compatible with ParallelFixture or
 // ParallelTests and disables them.
-func (options) SharedFixture() option {
+func (Opt) SharedFixture() option {
 	return func(c *config) {
 		c.freshFixture = false
 		c.parallelTests = false
@@ -169,7 +171,7 @@ func (options) SharedFixture() option {
 // in parallel with other go test functions.
 // This option assumes that `go test` was
 // invoked with the -parallel flag.
-func (options) ParallelFixture() option {
+func (Opt) ParallelFixture() option {
 	return func(c *config) {
 		c.parallelFixture = true
 		c.freshFixture = false
@@ -182,7 +184,7 @@ func (options) ParallelFixture() option {
 // with each other. This option assumes
 // that `go test` was invoked with the
 // -parallel flag.
-func (options) ParallelTests() option {
+func (Opt) ParallelTests() option {
 	return func(c *config) {
 		c.parallelTests = true
 		c.freshFixture = false

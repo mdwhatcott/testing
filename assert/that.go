@@ -3,45 +3,54 @@ package assert
 import "reflect"
 
 // With allows assertions as in: assert.With(t).That(actual).Equals(expected)
-func With(t T) *that {
-	return &that{t: t}
-}
-func (this *that) That(actual interface{}) *assertion {
-	return That(this.t, actual)
+func With(t testingT) *That {
+	return &That{t: t}
 }
 
-type that struct{ t T }
+// That is an intermediate type, not to be instantiated directly
+type That struct{ t testingT }
 
-// That allows assertions as in: assert.That(t, actual).Equals(expected)
-func That(t T, actual interface{}) *assertion {
-	return &assertion{T: t, actual: actual}
+// That is an intermediate method call, as in: assert.With(t).That(actual).Equals(expected)
+func (this *That) That(actual interface{}) *Assertion {
+	return &Assertion{
+		testingT: this.t,
+		actual:   actual,
+	}
 }
 
-type T interface {
+type testingT interface {
 	Helper()
 	Errorf(format string, args ...interface{})
 }
 
-type assertion struct {
-	T
+// Assertion is an intermediate type, not to be instantiated directly.
+type Assertion struct {
+	testingT
 	actual interface{}
 }
 
-func (this *assertion) IsNil() {
+// IsNil asserts that the value provided to That is nil.
+func (this *Assertion) IsNil() {
 	this.Helper()
 	if this.actual != nil && !reflect.ValueOf(this.actual).IsNil() {
 		this.Equals(nil)
 	}
 }
-func (this *assertion) IsTrue() {
+
+// IsTrue asserts that the value provided to That is true.
+func (this *Assertion) IsTrue() {
 	this.Helper()
 	this.Equals(true)
 }
-func (this *assertion) IsFalse() {
+
+// IsFalse asserts that the value provided to That is false.
+func (this *Assertion) IsFalse() {
 	this.Helper()
 	this.Equals(false)
 }
-func (this *assertion) Equals(expected interface{}) {
+
+// Equals asserts that the value provided is equal to the expected value.
+func (this *Assertion) Equals(expected interface{}) {
 	this.Helper()
 
 	if !reflect.DeepEqual(this.actual, expected) {
