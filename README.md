@@ -50,7 +50,7 @@
 	
 	FUNCTIONS
 	
-	func Run(fixture interface{}, options ...option)
+	func Run(fixture interface{}, options ...Option)
 	    Run accepts a fixture with Test* methods and optional setup/teardown methods
 	    and executes the suite. Fixtures must be struct types which embed a
 	    *testing.T. Assuming a fixture struct with test methods 'Test1' and 'Test2'
@@ -77,25 +77,40 @@
 	    Options provides the sole entrypoint to the option functions provided by
 	    this package.
 	
-	func (Opt) FreshFixture() option
+	func (Opt) FreshFixture() Option
 	    FreshFixture signals to Run that the new instances of the provided fixture
 	    are to be instantiated for each and every test case. The Setup and Teardown
 	    methods are also executed on the specifically instantiated fixtures. NOTE:
 	    the SetupSuite and TeardownSuite methods are always run on the provided
 	    fixture instance, regardless of this options having been provided.
 	
-	func (Opt) ParallelFixture() option
+	func (Opt) IntegrationTests() Option
+	    IntegrationTests is a composite option that signals to Run that the test
+	    suite should be treated as an integration test suite, avoiding parallelism
+	    and utilizing shared fixtures to allow reuse of potentially expensive
+	    resources.
+	
+	func (Opt) ParallelFixture() Option
 	    ParallelFixture signals to Run that the provided fixture instance can be
 	    executed in parallel with other go test functions. This option assumes that
 	    `go test` was invoked with the -parallel flag.
 	
-	func (Opt) ParallelTests() option
+	func (Opt) ParallelTests() Option
 	    ParallelTests signals to Run that the test methods on the provided fixture
 	    instance can be executed in parallel with each other. This option assumes
 	    that `go test` was invoked with the -parallel flag.
 	
-	func (Opt) SharedFixture() option
+	func (Opt) SharedFixture() Option
 	    SharedFixture signals to Run that the provided fixture instance is to be
 	    used to run all test methods. This mode is not compatible with
 	    ParallelFixture or ParallelTests and disables them.
+	
+	func (Opt) UnitTests() Option
+	    UnitTests is a composite option that signals to Run that the test suite can
+	    be treated as a unit-test suite by employing parallelism and fresh fixtures
+	    to maximize the chances of exposing unwanted coupling between tests.
+	
+	type Option func(*config)
+	    Option is a function that modifies a config. See Options for provided
+	    behaviors.
 	

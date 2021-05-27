@@ -36,11 +36,12 @@ would proceed as follows:
 The methods provided by Options may be supplied
 to this function to tweak the execution.
 */
-func Run(fixture interface{}, options ...option) {
+func Run(fixture interface{}, options ...Option) {
 	config := new(config)
 	for _, option := range options {
 		option(config)
 	}
+
 	fixtureValue := reflect.ValueOf(fixture)
 	fixtureType := reflect.TypeOf(fixture)
 	t := fixtureValue.Elem().FieldByName("T").Interface().(*testing.T)
@@ -95,6 +96,7 @@ func Run(fixture interface{}, options ...option) {
 			})
 		}
 	}
+
 	for _, testMethodName := range testNames {
 		testMethod := fixtureValue.MethodByName(testMethodName)
 		_, isNiladic := testMethod.Interface().(func())
@@ -139,7 +141,9 @@ type config struct {
 	parallelTests   bool
 }
 
-type option func(*config)
+// Option is a function that modifies a config.
+// See Options for provided behaviors.
+type Option func(*config)
 
 type Opt struct{}
 
@@ -158,7 +162,7 @@ var Options Opt
 // methods are always run on the provided
 // fixture instance, regardless of this
 // options having been provided.
-func (Opt) FreshFixture() option {
+func (Opt) FreshFixture() Option {
 	return func(c *config) {
 		c.freshFixture = true
 	}
@@ -169,7 +173,7 @@ func (Opt) FreshFixture() option {
 // to run all test methods. This mode is
 // not compatible with ParallelFixture or
 // ParallelTests and disables them.
-func (Opt) SharedFixture() option {
+func (Opt) SharedFixture() Option {
 	return func(c *config) {
 		c.freshFixture = false
 		c.parallelTests = false
@@ -182,7 +186,7 @@ func (Opt) SharedFixture() option {
 // in parallel with other go test functions.
 // This option assumes that `go test` was
 // invoked with the -parallel flag.
-func (Opt) ParallelFixture() option {
+func (Opt) ParallelFixture() Option {
 	return func(c *config) {
 		c.parallelFixture = true
 	}
@@ -194,7 +198,7 @@ func (Opt) ParallelFixture() option {
 // with each other. This option assumes
 // that `go test` was invoked with the
 // -parallel flag.
-func (Opt) ParallelTests() option {
+func (Opt) ParallelTests() Option {
 	return func(c *config) {
 		c.parallelTests = true
 		c.freshFixture = true
@@ -207,7 +211,7 @@ func (Opt) ParallelTests() option {
 // employing parallelism and fresh fixtures
 // to maximize the chances of exposing
 // unwanted coupling between tests.
-func (Opt) UnitTests() option {
+func (Opt) UnitTests() Option {
 	return func(c *config) {
 		Options.ParallelTests()(c)
 		Options.ParallelFixture()(c)
@@ -220,7 +224,7 @@ func (Opt) UnitTests() option {
 // treated as an integration test suite, avoiding
 // parallelism and utilizing shared fixtures to
 // allow reuse of potentially expensive resources.
-func (Opt) IntegrationTests() option {
+func (Opt) IntegrationTests() Option {
 	return func(c *config) {
 		Options.SharedFixture()(c)
 	}
