@@ -191,6 +191,31 @@ func (Opt) ParallelTests() option {
 	}
 }
 
+// UnitTests is a composite option that
+// signals to Run that the test suite can
+// be treated as a unit-test suite by
+// employing parallelism and fresh fixtures
+// to maximize the chances of exposing
+// unwanted coupling between tests.
+func (Opt) UnitTests() option {
+	return func(c *config) {
+		Options.ParallelTests()(c)
+		Options.ParallelFixture()(c)
+		Options.FreshFixture()(c)
+	}
+}
+
+// IntegrationTests is a composite option that
+// signals to Run that the test suite should be
+// treated as an integration test suite, avoiding
+// parallelism and utilizing shared fixtures to
+// allow reuse of potentially expensive resources.
+func (Opt) IntegrationTests() option {
+	return func(c *config) {
+		Options.SharedFixture()(c)
+	}
+}
+
 type (
 	setupSuite    interface{ SetupSuite() }
 	setupTest     interface{ Setup() }
