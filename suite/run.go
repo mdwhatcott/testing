@@ -10,7 +10,6 @@ following libraries:
 package suite
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -118,7 +117,6 @@ func Run(fixture interface{}, options ...Option) {
 					fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
 
 					setup, hasSetup := fixtureValue.Interface().(setupTest)
-					fmt.Printf("%#v\n", setup)
 					if hasSetup {
 						setup.Setup()
 					}
