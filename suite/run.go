@@ -105,35 +105,37 @@ func Run(fixture interface{}, options ...Option) {
 	}
 
 	for _, name := range testNames {
-		if isLongRunning(name) && testing.Short() {
-			t.Run(name, func(t *testing.T) {
-				t.Skip("Skipping long-running test in -test.short mode.")
-			})
-		} else {
-			t.Run(name, func(t *testing.T) {
-				if config.parallelTests {
-					t.Parallel()
-				}
+		func(name string) {
+			if isLongRunning(name) && testing.Short() {
+				t.Run(name, func(t *testing.T) {
+					t.Skip("Skipping long-running test in -test.short mode.")
+				})
+			} else {
+				t.Run(name, func(t *testing.T) {
+					if config.parallelTests {
+						t.Parallel()
+					}
 
-				fixtureValue := fixtureValue
-				if config.freshFixture {
-					fixtureValue = reflect.New(fixtureType.Elem())
-				}
-				fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
+					fixtureValue := fixtureValue
+					if config.freshFixture {
+						fixtureValue = reflect.New(fixtureType.Elem())
+					}
+					fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
 
-				setup, hasSetup := fixtureValue.Interface().(setupTest)
-				if hasSetup {
-					setup.Setup()
-				}
+					setup, hasSetup := fixtureValue.Interface().(setupTest)
+					if hasSetup {
+						setup.Setup()
+					}
 
-				teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
-				if hasTeardown {
-					defer teardown.Teardown()
-				}
+					teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
+					if hasTeardown {
+						defer teardown.Teardown()
+					}
 
-				fixtureValue.MethodByName(name).Call(nil)
-			})
-		}
+					fixtureValue.MethodByName(name).Call(nil)
+				})
+			}
+		}(name)
 	}
 }
 
