@@ -43,10 +43,10 @@
 	
 	Package suite implements an xUnit-style test runner, aiming for an optimum
 	balance between simplicity and utility. It is based on the following
-	libraries:
+	packages:
 	
-	    - github.com/stretchr/testify/suite
-	    - github.com/smartystreets/gunit
+	    - [github.com/stretchr/testify/suite](https://pkg.go.dev/github.com/stretchr/testify/suite)
+	    - [github.com/smartystreets/gunit](https://pkg.go.dev/github.com/smartystreets/gunit)
 	
 	FUNCTIONS
 	
