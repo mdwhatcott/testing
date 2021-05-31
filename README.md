@@ -48,6 +48,25 @@
 	    - [github.com/stretchr/testify/suite](https://pkg.go.dev/github.com/stretchr/testify/suite)
 	    - [github.com/smartystreets/gunit](https://pkg.go.dev/github.com/smartystreets/gunit)
 	
+	For those using GoLand by JetBrains, you may find the following "live
+	template" helpful:
+	
+	    func Test$NAME$Suite(t *testing.T) {
+	    	suite.Run(&$NAME$Suite{T: t}, suite.Options.UnitTests())
+	    }
+	
+	    type $NAME$Suite struct {
+	    	*testing.T
+	    }
+	
+	    func (this *$NAME$Suite) Setup() {
+	    }
+	
+	    func (this *$NAME$Suite) Test$END$() {
+	    }
+	
+	Happy testing!
+	
 	FUNCTIONS
 	
 	func Run(fixture interface{}, options ...Option)
