@@ -104,13 +104,13 @@ func Run(fixture interface{}, options ...Option) {
 		})
 	}
 
-	for _, testMethodName := range testNames {
-		if (strings.HasPrefix(testMethodName, "Long") || strings.HasPrefix(testMethodName, "FocusLong")) && testing.Short() {
-			t.Run(testMethodName, func(t *testing.T) {
+	for _, name := range testNames {
+		if isLongRunning(name) && testing.Short() {
+			t.Run(name, func(t *testing.T) {
 				t.Skip("Skipping long-running test in -test.short mode.")
 			})
 		} else {
-			t.Run(testMethodName, func(t *testing.T) {
+			t.Run(name, func(t *testing.T) {
 				if config.parallelTests {
 					t.Parallel()
 				}
@@ -131,10 +131,15 @@ func Run(fixture interface{}, options ...Option) {
 					defer teardown.Teardown()
 				}
 
-				fixtureValue.MethodByName(testMethodName).Interface().(func())()
+				fixtureValue.MethodByName(name).Call(nil)
 			})
 		}
 	}
+}
+
+func isLongRunning(name string) bool {
+	return strings.HasPrefix(name, "Long") ||
+		strings.HasPrefix(name, "FocusLong")
 }
 
 type config struct {
