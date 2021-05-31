@@ -52,6 +52,12 @@ func Run(fixture interface{}, options ...Option) {
 	)
 	for x := 0; x < fixtureType.NumMethod(); x++ {
 		name := fixtureType.Method(x).Name
+		method := fixtureValue.MethodByName(name)
+		_, isNiladic := method.Interface().(func())
+		if !isNiladic {
+			continue
+		}
+
 		if strings.HasPrefix(name, "Test") || strings.HasPrefix(name, "LongTest") {
 			testNames = append(testNames, name)
 		} else if name == "SkipNow" { // from embedded *testing.T
@@ -87,48 +93,40 @@ func Run(fixture interface{}, options ...Option) {
 	}
 
 	for _, testMethodName := range skippedTestNames {
-		testMethod := fixtureValue.MethodByName(testMethodName)
-		_, isNiladic := testMethod.Interface().(func())
-		if isNiladic {
-			t.Run(testMethodName, func(t *testing.T) {
-				t.Skip("Skipping:", testMethodName)
-			})
-		}
+		t.Run(testMethodName, func(t *testing.T) {
+			t.Skip("Skipping:", testMethodName)
+		})
 	}
 
 	for _, testMethodName := range testNames {
-		testMethod := fixtureValue.MethodByName(testMethodName)
-		_, isNiladic := testMethod.Interface().(func())
-		if isNiladic { // TODO: perform this filter/check earlier (when we decide test/skip/long/focus)
-			if (strings.HasPrefix(testMethodName, "Long") || strings.HasPrefix(testMethodName, "FocusLong")) && testing.Short() {
-				t.Run(testMethodName, func(t *testing.T) {
-					t.Skip("Skipping long-running test in -test.short mode.")
-				})
-			} else {
-				t.Run(testMethodName, func(t *testing.T) {
-					if config.parallelTests {
-						t.Parallel()
-					}
+		if (strings.HasPrefix(testMethodName, "Long") || strings.HasPrefix(testMethodName, "FocusLong")) && testing.Short() {
+			t.Run(testMethodName, func(t *testing.T) {
+				t.Skip("Skipping long-running test in -test.short mode.")
+			})
+		} else {
+			t.Run(testMethodName, func(t *testing.T) {
+				if config.parallelTests {
+					t.Parallel()
+				}
 
-					fixtureValue := fixtureValue
-					if config.freshFixture {
-						fixtureValue = reflect.New(fixtureType.Elem())
-					}
-					fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
+				fixtureValue := fixtureValue
+				if config.freshFixture {
+					fixtureValue = reflect.New(fixtureType.Elem())
+				}
+				fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
 
-					setup, hasSetup := fixtureValue.Interface().(setupTest)
-					if hasSetup {
-						setup.Setup()
-					}
+				setup, hasSetup := fixtureValue.Interface().(setupTest)
+				if hasSetup {
+					setup.Setup()
+				}
 
-					teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
-					if hasTeardown {
-						defer teardown.Teardown()
-					}
+				teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
+				if hasTeardown {
+					defer teardown.Teardown()
+				}
 
-					fixtureValue.MethodByName(testMethodName).Interface().(func())()
-				})
-			}
+				fixtureValue.MethodByName(testMethodName).Interface().(func())()
+			})
 		}
 	}
 }
