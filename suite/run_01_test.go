@@ -10,7 +10,7 @@ import (
 func TestSuiteWithSetupsAndTeardowns(t *testing.T) {
 	fixture := &Suite01{T: t}
 
-	suite.Run(fixture, suite.Options.SharedFixture())
+	suite.Run(fixture, suite.Options.IntegrationTests())
 
 	assert.With(t).That(fixture.events).Equals([]string{
 		"SetupSuite",

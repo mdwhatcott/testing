@@ -198,6 +198,7 @@ func (Opt) ParallelTests() Option {
 	return func(c *config) {
 		c.parallelTests = true
 		c.freshFixture = true
+		Options.FreshFixture()(c)
 	}
 }
 
@@ -211,7 +212,6 @@ func (Opt) UnitTests() Option {
 	return func(c *config) {
 		Options.ParallelTests()(c)
 		Options.ParallelFixture()(c)
-		Options.FreshFixture()(c)
 	}
 }
 

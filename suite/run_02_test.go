@@ -9,7 +9,7 @@ import (
 
 func TestFreshFixture(t *testing.T) {
 	fixture := &Suite02{T: t}
-	suite.Run(fixture, suite.Options.FreshFixture())
+	suite.Run(fixture, suite.Options.UnitTests())
 	assert.With(t).That(fixture.counter).Equals(0)
 }
 
