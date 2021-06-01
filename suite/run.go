@@ -117,44 +117,59 @@ func Run(fixture interface{}, options ...Option) {
 		defer teardown.TeardownSuite()
 	}
 
-	for _, testMethodName := range skippedTestNames {
-		t.Run(testMethodName, func(t *testing.T) {
-			t.Skip("Skipping:", testMethodName)
-		})
+	for _, name := range skippedTestNames {
+		testCase{t: t, name: name}.skip()
 	}
 
 	for _, name := range testNames {
-		func(name string) {
-			if isLongRunning(name) && testing.Short() {
-				t.Run(name, func(t *testing.T) {
-					t.Skip("Skipping long-running test in -test.short mode.")
-				})
-			} else {
-				t.Run(name, func(t *testing.T) {
-					if config.parallelTests {
-						t.Parallel()
-					}
+		testCase{t, name, config, fixtureType, fixtureValue}.run()
+	}
+}
 
-					fixtureValue := fixtureValue
-					if config.freshFixture {
-						fixtureValue = reflect.New(fixtureType.Elem())
-					}
-					fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
+type testCase struct {
+	t            *testing.T
+	name         string
+	config       *config
+	fixtureType  reflect.Type
+	fixtureValue reflect.Value
+}
 
-					setup, hasSetup := fixtureValue.Interface().(setupTest)
-					if hasSetup {
-						setup.Setup()
-					}
+func (this testCase) skip() {
+	this.t.Run(this.name, func(t *testing.T) {
+		t.Skip("Skipping:", this.name)
+	})
+}
 
-					teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
-					if hasTeardown {
-						defer teardown.Teardown()
-					}
-
-					fixtureValue.MethodByName(name).Call(nil)
-				})
+func (this testCase) run() {
+	if isLongRunning(this.name) && testing.Short() {
+		this.t.Run(this.name, func(t *testing.T) {
+			t.Skip("Skipping long-running test in -test.short mode.")
+		})
+	} else {
+		this.t.Run(this.name, func(t *testing.T) {
+			if this.config.parallelTests {
+				t.Parallel()
 			}
-		}(name)
+
+			fixtureValue := this.fixtureValue
+			if this.config.freshFixture {
+				fixtureValue = reflect.New(this.fixtureType.Elem())
+			}
+			fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
+
+			setup, hasSetup :=
+				fixtureValue.Interface().(setupTest)
+			if hasSetup {
+				setup.Setup()
+			}
+
+			teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
+			if hasTeardown {
+				defer teardown.Teardown()
+			}
+
+			fixtureValue.MethodByName(this.name).Call(nil)
+		})
 	}
 }
 
