@@ -3,19 +3,19 @@ package bowling
 import (
 	"testing"
 
-	"github.com/mdwhatcott/testing/assert"
+	"github.com/mdwhatcott/testing/should"
 	"github.com/mdwhatcott/testing/suite"
 )
 
 func TestGameFixture(t *testing.T) {
 	suite.Run(
-		&GameFixture{T: t},
+		&GameFixture{T: &suite.T{T: t}},
 		suite.Options.UnitTests(),
 	)
 }
 
 type GameFixture struct {
-	*testing.T
+	*suite.T
 	game *Game
 }
 
@@ -23,7 +23,8 @@ func (this *GameFixture) Setup() {
 	this.game = new(Game)
 }
 func (this *GameFixture) assertScore(expected int) {
-	assert.With(this).That(this.game.CalculateScore()).Equals(expected)
+	this.Helper()
+	this.So(this.game.CalculateScore(), should.Equal, expected)
 }
 func (this *GameFixture) rollMany(times, pins int) {
 	for x := 0; x < times; x++ {

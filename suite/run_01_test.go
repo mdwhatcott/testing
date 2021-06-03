@@ -3,16 +3,16 @@ package suite_test
 import (
 	"testing"
 
-	"github.com/mdwhatcott/testing/assert"
+	"github.com/mdwhatcott/testing/should"
 	"github.com/mdwhatcott/testing/suite"
 )
 
 func TestSuiteWithSetupsAndTeardowns(t *testing.T) {
-	fixture := &Suite01{T: t}
+	fixture := &Suite01{T: &suite.T{T: t}}
 
 	suite.Run(fixture, suite.Options.IntegrationTests())
 
-	assert.With(t).That(fixture.events).Equals([]string{
+	fixture.So(fixture.events, should.Equal, []string{
 		"SetupSuite",
 		"Setup",
 		"Test",
@@ -22,7 +22,7 @@ func TestSuiteWithSetupsAndTeardowns(t *testing.T) {
 }
 
 type Suite01 struct {
-	*testing.T
+	*suite.T
 	events []string
 }
 

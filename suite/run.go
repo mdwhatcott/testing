@@ -11,11 +11,11 @@ For those using GoLand by JetBrains, you may
 find the following "live template" helpful:
 
 	func Test$NAME$Suite(t *testing.T) {
-		suite.Run(&$NAME$Suite{T: t}, suite.Options.UnitTests())
+		suite.Run(&$NAME$Suite{T: &suite.T{T: t}}, suite.Options.UnitTests())
 	}
 
 	type $NAME$Suite struct {
-		*testing.T
+		*suite.T
 	}
 
 	func (this *$NAME$Suite) Setup() {
@@ -62,7 +62,7 @@ func Run(fixture interface{}, options ...Option) {
 
 	fixtureValue := reflect.ValueOf(fixture)
 	fixtureType := reflect.TypeOf(fixture)
-	t := fixtureValue.Elem().FieldByName("T").Interface().(*testing.T)
+	t := fixtureValue.Elem().FieldByName("T").Interface().(*T)
 
 	var (
 		testNames        []string
@@ -127,7 +127,7 @@ func Run(fixture interface{}, options ...Option) {
 }
 
 type testCase struct {
-	t            *testing.T
+	t            *T
 	name         string
 	config       *config
 	fixtureType  reflect.Type
@@ -155,7 +155,7 @@ func (this testCase) run() {
 			if this.config.freshFixture {
 				fixtureValue = reflect.New(this.fixtureType.Elem())
 			}
-			fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
+			fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(&T{T: t}))
 
 			setup, hasSetup := fixtureValue.Interface().(setupTest)
 			if hasSetup {

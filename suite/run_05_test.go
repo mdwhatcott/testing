@@ -3,23 +3,23 @@ package suite_test
 import (
 	"testing"
 
-	"github.com/mdwhatcott/testing/assert"
+	"github.com/mdwhatcott/testing/should"
 	"github.com/mdwhatcott/testing/suite"
 )
 
 func TestFocus(t *testing.T) {
 	fixture := &Suite05{
-		T:      t,
+		T:      &suite.T{T: t},
 		events: make(map[string]struct{}),
 	}
 
 	suite.Run(fixture, suite.Options.SharedFixture())
 
-	assert.With(t).That(t.Failed()).IsFalse()
+	fixture.So(t.Failed(), should.BeFalse)
 	if testing.Short() {
-		assert.With(t).That(fixture.events).Equals(map[string]struct{}{"1": {}})
+		fixture.So(fixture.events, should.Equal, map[string]struct{}{"1": {}})
 	} else {
-		assert.With(t).That(fixture.events).Equals(map[string]struct{}{
+		fixture.So(fixture.events, should.Equal, map[string]struct{}{
 			"1": {},
 			"2": {},
 		})
@@ -27,7 +27,7 @@ func TestFocus(t *testing.T) {
 }
 
 type Suite05 struct {
-	*testing.T
+	*suite.T
 	events map[string]struct{}
 }
 
@@ -38,5 +38,5 @@ func (this *Suite05) FocusLongTest2() {
 	this.events["2"] = struct{}{}
 }
 func (this *Suite05) TestThatFails() {
-	assert.With(this).That(1).Equals(2)
+	this.So(1, should.Equal, 2)
 }

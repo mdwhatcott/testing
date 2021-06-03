@@ -3,20 +3,20 @@ package suite_test
 import (
 	"testing"
 
-	"github.com/mdwhatcott/testing/assert"
+	"github.com/mdwhatcott/testing/should"
 	"github.com/mdwhatcott/testing/suite"
 )
 
 func TestSuiteWithSetupsAndTeardownsSkipped(t *testing.T) {
-	fixture := &Suite06{T: t}
+	fixture := &Suite06{T: &suite.T{T: t}}
 
 	suite.Run(fixture, suite.Options.SharedFixture())
 
-	assert.With(t).That(fixture.events).IsNil()
+	fixture.So(fixture.events, should.BeNil)
 }
 
 type Suite06 struct {
-	*testing.T
+	*suite.T
 	events []string
 }
 
