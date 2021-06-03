@@ -82,14 +82,14 @@ func Run(fixture interface{}, options ...Option) {
 		} else if strings.HasPrefix(name, "LongTest") {
 			testNames = append(testNames, name)
 
-		} else if strings.HasPrefix(name, "SkipLong") {
+		} else if strings.HasPrefix(name, "SkipLongTest") {
 			skippedTestNames = append(skippedTestNames, name)
-		} else if strings.HasPrefix(name, "Skip") {
+		} else if strings.HasPrefix(name, "SkipTest") {
 			skippedTestNames = append(skippedTestNames, name)
 
-		} else if strings.HasPrefix(name, "FocusLong") {
+		} else if strings.HasPrefix(name, "FocusLongTest") {
 			focusedTestNames = append(focusedTestNames, name)
-		} else if strings.HasPrefix(name, "Focus") {
+		} else if strings.HasPrefix(name, "FocusTest") {
 			focusedTestNames = append(focusedTestNames, name)
 		}
 	}
