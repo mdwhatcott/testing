@@ -157,8 +157,7 @@ func (this testCase) run() {
 			}
 			fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
 
-			setup, hasSetup :=
-				fixtureValue.Interface().(setupTest)
+			setup, hasSetup := fixtureValue.Interface().(setupTest)
 			if hasSetup {
 				setup.Setup()
 			}
