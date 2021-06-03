@@ -2,40 +2,16 @@
 
 
 
-	package assert // import "github.com/mdwhatcott/testing/assert"
+	package should // import "github.com/mdwhatcott/testing/should"
 	
 	
-	TYPES
+	FUNCTIONS
 	
-	type Assertion struct {
-		// Has unexported fields.
-	}
-	    Assertion is an intermediate type, not to be instantiated directly.
-	
-	func (this *Assertion) Equals(expected interface{})
-	    Equals asserts that the value provided is equal to the expected value.
-	
-	func (this *Assertion) IsFalse()
-	    IsFalse asserts that the value provided to That is false.
-	
-	func (this *Assertion) IsNil()
-	    IsNil asserts that the value provided to That is nil.
-	
-	func (this *Assertion) IsTrue()
-	    IsTrue asserts that the value provided to That is true.
-	
-	type That struct {
-		// Has unexported fields.
-	}
-	    That is an intermediate type, not to be instantiated directly
-	
-	func With(t testingT) *That
-	    With allows assertions as in: assert.With(t).That(actual).Equals(expected)
-	
-	func (this *That) That(actual interface{}) *Assertion
-	    That is an intermediate method call, as in:
-	    assert.With(t).That(actual).Equals(expected)
-	
+	func BeFalse(actual interface{}, EXPECTED ...interface{}) error
+	func BeNil(actual interface{}, EXPECTED ...interface{}) error
+	func BeTrue(actual interface{}, EXPECTED ...interface{}) error
+	func Equal(actual interface{}, EXPECTED ...interface{}) error
+	func HappenAt(ACTUAL interface{}, EXPECTED ...interface{}) error
 
 ---
 
@@ -52,11 +28,11 @@
 	template" helpful:
 	
 	    func Test$NAME$Suite(t *testing.T) {
-	    	suite.Run(&$NAME$Suite{T: t}, suite.Options.UnitTests())
+	    	suite.Run(&$NAME$Suite{T: &suite.T{T: t}}, suite.Options.UnitTests())
 	    }
 	
 	    type $NAME$Suite struct {
-	    	*testing.T
+	    	*suite.T
 	    }
 	
 	    func (this *$NAME$Suite) Setup() {
@@ -132,4 +108,10 @@
 	type Option func(*config)
 	    Option is a function that modifies a config. See Options for provided
 	    behaviors.
+	
+	type T struct{ *testing.T }
+	
+	func (this *T) So(actual interface{}, assertion assertion, expected ...interface{})
+	
+	func (this *T) Write(p []byte) (n int, err error)
 	

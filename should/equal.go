@@ -7,7 +7,9 @@ import (
 	"time"
 )
 
-func BeNil(actual interface{}, EXPECTED ...interface{}) error { // TODO: test
+func BeNil(actual interface{}, EXPECTED ...interface{}) error {
+	// TODO: test
+	// TODO: docs
 	if len(EXPECTED) > 0 {
 		return fmt.Errorf("%w: please provide 0 expected values (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}
@@ -30,7 +32,9 @@ func interfaceHasNilValue(actual interface{}) bool {
 	return nillable && value.IsNil()
 }
 
-func BeFalse(actual interface{}, EXPECTED ...interface{}) error { // TODO: test
+func BeFalse(actual interface{}, EXPECTED ...interface{}) error {
+	// TODO: test
+	// TODO: docs
 	if len(EXPECTED) > 0 {
 		return fmt.Errorf("%w: please provide 0 expected values (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}
@@ -44,7 +48,9 @@ func BeFalse(actual interface{}, EXPECTED ...interface{}) error { // TODO: test
 	return nil
 }
 
-func BeTrue(actual interface{}, EXPECTED ...interface{}) error { // TODO: test
+func BeTrue(actual interface{}, EXPECTED ...interface{}) error {
+	// TODO: test
+	// TODO: docs
 	if len(EXPECTED) > 0 {
 		return fmt.Errorf("%w: please provide 0 expected values (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}
@@ -58,7 +64,9 @@ func BeTrue(actual interface{}, EXPECTED ...interface{}) error { // TODO: test
 	return nil
 }
 
-func Equal(actual interface{}, EXPECTED ...interface{}) error { // TODO: test
+func Equal(actual interface{}, EXPECTED ...interface{}) error {
+	// TODO: test
+	// TODO: docs
 	if len(EXPECTED) != 1 {
 		return fmt.Errorf("%w: please provide a single expected value (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}
@@ -75,7 +83,9 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error { // TODO: test
 	)
 }
 
-func HappenAt(ACTUAL interface{}, EXPECTED ...interface{}) error { // TODO: test
+func HappenAt(ACTUAL interface{}, EXPECTED ...interface{}) error {
+	// TODO: test
+	// TODO: docs
 	if len(EXPECTED) != 1 {
 		return fmt.Errorf("%w: please provide a single expected value (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}

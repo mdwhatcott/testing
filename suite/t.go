@@ -2,6 +2,8 @@ package suite
 
 import "testing"
 
+// TODO: docs
+
 type T struct{ *testing.T }
 
 type assertion func(actual interface{}, expected ...interface{}) error
