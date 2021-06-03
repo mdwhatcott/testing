@@ -5,9 +5,10 @@ import (
 	"reflect"
 )
 
+// Equal verifies that the actual value is equal to the expected value.
+// It uses reflect.DeepEqual in most cases.
 func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	// TODO: test
-	// TODO: docs
 	if len(EXPECTED) != 1 {
 		return fmt.Errorf("%w: please provide a single expected value (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}

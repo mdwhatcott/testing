@@ -5,9 +5,9 @@ import (
 	"reflect"
 )
 
+// BeFalse verifies that actual is the boolean false value.
 func BeFalse(actual interface{}, EXPECTED ...interface{}) error {
 	// TODO: test
-	// TODO: docs
 	if len(EXPECTED) > 0 {
 		return fmt.Errorf("%w: please provide 0 expected values (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}

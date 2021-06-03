@@ -1,17 +1,28 @@
 # github.com/mdwhatcott/testing
 
 
-
 	package should // import "github.com/mdwhatcott/testing/should"
 	
 	
 	FUNCTIONS
 	
 	func BeFalse(actual interface{}, EXPECTED ...interface{}) error
+	    BeFalse verifies that actual is the boolean false value.
+	
 	func BeNil(actual interface{}, EXPECTED ...interface{}) error
+	    BeNil verifies that actual is the nil value.
+	
 	func BeTrue(actual interface{}, EXPECTED ...interface{}) error
+	    BeTrue verifies that actual is the boolean true value.
+	
 	func Equal(actual interface{}, EXPECTED ...interface{}) error
+	    Equal verifies that the actual value is equal to the expected value. It uses
+	    reflect.DeepEqual in most cases.
+	
 	func HappenAt(ACTUAL interface{}, EXPECTED ...interface{}) error
+	    HappenAt verifies that the actual value is a time.Time that is equal to the
+	    expected time.Time.
+	
 
 ---
 

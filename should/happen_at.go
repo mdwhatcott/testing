@@ -6,9 +6,10 @@ import (
 	"time"
 )
 
+// HappenAt verifies that the actual value is a time.Time that is
+// equal to the expected time.Time.
 func HappenAt(ACTUAL interface{}, EXPECTED ...interface{}) error {
 	// TODO: test
-	// TODO: docs
 	if len(EXPECTED) != 1 {
 		return fmt.Errorf("%w: please provide a single expected value (not %d)", errExpectedCountInvalid, len(EXPECTED))
 	}
