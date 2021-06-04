@@ -8,8 +8,9 @@ import (
 // BeNil verifies that actual is the nil value.
 func BeNil(actual interface{}, EXPECTED ...interface{}) error {
 	// TODO: test
-	if len(EXPECTED) > 0 {
-		return fmt.Errorf("%w: please provide 0 expected values (not %d)", errExpectedCountInvalid, len(EXPECTED))
+	err := validateExpected(0, len(EXPECTED))
+	if err != nil {
+		return err
 	}
 	if actual == nil || interfaceHasNilValue(actual) {
 		return nil

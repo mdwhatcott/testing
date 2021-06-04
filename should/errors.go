@@ -7,8 +7,7 @@ import (
 
 var (
 	errExpectedCountInvalid = fmt.Errorf("expected count invalid")
-	errExpectedTypeMismatch = fmt.Errorf("expected type mismatch")
-	errActualTypeMismatch   = fmt.Errorf("actual type mismatch")
+	errTypeMismatch         = fmt.Errorf("type mismatch")
 
 	errAssertionFailed = errors.New("assertion failed")
 	errNilCheck        = fmt.Errorf("%w: 'nil check'", errAssertionFailed)
