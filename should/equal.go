@@ -10,8 +10,9 @@ import (
 // It uses reflect.DeepEqual in most cases.
 func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	// TODO: test
-	if len(EXPECTED) != 1 {
-		return fmt.Errorf("%w: please provide a single expected value (not %d)", errExpectedCountInvalid, len(EXPECTED))
+	err := validateExpected(1, EXPECTED)
+	if err != nil {
+		return err
 	}
 	// TODO: []byte
 	// TODO: time.Time
