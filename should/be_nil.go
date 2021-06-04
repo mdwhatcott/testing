@@ -6,9 +6,8 @@ import (
 )
 
 // BeNil verifies that actual is the nil value.
-func BeNil(actual interface{}, EXPECTED ...interface{}) error {
-	// TODO: test
-	err := validateExpected(0, len(EXPECTED))
+func BeNil(actual interface{}, expected ...interface{}) error {
+	err := validateExpected(0, expected)
 	if err != nil {
 		return err
 	}

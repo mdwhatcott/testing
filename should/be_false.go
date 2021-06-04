@@ -1,19 +1,22 @@
 package should
 
 import (
-	"errors"
 	"fmt"
+	"reflect"
 )
 
 // BeFalse verifies that actual is the boolean false value.
-func BeFalse(actual interface{}, EXPECTED ...interface{}) error {
-	// TODO: test
-	err := BeTrue(actual, EXPECTED...)
-	if errors.Is(err, errEqualityCheck) {
-		return nil
-	}
+func BeFalse(actual interface{}, expected ...interface{}) error {
+	err := validateExpected(0, expected)
 	if err != nil {
 		return err
 	}
-	return fmt.Errorf("%w: expected <false>, got <true> instead", errEqualityCheck)
+	boolean, ok := actual.(bool)
+	if !ok {
+		return fmt.Errorf("%w: actual is %s (bool required)", errTypeMismatch, reflect.TypeOf(actual))
+	}
+	if boolean {
+		return fmt.Errorf("%w: expected <false>, got <true> instead", errBoolCheck)
+	}
+	return nil
 }

@@ -2,7 +2,7 @@ package should
 
 import "fmt"
 
-func validateExpected(count int, expected ...interface{}) error {
+func validateExpected(count int, expected []interface{}) error {
 	if len(expected) == count {
 		return nil
 	}

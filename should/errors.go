@@ -11,6 +11,7 @@ var (
 
 	errAssertionFailed = errors.New("assertion failed")
 	errNilCheck        = fmt.Errorf("%w: 'nil check'", errAssertionFailed)
+	errBoolCheck       = fmt.Errorf("%w: 'bool check'", errAssertionFailed)
 	errEqualityCheck   = fmt.Errorf("%w: 'equality check'", errAssertionFailed)
 )
 

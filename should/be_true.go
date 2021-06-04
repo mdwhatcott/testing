@@ -6,9 +6,8 @@ import (
 )
 
 // BeTrue verifies that actual is the boolean true value.
-func BeTrue(actual interface{}, EXPECTED ...interface{}) error {
-	// TODO: test
-	err := validateExpected(0, EXPECTED...)
+func BeTrue(actual interface{}, expected ...interface{}) error {
+	err := validateExpected(0, expected)
 	if err != nil {
 		return err
 	}
@@ -17,7 +16,7 @@ func BeTrue(actual interface{}, EXPECTED ...interface{}) error {
 		return fmt.Errorf("%w: actual is %s (bool required)", errTypeMismatch, reflect.TypeOf(actual))
 	}
 	if !boolean {
-		return fmt.Errorf("%w: expected <true>, got <false> instead", errEqualityCheck)
+		return fmt.Errorf("%w: expected <true>, got <false> instead", errBoolCheck)
 	}
 	return nil
 }
