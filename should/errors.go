@@ -45,7 +45,6 @@ var (
 
 ## Negations: need to figure out an elegant way (use result of corresponding positive assertion)
 
-- NotBeNil
 - NotBeEmpty
 - NotEqual
 - NotHaveLength
