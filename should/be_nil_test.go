@@ -18,7 +18,6 @@ func TestShouldNotBeNil(t *testing.T) {
 	assertFail(t, NOT.BeNil(nil), errNilCheck)
 	assertFail(t, NOT.BeNil([]string(nil)), errNilCheck)
 	assertFail(t, NOT.BeNil(1, 2), errExpectedCountInvalid)
-
 }
 
 var notNil = errors.New("not nil")
