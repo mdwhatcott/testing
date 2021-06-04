@@ -22,6 +22,7 @@ func (this *GameFixture) Setup() {
 func (this *GameFixture) assertScore(expected int) {
 	this.Helper()
 	this.So(this.game.CalculateScore(), should.Equal, expected)
+	this.So(this.game.CalculateScore(), should.NOT.Equal, expected+1)
 }
 func (this *GameFixture) rollMany(times, pins int) {
 	for x := 0; x < times; x++ {

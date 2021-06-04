@@ -1,13 +1,18 @@
 package should
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
-	errNilCheckFailed       = errors.New("nil check failed")
-	errExpectedCountInvalid = errors.New("expected count invalid")
-	errExpectedTypeMismatch = errors.New("expected type mismatch")
-	errActualTypeMismatch   = errors.New("actual type mismatch")
-	errEqualityMismatch     = errors.New("equality mismatch")
+	errExpectedCountInvalid = fmt.Errorf("expected count invalid")
+	errExpectedTypeMismatch = fmt.Errorf("expected type mismatch")
+	errActualTypeMismatch   = fmt.Errorf("actual type mismatch")
+
+	errAssertionFailed = errors.New("assertion failed")
+	errNilCheck        = fmt.Errorf("%w: 'nil check'", errAssertionFailed)
+	errEqualityCheck   = fmt.Errorf("%w: 'equality check'", errAssertionFailed)
 )
 
 /*
