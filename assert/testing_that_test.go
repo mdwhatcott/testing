@@ -20,6 +20,7 @@ func TestPass(t *testing.T) {
 		t.Error("Unexpected failures:", T.failures)
 	}
 }
+
 func TestFail(t *testing.T) {
 	T := new(FakeT)
 
