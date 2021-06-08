@@ -21,7 +21,7 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	if reflect.DeepEqual(actual, expected) {
 		return nil
 	}
-	return fmt.Errorf("\n" +
+	return fmt.Errorf("\n"+
 		"%w:\n"+
 		"  expected: %#v\n"+
 		"  actual:   %#v",

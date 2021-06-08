@@ -142,34 +142,40 @@ func (this testCase) skip() {
 
 func (this testCase) run() {
 	if isLongRunning(this.name) && testing.Short() {
-		this.t.Run(this.name, func(t *testing.T) {
-			t.Skip("Skipping long-running test in -test.short mode.")
-		})
+		this.skipLongRunningTest()
 	} else {
-		this.t.Run(this.name, func(t *testing.T) {
-			if this.config.parallelTests {
-				t.Parallel()
-			}
-
-			fixtureValue := this.fixtureValue
-			if this.config.freshFixture {
-				fixtureValue = reflect.New(this.fixtureType.Elem())
-			}
-			fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(&T{T: t}))
-
-			setup, hasSetup := fixtureValue.Interface().(setupTest)
-			if hasSetup {
-				setup.Setup()
-			}
-
-			teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
-			if hasTeardown {
-				defer teardown.Teardown()
-			}
-
-			fixtureValue.MethodByName(this.name).Call(nil)
-		})
+		this.runTestCase()
 	}
+}
+func (this testCase) skipLongRunningTest() {
+	_ = this.t.Run(this.name, func(t *testing.T) {
+		t.Skip("Skipping long-running test in -test.short mode.")
+	})
+}
+func (this testCase) runTestCase() {
+	_ = this.t.Run(this.name, func(t *testing.T) {
+		if this.config.parallelTests {
+			t.Parallel()
+		}
+
+		fixtureValue := this.fixtureValue
+		if this.config.freshFixture {
+			fixtureValue = reflect.New(this.fixtureType.Elem())
+		}
+		fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(&T{T: t}))
+
+		setup, hasSetup := fixtureValue.Interface().(setupTest)
+		if hasSetup {
+			setup.Setup()
+		}
+
+		teardown, hasTeardown := fixtureValue.Interface().(teardownTest)
+		if hasTeardown {
+			defer teardown.Teardown()
+		}
+
+		fixtureValue.MethodByName(this.name).Call(nil)
+	})
 }
 
 func isLongRunning(name string) bool {
