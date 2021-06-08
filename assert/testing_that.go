@@ -1,7 +1,5 @@
 package assert
 
-import "github.com/mdwhatcott/testing/should"
-
 // With allows assertions as in: assert.With(t).That(actual).Equals(expected)
 func With(t testingT) *TestingThat {
 	return &TestingThat{t: t}
@@ -13,8 +11,8 @@ type TestingThat struct{ t testingT }
 // That is an intermediate method call, as in: assert.With(t).That(actual).Equals(expected)
 func (this *TestingThat) That(actual interface{}) *TestingAssertion {
 	return &TestingAssertion{
-		testingT: this.t,
-		actual:   actual,
+		testingT:  this.t,
+		Assertion: That(actual),
 	}
 }
 
@@ -26,12 +24,12 @@ type testingT interface {
 // TestingAssertion is an intermediate type, not to be instantiated directly.
 type TestingAssertion struct {
 	testingT
-	actual interface{}
+	*Assertion
 }
 
 // IsNil asserts that the value provided to That is nil.
 func (this *TestingAssertion) IsNil() {
-	err := should.BeNil(this.actual)
+	err := this.Assertion.IsNil()
 	if err != nil {
 		this.Helper()
 		this.Error(err)
@@ -40,7 +38,7 @@ func (this *TestingAssertion) IsNil() {
 
 // IsTrue asserts that the value provided to That is true.
 func (this *TestingAssertion) IsTrue() {
-	err := should.BeTrue(this.actual)
+	err := this.Assertion.IsTrue()
 	if err != nil {
 		this.Helper()
 		this.Error(err)
@@ -49,7 +47,7 @@ func (this *TestingAssertion) IsTrue() {
 
 // IsFalse asserts that the value provided to That is false.
 func (this *TestingAssertion) IsFalse() {
-	err := should.BeFalse(this.actual)
+	err := this.Assertion.IsFalse()
 	if err != nil {
 		this.Helper()
 		this.Error(err)
@@ -58,7 +56,7 @@ func (this *TestingAssertion) IsFalse() {
 
 // Equals asserts that the value provided is equal to the expected value.
 func (this *TestingAssertion) Equals(expected interface{}) {
-	err := should.Equal(this.actual, expected)
+	err := this.Assertion.Equals(expected)
 	if err != nil {
 		this.Helper()
 		this.Error(err)
