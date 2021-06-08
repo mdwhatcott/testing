@@ -3,16 +3,16 @@ package assert
 import "github.com/mdwhatcott/testing/should"
 
 // With allows assertions as in: assert.With(t).That(actual).Equals(expected)
-func With(t testingT) *That {
-	return &That{t: t}
+func With(t testingT) *TestingThat {
+	return &TestingThat{t: t}
 }
 
-// That is an intermediate type, not to be instantiated directly
-type That struct{ t testingT }
+// TestingThat is an intermediate type, not to be instantiated directly
+type TestingThat struct{ t testingT }
 
 // That is an intermediate method call, as in: assert.With(t).That(actual).Equals(expected)
-func (this *That) That(actual interface{}) *Assertion {
-	return &Assertion{
+func (this *TestingThat) That(actual interface{}) *TestingAssertion {
+	return &TestingAssertion{
 		testingT: this.t,
 		actual:   actual,
 	}
@@ -23,14 +23,14 @@ type testingT interface {
 	Error(args ...interface{})
 }
 
-// Assertion is an intermediate type, not to be instantiated directly.
-type Assertion struct {
+// TestingAssertion is an intermediate type, not to be instantiated directly.
+type TestingAssertion struct {
 	testingT
 	actual interface{}
 }
 
 // IsNil asserts that the value provided to That is nil.
-func (this *Assertion) IsNil() {
+func (this *TestingAssertion) IsNil() {
 	err := should.BeNil(this.actual)
 	if err != nil {
 		this.Helper()
@@ -39,7 +39,7 @@ func (this *Assertion) IsNil() {
 }
 
 // IsTrue asserts that the value provided to That is true.
-func (this *Assertion) IsTrue() {
+func (this *TestingAssertion) IsTrue() {
 	err := should.BeTrue(this.actual)
 	if err != nil {
 		this.Helper()
@@ -48,7 +48,7 @@ func (this *Assertion) IsTrue() {
 }
 
 // IsFalse asserts that the value provided to That is false.
-func (this *Assertion) IsFalse() {
+func (this *TestingAssertion) IsFalse() {
 	err := should.BeFalse(this.actual)
 	if err != nil {
 		this.Helper()
@@ -57,7 +57,7 @@ func (this *Assertion) IsFalse() {
 }
 
 // Equals asserts that the value provided is equal to the expected value.
-func (this *Assertion) Equals(expected interface{}) {
+func (this *TestingAssertion) Equals(expected interface{}) {
 	err := should.Equal(this.actual, expected)
 	if err != nil {
 		this.Helper()

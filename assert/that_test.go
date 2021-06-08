@@ -9,25 +9,25 @@ import (
 )
 
 func TestPass(t *testing.T) {
-	tt := new(FakeT)
+	T := new(FakeT)
 
-	assert.With(tt).That(nil).IsNil()
-	assert.With(tt).That((*testing.T)(nil)).IsNil()
-	assert.With(tt).That(true).IsTrue()
-	assert.With(tt).That(false).IsFalse()
+	assert.With(T).That(nil).IsNil()
+	assert.With(T).That((*testing.T)(nil)).IsNil()
+	assert.With(T).That(true).IsTrue()
+	assert.With(T).That(false).IsFalse()
 
-	if len(tt.failures) > 0 {
-		t.Error("Unexpected failures:", tt.failures)
+	if len(T.failures) > 0 {
+		t.Error("Unexpected failures:", T.failures)
 	}
 }
 func TestFail(t *testing.T) {
-	tt := new(FakeT)
+	T := new(FakeT)
 
-	assert.With(tt).That(true).IsFalse()
-	assert.With(tt).That(false).IsTrue()
-	assert.With(tt).That(errors.New("HI")).IsNil()
+	assert.With(T).That(true).IsFalse()
+	assert.With(T).That(false).IsTrue()
+	assert.With(T).That(errors.New("HI")).IsNil()
 
-	if len(tt.failures) != 3 {
+	if len(T.failures) != 3 {
 		t.Error("Expected a failure!")
 	}
 }
