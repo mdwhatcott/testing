@@ -31,4 +31,3 @@ func (this *Assertion) IsFalse() error {
 func (this *Assertion) Equals(expected interface{}) error {
 	return should.Equal(this.actual, expected)
 }
-

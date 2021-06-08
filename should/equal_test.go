@@ -17,8 +17,8 @@ func TestShouldEqual(t *testing.T) {
 	//assertPass(t, Equal(now.UTC(), now)) // TODO: time.Time instants (in different time zones)
 	assertFail(t, Equal(time.Now(), time.Now()), errEqualityCheck)
 
-	assertFail(t, Equal(struct{A string}{}, struct{B string}{}), errEqualityCheck)
-	assertPass(t, Equal(struct{A string}{}, struct{A string}{}))
+	assertFail(t, Equal(struct{ A string }{}, struct{ B string }{}), errEqualityCheck)
+	assertPass(t, Equal(struct{ A string }{}, struct{ A string }{}))
 
 	assertFail(t, Equal([]byte("hi"), []byte("bye")), errEqualityCheck)
 	assertPass(t, Equal([]byte("hi"), []byte("hi")))
