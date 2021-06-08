@@ -9,14 +9,10 @@ import (
 // Equal verifies that the actual value is equal to the expected value.
 // It uses reflect.DeepEqual in most cases.
 func Equal(actual interface{}, EXPECTED ...interface{}) error {
-	// TODO: test
 	err := validateExpected(1, EXPECTED)
 	if err != nil {
 		return err
 	}
-	// TODO: []byte
-	// TODO: time.Time
-	// TODO: struct pointers?
 	expected := EXPECTED[0]
 	if reflect.DeepEqual(actual, expected) {
 		return nil
