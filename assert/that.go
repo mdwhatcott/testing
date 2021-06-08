@@ -1,6 +1,6 @@
 package assert
 
-import "reflect"
+import "github.com/mdwhatcott/testing/should"
 
 // With allows assertions as in: assert.With(t).That(actual).Equals(expected)
 func With(t testingT) *That {
@@ -20,7 +20,7 @@ func (this *That) That(actual interface{}) *Assertion {
 
 type testingT interface {
 	Helper()
-	Errorf(format string, args ...interface{})
+	Error(args ...interface{})
 }
 
 // Assertion is an intermediate type, not to be instantiated directly.
@@ -31,34 +31,36 @@ type Assertion struct {
 
 // IsNil asserts that the value provided to That is nil.
 func (this *Assertion) IsNil() {
-	this.Helper()
-	if this.actual != nil && !reflect.ValueOf(this.actual).IsNil() {
-		this.Equals(nil)
+	err := should.BeNil(this.actual)
+	if err != nil {
+		this.Helper()
+		this.Error(err)
 	}
 }
 
 // IsTrue asserts that the value provided to That is true.
 func (this *Assertion) IsTrue() {
-	this.Helper()
-	this.Equals(true)
+	err := should.BeTrue(this.actual)
+	if err != nil {
+		this.Helper()
+		this.Error(err)
+	}
 }
 
 // IsFalse asserts that the value provided to That is false.
 func (this *Assertion) IsFalse() {
-	this.Helper()
-	this.Equals(false)
+	err := should.BeFalse(this.actual)
+	if err != nil {
+		this.Helper()
+		this.Error(err)
+	}
 }
 
 // Equals asserts that the value provided is equal to the expected value.
 func (this *Assertion) Equals(expected interface{}) {
-	this.Helper()
-
-	if !reflect.DeepEqual(this.actual, expected) {
-		this.Errorf("\n"+
-			"Expected: %#v\n"+
-			"Actual:   %#v",
-			expected,
-			this.actual,
-		)
+	err := should.Equal(this.actual, expected)
+	if err != nil {
+		this.Helper()
+		this.Error(err)
 	}
 }

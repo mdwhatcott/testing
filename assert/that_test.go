@@ -8,11 +8,6 @@ import (
 	"github.com/mdwhatcott/testing/assert"
 )
 
-func TestFlexibleNumericEquality(t *testing.T) {
-	t.Skip("TODO?")
-	assert.With(t).That(int32(1)).Equals(int64(1))
-}
-
 func TestPass(t *testing.T) {
 	tt := new(FakeT)
 
@@ -40,6 +35,6 @@ func TestFail(t *testing.T) {
 type FakeT struct{ failures []string }
 
 func (this *FakeT) Helper() {}
-func (this *FakeT) Errorf(format string, args ...interface{}) {
-	this.failures = append(this.failures, fmt.Sprintf(format, args...))
+func (this *FakeT) Error(args ...interface{}) {
+	this.failures = append(this.failures, fmt.Sprint(args...))
 }
