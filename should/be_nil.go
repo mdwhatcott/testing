@@ -15,7 +15,7 @@ func BeNil(actual interface{}, expected ...interface{}) error {
 	if actual == nil || interfaceHasNilValue(actual) {
 		return nil
 	}
-	return fmt.Errorf("%w: got %#v, want <nil>", ErrNilCheck, actual)
+	return fmt.Errorf("%w: got %#v, want <nil>", ErrAssertionFailure, actual)
 }
 func interfaceHasNilValue(actual interface{}) bool {
 	value := reflect.ValueOf(actual)
@@ -34,11 +34,11 @@ func interfaceHasNilValue(actual interface{}) bool {
 // BeNil negated!
 func (not) BeNil(actual interface{}, expected ...interface{}) error {
 	err := BeNil(actual, expected...)
-	if errors.Is(err, ErrNilCheck) {
+	if errors.Is(err, ErrAssertionFailure) {
 		return nil
 	}
 	if err != nil {
 		return err
 	}
-	return fmt.Errorf("%w: got nil, want non-<nil>", ErrNilCheck)
+	return fmt.Errorf("%w: got nil, want non-<nil>", ErrAssertionFailure)
 }

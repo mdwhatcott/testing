@@ -16,7 +16,7 @@ func BeFalse(actual interface{}, expected ...interface{}) error {
 
 	boolean := actual.(bool)
 	if boolean {
-		return fmt.Errorf("%w: got <true>, want <false>", ErrBoolCheck)
+		return fmt.Errorf("%w: got <true>, want <false>", ErrAssertionFailure)
 	}
 
 	return nil

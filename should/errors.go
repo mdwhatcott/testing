@@ -2,18 +2,13 @@ package should
 
 import (
 	"errors"
-	"fmt"
 )
 
-// TODO: is this the right package for these error declarations?
 var (
-	ErrExpectedCountInvalid = fmt.Errorf("expected count invalid")
-	ErrTypeMismatch         = fmt.Errorf("type mismatch")
-	ErrKindMismatch         = fmt.Errorf("kind mismatch")
+	ErrExpectedCountInvalid = errors.New("expected count invalid")
+	ErrTypeMismatch         = errors.New("type mismatch")
+	ErrKindMismatch         = errors.New("kind mismatch")
 	ErrAssertionFailure     = errors.New("assertion failure")
-	ErrNilCheck             = fmt.Errorf("%w: 'nil check'", ErrAssertionFailure)      // Deprecated
-	ErrBoolCheck            = fmt.Errorf("%w: 'bool check'", ErrAssertionFailure)     // Deprecated
-	ErrEqualityCheck        = fmt.Errorf("%w: 'equality check'", ErrAssertionFailure) // Deprecated
 )
 
 /*

@@ -12,13 +12,13 @@ func TestShouldBeNil(t *testing.T) {
 	assertPass(t, should.BeNil([]string(nil)))
 	assertPass(t, should.BeNil((*string)(nil)))
 	assertFail(t, should.BeNil(1, 2), should.ErrExpectedCountInvalid)
-	assertFail(t, should.BeNil(notNil), should.ErrNilCheck)
+	assertFail(t, should.BeNil(notNil), should.ErrAssertionFailure)
 }
 
 func TestShouldNotBeNil(t *testing.T) {
 	assertPass(t, should.NOT.BeNil(notNil))
-	assertFail(t, should.NOT.BeNil(nil), should.ErrNilCheck)
-	assertFail(t, should.NOT.BeNil([]string(nil)), should.ErrNilCheck)
+	assertFail(t, should.NOT.BeNil(nil), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeNil([]string(nil)), should.ErrAssertionFailure)
 	assertFail(t, should.NOT.BeNil(1, 2), should.ErrExpectedCountInvalid)
 }
 

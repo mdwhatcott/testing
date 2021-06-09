@@ -18,7 +18,7 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	if result.OK() {
 		return nil
 	}
-	return fmt.Errorf("%w: %s", ErrEqualityCheck, result.Report())
+	return fmt.Errorf("%w: %s", ErrAssertionFailure, result.Report())
 }
 
 // Equal negated!
