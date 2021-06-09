@@ -1,7 +1,5 @@
 package should
 
-import "fmt"
-
 // BeFalse verifies that actual is the boolean false value.
 func BeFalse(actual interface{}, expected ...interface{}) error {
 	err := validateExpected(0, expected)
@@ -16,7 +14,7 @@ func BeFalse(actual interface{}, expected ...interface{}) error {
 
 	boolean := actual.(bool)
 	if boolean {
-		return fmt.Errorf("%w: got <true>, want <false>", ErrAssertionFailure)
+		return failure("got <true>, want <false>")
 	}
 
 	return nil

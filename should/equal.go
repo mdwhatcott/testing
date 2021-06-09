@@ -2,7 +2,6 @@ package should
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/mdwhatcott/testing/compare"
 )
@@ -18,11 +17,11 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	if result.OK() {
 		return nil
 	}
-	return fmt.Errorf("%w: %s", ErrAssertionFailure, result.Report())
+	return failure("%s", result.Report())
 }
 
 // Equal negated!
-func (not) Equal(actual interface{}, expected ...interface{}) error {
+func (negated) Equal(actual interface{}, expected ...interface{}) error {
 	err := Equal(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
 		return nil
@@ -30,12 +29,10 @@ func (not) Equal(actual interface{}, expected ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	return fmt.Errorf("\n"+
-		"negated %w\n"+
+	return negatedFailure("\n"+
 		"  expected:     %#v\n"+
 		"  to not equal: %#v\n"+
 		"  (but it did)",
-		ErrAssertionFailure,
 		expected[0],
 		actual,
 	)
