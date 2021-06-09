@@ -53,7 +53,6 @@ func failure(format string, args ...interface{}) error {
 
 ## Negations:
 
-- NotBeEmpty
 - NotHaveLength
 - NotBeIn
 - NotContain

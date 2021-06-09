@@ -1,6 +1,7 @@
 package should
 
 import (
+	"errors"
 	"reflect"
 )
 
@@ -23,6 +24,18 @@ func BeEmpty(actual interface{}, expected ...interface{}) error {
 
 	TYPE := reflect.TypeOf(actual).String()
 	return failure("got len(%s) == %d, want empty %s", TYPE, length, TYPE)
+}
+
+func (negated) BeEmpty(actual interface{}, expected ...interface{}) error {
+	err := BeEmpty(actual, expected...)
+	if errors.Is(err, ErrAssertionFailure) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	TYPE := reflect.TypeOf(actual).String()
+	return negatedFailure("got empty %s, want non-empty %s", TYPE, TYPE)
 }
 
 var kindsWithLength = []reflect.Kind{

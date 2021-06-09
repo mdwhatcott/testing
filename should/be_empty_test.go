@@ -33,6 +33,33 @@ func TestShouldBeEmpty(t *testing.T) {
 	assertFail(t, should.BeEmpty(" "), should.ErrAssertionFailure)
 }
 
+func TestShouldNotBeEmpty(t *testing.T) {
+	assertFail(t, should.NOT.BeEmpty([]string(nil), "extra"), should.ErrExpectedCountInvalid)
+	assertFail(t, should.NOT.BeEmpty(42), should.ErrKindMismatch)
+
+	assertFail(t, should.NOT.BeEmpty([]string(nil)), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeEmpty(make([]string, 0, 0)), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeEmpty(make([]string, 0, 1)), should.ErrAssertionFailure)
+	assertPass(t, should.NOT.BeEmpty([]string{""}))
+
+	assertFail(t, should.NOT.BeEmpty([0]string{}), should.ErrAssertionFailure)
+	assertPass(t, should.NOT.BeEmpty([1]string{}))
+
+	assertFail(t, should.NOT.BeEmpty(chan string(nil)), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeEmpty(make(chan string)), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeEmpty(make(chan string, 1)), should.ErrAssertionFailure)
+	assertPass(t, should.NOT.BeEmpty(nonEmptyChannel()))
+
+	assertFail(t, should.NOT.BeEmpty(map[string]string(nil)), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeEmpty(make(map[string]string)), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeEmpty(make(map[string]string, 1)), should.ErrAssertionFailure)
+	assertPass(t, should.NOT.BeEmpty(map[string]string{"": ""}))
+
+	assertFail(t, should.NOT.BeEmpty(""), should.ErrAssertionFailure)
+	assertFail(t, should.NOT.BeEmpty(*new(string)), should.ErrAssertionFailure)
+	assertPass(t, should.NOT.BeEmpty(" "))
+}
+
 func nonEmptyChannel() chan string {
 	c := make(chan string, 1)
 	c <- ""
