@@ -11,11 +11,11 @@ func validateExpected(count int, expected []interface{}) error {
 	}
 
 	return fmt.Errorf(
-		"%w: please provide %d expected value%s (not %d)",
+		"%w: got %d value%s, want %d",
 		ErrExpectedCountInvalid,
-		count,
-		pluralize(count),
 		len(expected),
+		pluralize(len(expected)),
+		count,
 	)
 }
 
@@ -32,7 +32,12 @@ func validateType(actual, expected interface{}) error {
 	if ACTUAL == EXPECTED {
 		return nil
 	}
-	return fmt.Errorf("%w: want %s got: %s", ErrTypeMismatch, ACTUAL.String(), EXPECTED.String())
+	return fmt.Errorf(
+		"%w: got %s, want %s",
+		ErrTypeMismatch,
+		ACTUAL.String(),
+		EXPECTED.String(),
+	)
 }
 
 func validateKind(actual interface{}, kinds ...reflect.Kind) error {
@@ -43,5 +48,10 @@ func validateKind(actual interface{}, kinds ...reflect.Kind) error {
 			return nil
 		}
 	}
-	return fmt.Errorf("%w: want one of %v got: %s", ErrKindMismatch, kinds, kind.String())
+	return fmt.Errorf(
+		"%w: got %s, want one of %v",
+		ErrKindMismatch,
+		kind.String(),
+		kinds,
+	)
 }

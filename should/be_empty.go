@@ -22,11 +22,13 @@ func BeEmpty(actual interface{}, expected ...interface{}) error {
 		return nil
 	}
 
+	TYPE := reflect.TypeOf(actual).String()
 	return fmt.Errorf(
-		"%w: want empty %s but len() was %d",
+		"%w: got len(%s) == %d, want empty %s",
 		ErrAssertionFailure,
-		reflect.TypeOf(actual).String(),
+		TYPE,
 		length,
+		TYPE,
 	)
 }
 
