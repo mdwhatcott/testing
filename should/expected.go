@@ -34,3 +34,14 @@ func validateType(actual, expected interface{}) error {
 	}
 	return fmt.Errorf("%w: want %s got: %s", ErrTypeMismatch, ACTUAL.String(), EXPECTED.String())
 }
+
+func validateKind(actual interface{}, kinds ...reflect.Kind) error {
+	ACTUAL := reflect.ValueOf(actual)
+	kind := ACTUAL.Kind()
+	for _, k := range kinds {
+		if k == kind {
+			return nil
+		}
+	}
+	return fmt.Errorf("%w: want one of %v got: %s", ErrKindMismatch, kinds, kind.String())
+}
