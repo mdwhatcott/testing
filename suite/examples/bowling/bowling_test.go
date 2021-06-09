@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mdwhatcott/testing/should"
+	"github.com/mdwhatcott/testing/so"
 	"github.com/mdwhatcott/testing/suite"
 )
 
@@ -21,8 +22,12 @@ func (this *GameFixture) Setup() {
 }
 func (this *GameFixture) assertScore(expected int) {
 	this.Helper()
+
 	this.So(this.game.CalculateScore(), should.Equal, expected)
 	this.So(this.game.CalculateScore(), should.NOT.Equal, expected+1)
+
+	so.With(this).The(this.game.CalculateScore(), should.Equal, expected)
+	so.With(this).The(this.game.CalculateScore(), should.NOT.Equal, expected+1)
 }
 func (this *GameFixture) rollMany(times, pins int) {
 	for x := 0; x < times; x++ {
