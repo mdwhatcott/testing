@@ -9,10 +9,10 @@ var (
 	errExpectedCountInvalid = fmt.Errorf("expected count invalid")
 	errTypeMismatch         = fmt.Errorf("type mismatch")
 
-	errAssertionFailed = errors.New("assertion failed")
-	errNilCheck        = fmt.Errorf("%w: 'nil check'", errAssertionFailed)
-	errBoolCheck       = fmt.Errorf("%w: 'bool check'", errAssertionFailed)
-	errEqualityCheck   = fmt.Errorf("%w: 'equality check'", errAssertionFailed)
+	errAssertionFailure = errors.New("assertion failure")
+	errNilCheck         = fmt.Errorf("%w: 'nil check'", errAssertionFailure)
+	errBoolCheck        = fmt.Errorf("%w: 'bool check'", errAssertionFailure)
+	errEqualityCheck    = fmt.Errorf("%w: 'equality check'", errAssertionFailure)
 )
 
 /*
@@ -21,19 +21,23 @@ var (
 
 - BeEmpty
 - HaveLength
+- BeIn
 - Contain
 - ContainKey
+
 - ContainSubstring
 - StartWith
 - EndWith
-- BeIn
+
 - BeGreaterThan
 - BeGreaterThanOrEqualTo
 - BeLessThan
 - BeLessThanOrEqualTo
+
 - Panic
 - PanicWith
 - WrapError
+
 - HappenAfter
 - HappenBefore
 - HappenBetween
@@ -42,18 +46,20 @@ var (
 - HappenOnOrBetween
 - HappenWithin
 
-## Negations: need to figure out an elegant way (use result of corresponding positive assertion)
+## Negations:
 
 - NotBeEmpty
-- NotEqual
 - NotHaveLength
+- NotBeIn
 - NotContain
 - NotContainKey
+
 - NotContainSubstring
 - NotStartWith
 - NotEndWith
-- NotBeIn
+
 - NotPanic
+
 - NotHappenWithin
 
 */

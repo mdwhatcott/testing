@@ -23,9 +23,8 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 
 // Equal negated!
 func (not) Equal(actual interface{}, expected ...interface{}) error {
-	// TODO: test
 	err := Equal(actual, expected...)
-	if errors.Is(err, errAssertionFailed) {
+	if errors.Is(err, errAssertionFailure) {
 		return nil
 	}
 	if err != nil {
@@ -36,7 +35,7 @@ func (not) Equal(actual interface{}, expected ...interface{}) error {
 		"  expected:     %#v\n"+
 		"  to not equal: %#v\n"+
 		"  (but it did)",
-		errEqualityCheck,
+		errAssertionFailure,
 		expected[0],
 		actual,
 	)
