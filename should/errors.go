@@ -19,7 +19,6 @@ var (
 
 ## TODO
 
-- Equal for numerics of differing type: So(8, should.Equal, uint(8))
 - BeEmpty
 - HaveLength
 - Contain
