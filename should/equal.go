@@ -3,7 +3,8 @@ package should
 import (
 	"errors"
 	"fmt"
-	"reflect"
+
+	"github.com/mdwhatcott/testing/compare"
 )
 
 // Equal verifies that the actual value is equal to the expected value.
@@ -13,18 +14,11 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	expected := EXPECTED[0]
-	if reflect.DeepEqual(actual, expected) {
+	result := compare.New().Compare(EXPECTED[0], actual)
+	if result.OK() {
 		return nil
 	}
-	return fmt.Errorf("\n"+
-		"%w:\n"+
-		"  expected: %#v\n"+
-		"  actual:   %#v",
-		errEqualityCheck,
-		expected,
-		actual,
-	)
+	return fmt.Errorf("%w: %s", errEqualityCheck, result.Report())
 }
 
 // Equal negated!
