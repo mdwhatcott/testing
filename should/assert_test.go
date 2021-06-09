@@ -1,4 +1,4 @@
-package should
+package should_test
 
 import (
 	"errors"

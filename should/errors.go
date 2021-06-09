@@ -5,14 +5,15 @@ import (
 	"fmt"
 )
 
+// TODO: is this the right package for these error declarations?
 var (
-	errExpectedCountInvalid = fmt.Errorf("expected count invalid")
-	errTypeMismatch         = fmt.Errorf("type mismatch")
+	ErrExpectedCountInvalid = fmt.Errorf("expected count invalid")
+	ErrTypeMismatch         = fmt.Errorf("type mismatch")
 
-	errAssertionFailure = errors.New("assertion failure")
-	errNilCheck         = fmt.Errorf("%w: 'nil check'", errAssertionFailure)
-	errBoolCheck        = fmt.Errorf("%w: 'bool check'", errAssertionFailure)
-	errEqualityCheck    = fmt.Errorf("%w: 'equality check'", errAssertionFailure)
+	ErrAssertionFailure = errors.New("assertion failure")
+	ErrNilCheck         = fmt.Errorf("%w: 'nil check'", ErrAssertionFailure)
+	ErrBoolCheck        = fmt.Errorf("%w: 'bool check'", ErrAssertionFailure)
+	ErrEqualityCheck    = fmt.Errorf("%w: 'equality check'", ErrAssertionFailure)
 )
 
 /*

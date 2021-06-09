@@ -1,32 +1,34 @@
-package should
+package should_test
 
 import (
 	"testing"
 	"time"
+
+	"github.com/mdwhatcott/testing/should"
 )
 
 func TestShouldEqual(t *testing.T) {
-	assertFail(t, Equal("not enough args"), errExpectedCountInvalid)
-	assertFail(t, Equal("too", "many", "args"), errExpectedCountInvalid)
+	assertFail(t, should.Equal("not enough args"), should.ErrExpectedCountInvalid)
+	assertFail(t, should.Equal("too", "many", "args"), should.ErrExpectedCountInvalid)
 
-	assertFail(t, Equal(1, 2), errEqualityCheck)
-	assertPass(t, Equal(1, 1))
-	assertPass(t, Equal(1, uint(1)))
+	assertFail(t, should.Equal(1, 2), should.ErrEqualityCheck)
+	assertPass(t, should.Equal(1, 1))
+	assertPass(t, should.Equal(1, uint(1)))
 
 	now := time.Now()
-	assertPass(t, Equal(now.UTC(), now.In(time.Local)))
-	assertFail(t, Equal(time.Now(), time.Now()), errEqualityCheck)
+	assertPass(t, should.Equal(now.UTC(), now.In(time.Local)))
+	assertFail(t, should.Equal(time.Now(), time.Now()), should.ErrEqualityCheck)
 
-	assertFail(t, Equal(struct{ A string }{}, struct{ B string }{}), errEqualityCheck)
-	assertPass(t, Equal(struct{ A string }{}, struct{ A string }{}))
+	assertFail(t, should.Equal(struct{ A string }{}, struct{ B string }{}), should.ErrEqualityCheck)
+	assertPass(t, should.Equal(struct{ A string }{}, struct{ A string }{}))
 
-	assertFail(t, Equal([]byte("hi"), []byte("bye")), errEqualityCheck)
-	assertPass(t, Equal([]byte("hi"), []byte("hi")))
+	assertFail(t, should.Equal([]byte("hi"), []byte("bye")), should.ErrEqualityCheck)
+	assertPass(t, should.Equal([]byte("hi"), []byte("hi")))
 }
 
 func TestShouldNotEqual(t *testing.T) {
-	assertFail(t, NOT.Equal("not enough args"), errExpectedCountInvalid)
-	assertFail(t, NOT.Equal("too", "many", "args"), errExpectedCountInvalid)
-	assertFail(t, NOT.Equal(1, 1), errAssertionFailure)
-	assertPass(t, NOT.Equal(1, 2))
+	assertFail(t, should.NOT.Equal("not enough args"), should.ErrExpectedCountInvalid)
+	assertFail(t, should.NOT.Equal("too", "many", "args"), should.ErrExpectedCountInvalid)
+	assertFail(t, should.NOT.Equal(1, 1), should.ErrAssertionFailure)
+	assertPass(t, should.NOT.Equal(1, 2))
 }

@@ -1,10 +1,14 @@
-package should
+package should_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/mdwhatcott/testing/should"
+)
 
 func TestShouldBeFalse(t *testing.T) {
-	assertPass(t, BeFalse(false))
-	assertFail(t, BeFalse(1, 2), errExpectedCountInvalid)
-	assertFail(t, BeFalse(1), errTypeMismatch)
-	assertFail(t, BeFalse(true), errBoolCheck)
+	assertPass(t, should.BeFalse(false))
+	assertFail(t, should.BeFalse(1, 2), should.ErrExpectedCountInvalid)
+	assertFail(t, should.BeFalse(1), should.ErrTypeMismatch)
+	assertFail(t, should.BeFalse(true), should.ErrBoolCheck)
 }

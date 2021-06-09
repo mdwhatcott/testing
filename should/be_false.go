@@ -13,10 +13,10 @@ func BeFalse(actual interface{}, expected ...interface{}) error {
 	}
 	boolean, ok := actual.(bool)
 	if !ok {
-		return fmt.Errorf("%w: actual is %s (bool required)", errTypeMismatch, reflect.TypeOf(actual))
+		return fmt.Errorf("%w: actual is %s (bool required)", ErrTypeMismatch, reflect.TypeOf(actual))
 	}
 	if boolean {
-		return fmt.Errorf("%w: expected <false>, got <true> instead", errBoolCheck)
+		return fmt.Errorf("%w: expected <false>, got <true> instead", ErrBoolCheck)
 	}
 	return nil
 }

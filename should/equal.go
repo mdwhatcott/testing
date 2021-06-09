@@ -18,13 +18,13 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	if result.OK() {
 		return nil
 	}
-	return fmt.Errorf("%w: %s", errEqualityCheck, result.Report())
+	return fmt.Errorf("%w: %s", ErrEqualityCheck, result.Report())
 }
 
 // Equal negated!
 func (not) Equal(actual interface{}, expected ...interface{}) error {
 	err := Equal(actual, expected...)
-	if errors.Is(err, errAssertionFailure) {
+	if errors.Is(err, ErrAssertionFailure) {
 		return nil
 	}
 	if err != nil {
@@ -35,7 +35,7 @@ func (not) Equal(actual interface{}, expected ...interface{}) error {
 		"  expected:     %#v\n"+
 		"  to not equal: %#v\n"+
 		"  (but it did)",
-		errAssertionFailure,
+		ErrAssertionFailure,
 		expected[0],
 		actual,
 	)

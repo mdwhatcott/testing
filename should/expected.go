@@ -1,6 +1,9 @@
 package should
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func validateExpected(count int, expected []interface{}) error {
 	if len(expected) == count {
@@ -9,7 +12,7 @@ func validateExpected(count int, expected []interface{}) error {
 
 	return fmt.Errorf(
 		"%w: please provide %d expected value%s (not %d)",
-		errExpectedCountInvalid,
+		ErrExpectedCountInvalid,
 		count,
 		pluralize(count),
 		len(expected),
