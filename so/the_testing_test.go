@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/mdwhatcott/testing/should"
 	"github.com/mdwhatcott/testing/so"
 )
 
 func TestPass(t *testing.T) {
 	T := new(FakeT)
 
-	so.With(T).The(nil, should.BeNil)
-	so.With(T).The(true, should.BeTrue)
-	so.With(T).The(true, should.BeTrue)
-	so.With(T).The(false, should.BeFalse)
+	so.With(T).The(nil, shouldPass)
+	so.With(T).The(true, shouldPass)
+	so.With(T).The(true, shouldPass)
+	so.With(T).The(false, shouldPass)
 
 	if len(T.failures) > 0 {
 		t.Error("Unexpected failures:", T.failures)
@@ -27,9 +26,9 @@ func TestPass(t *testing.T) {
 func TestFail(t *testing.T) {
 	T := new(FakeT)
 
-	so.With(T).The(true, should.BeFalse)
-	so.With(T).The(false, should.BeTrue)
-	so.With(T).The(t, should.BeNil)
+	so.With(T).The(true, shouldFail)
+	so.With(T).The(false, shouldFail)
+	so.With(T).The(t, shouldFail)
 
 	if len(T.failures) != 3 {
 		t.Error("Expected 3 failures, got:", T.failures)
