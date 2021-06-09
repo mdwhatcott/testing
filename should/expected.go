@@ -25,3 +25,12 @@ func pluralize(count int) string {
 	}
 	return "s"
 }
+
+func validateType(actual, expected interface{}) error {
+	ACTUAL := reflect.TypeOf(actual)
+	EXPECTED := reflect.TypeOf(expected)
+	if ACTUAL == EXPECTED {
+		return nil
+	}
+	return fmt.Errorf("%w: want %s got: %s", ErrTypeMismatch, ACTUAL.String(), EXPECTED.String())
+}

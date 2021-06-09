@@ -2,7 +2,6 @@ package should
 
 import (
 	"fmt"
-	"reflect"
 )
 
 // BeTrue verifies that actual is the boolean true value.
@@ -11,12 +10,15 @@ func BeTrue(actual interface{}, expected ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	boolean, ok := actual.(bool)
-	if !ok {
-		return fmt.Errorf("%w: actual is %s (bool required)", ErrTypeMismatch, reflect.TypeOf(actual))
+
+	err = validateType(actual, *new(bool))
+	if err != nil {
+		return err
 	}
+
+	boolean := actual.(bool)
 	if !boolean {
-		return fmt.Errorf("%w: expected <true>, got <false> instead", ErrBoolCheck)
+		return fmt.Errorf("%w: want <true>, got <false>", ErrBoolCheck)
 	}
 	return nil
 }

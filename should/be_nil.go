@@ -40,5 +40,5 @@ func (not) BeNil(actual interface{}, expected ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	return fmt.Errorf("%w: expected non-nil value, got nil instead", ErrNilCheck)
+	return fmt.Errorf("%w: want non-<nil> got nil", ErrNilCheck)
 }
