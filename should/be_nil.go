@@ -11,9 +11,11 @@ func BeNil(actual interface{}, expected ...interface{}) error {
 	if err != nil {
 		return err
 	}
+
 	if actual == nil || interfaceHasNilValue(actual) {
 		return nil
 	}
+
 	return failure("got %#v, want <nil>", actual)
 }
 func interfaceHasNilValue(actual interface{}) bool {
@@ -36,8 +38,10 @@ func (negated) BeNil(actual interface{}, expected ...interface{}) error {
 	if errors.Is(err, ErrAssertionFailure) {
 		return nil
 	}
+
 	if err != nil {
 		return err
 	}
+
 	return negatedFailure("got nil, want non-<nil>")
 }
