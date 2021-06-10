@@ -25,8 +25,6 @@ func failure(format string, args ...interface{}) error {
 
 ## TODO
 
-- WrapError
-
 - ContainSubstring (&NOT)
 
 - BeIn             (&NOT)
