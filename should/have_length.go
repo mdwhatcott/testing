@@ -25,8 +25,7 @@ func HaveLength(actual interface{}, expected ...interface{}) error {
 		return nil
 	}
 
-	TYPE := reflect.TypeOf(actual).String()
-	return failure("got length of %d, want %d", TYPE, actualLength, expectedLength)
+	return failure("got length of %d, want %d", actualLength, expectedLength)
 }
 
 var numericKinds = []reflect.Kind{
