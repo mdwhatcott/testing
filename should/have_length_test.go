@@ -10,6 +10,7 @@ func TestShouldHaveLength(t *testing.T) {
 	assertFail(t, should.HaveLength("", 1, "too many"), should.ErrExpectedCountInvalid)
 	assertFail(t, should.HaveLength(true, 0), should.ErrKindMismatch)
 	assertFail(t, should.HaveLength(42, 0), should.ErrKindMismatch)
+	assertFail(t, should.HaveLength("", ""), should.ErrKindMismatch)
 
 	assertPass(t, should.HaveLength([]string(nil), 0))
 	assertPass(t, should.HaveLength([]string{}, 0))
