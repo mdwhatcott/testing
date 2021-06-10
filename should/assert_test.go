@@ -23,6 +23,6 @@ func assertFail(t *testing.T, actual, expected error) {
 			actual,
 		)
 	} else if testing.Verbose() {
-		t.Log("\n (error report printed below for visual inspection)\n", actual)
+		t.Log("\n", actual, "\n", "(above error report printed for visual inspection)")
 	}
 }
