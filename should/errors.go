@@ -25,18 +25,16 @@ func failure(format string, args ...interface{}) error {
 
 ## TODO
 
-- BeIn             (&NOT) w/ support for substrings?
-- Contain          (&NOT) w/ support for substrings?
-- ContainKey       (&NOT)
-
-- StartWith        (&NOT) w/ support for slices?
-- EndWith          (&NOT) w/ support for slices?
-
 - Panic            (&NOT)
 
-- BeGreaterThan           w/ support for time.Time?
-- BeGreaterThanOrEqualTo  w/ support for time.Time?
-- BeLessThan              w/ support for time.Time?
-- BeLessThanOrEqualTo     w/ support for time.Time?
+- BeIn             (&NOT) for slices, strings, arrays, map keys
+- Contain          (&NOT) for slices, strings, arrays, map keys
+- StartWith        (&NOT) for slices, strings, arrays
+- EndWith          (&NOT) for slices, strings, arrays
+
+- BeGreaterThan           for numerics, time.Time
+- BeGreaterThanOrEqualTo  for numerics, time.Time
+- BeLessThan              for numerics, time.Time
+- BeLessThanOrEqualTo     for numerics, time.Time
 
 */
