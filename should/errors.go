@@ -25,21 +25,20 @@ func failure(format string, args ...interface{}) error {
 
 ## TODO
 
-- HaveLength
-- BeIn
-- Contain
-- ContainKey
+- BeIn (&NOT)
+- Contain (&NOT)
+- ContainKey (&NOT)
 
-- ContainSubstring
-- StartWith
-- EndWith
+- ContainSubstring (&NOT)
+- StartWith (&NOT)
+- EndWith (&NOT)
 
 - BeGreaterThan
 - BeGreaterThanOrEqualTo
 - BeLessThan
 - BeLessThanOrEqualTo
 
-- Panic
+- Panic (&NOT)
 - PanicWith
 - WrapError
 
@@ -49,21 +48,6 @@ func failure(format string, args ...interface{}) error {
 - HappenOnOrAfter
 - HappenOnOrBefore
 - HappenOnOrBetween
-- HappenWithin
-
-## Negations:
-
-- NotHaveLength
-- NotBeIn
-- NotContain
-- NotContainKey
-
-- NotContainSubstring
-- NotStartWith
-- NotEndWith
-
-- NotPanic
-
-- NotHappenWithin
+- HappenWithin (&NOT)
 
 */
