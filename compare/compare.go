@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"runtime/debug"
 	"strings"
-	"testing"
 	"time"
 )
 
@@ -29,9 +28,6 @@ type comparer struct {
 	config *config
 }
 
-func ForTesting(t *testing.T, options ...Option) Comparer {
-	return New(append(options, testingT(t))...)
-}
 func New(options ...Option) Comparer {
 	return comparer{config: newConfig(options...)}
 }
@@ -39,7 +35,6 @@ func New(options ...Option) Comparer {
 func (this comparer) Compare(a, b interface{}) (result Comparison) {
 	result.ok = this.check(a, b)
 	result.report = report(result.OK(), this.resolveFormatter(a), a, b)
-	this.config.reportT(result)
 	return result
 }
 
@@ -66,9 +61,6 @@ func (this comparer) check(a, b interface{}) bool {
 
 type Option func(*config)
 
-func testingT(t *testing.T) Option {
-	return func(this *config) { this.t = t }
-}
 func With(specs ...Specification) Option {
 	return func(this *config) { this.specs = append(this.specs, specs...) }
 }
@@ -77,11 +69,6 @@ func Format(formatter Formatter) Option {
 }
 func FormatVerb(verb string) Option {
 	return Format(func(v interface{}) string { return fmt.Sprintf(verb, v) })
-}
-func FormatLength() Option {
-	return Format(func(v interface{}) string {
-		return fmt.Sprintf("Length: %d  Value: %#v", reflect.ValueOf(v).Len(), v)
-	})
 }
 func FormatJSON(indent string) Option {
 	return Format(func(v interface{}) string {
@@ -99,7 +86,6 @@ func FormatJSON(indent string) Option {
 }
 
 type config struct {
-	t         *testing.T
 	specs     []Specification
 	formatter Formatter
 }
@@ -113,15 +99,6 @@ func newConfig(options ...Option) *config {
 		this.specs = []Specification{NumericEquality{}, TimeEquality{}, DeepEquality{}}
 	}
 	return this
-}
-func (this *config) reportT(result Comparison) {
-	if result.OK() {
-		return
-	}
-	if this.t == nil {
-		return
-	}
-	this.t.Error(result.Report())
 }
 
 type Specification interface {
@@ -138,17 +115,6 @@ func (this DeepEquality) IsSatisfiedBy(a, b interface{}) bool {
 }
 func (this DeepEquality) Compare(a, b interface{}) bool {
 	return reflect.DeepEqual(a, b)
-}
-
-// SimpleEquality compares any two values using the built-in equality operator (`==`).
-// https://golang.org/ref/spec#Comparison_operators
-type SimpleEquality struct{}
-
-func (this SimpleEquality) IsSatisfiedBy(a, b interface{}) bool {
-	return reflect.TypeOf(a) == reflect.TypeOf(b)
-}
-func (this SimpleEquality) Compare(a, b interface{}) bool {
-	return a == b
 }
 
 // NumericEquality compares numeric values using the built-in equality
@@ -200,26 +166,6 @@ func (this TimeEquality) Compare(a, b interface{}) bool {
 func isTime(v interface{}) bool {
 	_, ok := v.(time.Time)
 	return ok
-}
-
-// LengthEquality compares values that can serve as valid arguments to the built-in len function
-// (with the exception of pointers to arrays, which are not yet supported herein).
-// https://golang.org/pkg/builtin/#len
-type LengthEquality struct{}
-
-func (this LengthEquality) IsSatisfiedBy(a, b interface{}) bool {
-	return hasLen(a) && hasLen(b)
-}
-func (this LengthEquality) Compare(a, b interface{}) bool {
-	return reflect.ValueOf(a).Len() == reflect.ValueOf(b).Len()
-}
-func hasLen(v interface{}) bool {
-	switch reflect.TypeOf(v).Kind() {
-	case reflect.Array, reflect.Map, reflect.Slice, reflect.Chan, reflect.String:
-		return true
-	default:
-		return false
-	}
 }
 
 type Formatter func(interface{}) string
