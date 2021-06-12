@@ -135,17 +135,6 @@ func (this DeepEquality) Compare(a, b interface{}) bool {
 	return reflect.DeepEqual(a, b)
 }
 
-// SimpleEquality compares any two values using the built-in equality operator (`==`).
-// https://golang.org/ref/spec#Comparison_operators
-type SimpleEquality struct{}
-
-func (this SimpleEquality) IsSatisfiedBy(a, b interface{}) bool {
-	return reflect.TypeOf(a) == reflect.TypeOf(b)
-}
-func (this SimpleEquality) Compare(a, b interface{}) bool {
-	return a == b
-}
-
 // NumericEquality compares numeric values using the built-in equality
 // operator (`==`). Values of differing numeric reflect.Kind are each
 // converted to the type of the other and are compared with `==` in both

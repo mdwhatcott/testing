@@ -144,24 +144,6 @@ func Test(t *testing.T) {
 		},
 		{
 			Skip:     false,
-			Expected: 1,
-			Actual:   1,
-			AreEqual: true,
-			Options: []compare.Option{
-				compare.With(compare.SimpleEquality{}),
-			},
-		},
-		{
-			Skip:     false,
-			Expected: int32(1),
-			Actual:   int64(1),
-			AreEqual: false,
-			Options: []compare.Option{
-				compare.With(compare.SimpleEquality{}),
-			},
-		},
-		{
-			Skip:     false,
 			Expected: Thing{Integer: 42},
 			Actual:   Thing{Integer: 43},
 			AreEqual: false,
