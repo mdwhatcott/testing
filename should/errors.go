@@ -25,8 +25,6 @@ func failure(format string, args ...interface{}) error {
 
 ## TODO
 
-- Panic            (&NOT)
-
 - BeIn             (&NOT) for slices, strings, arrays, map keys
 - Contain          (&NOT) for slices, strings, arrays, map keys
 - StartWith        (&NOT) for slices, strings, arrays
