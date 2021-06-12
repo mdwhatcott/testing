@@ -7,11 +7,20 @@
 	
 	VARIABLES
 	
-	var NOT not
+	var (
+		ErrExpectedCountInvalid = errors.New("expected count invalid")
+		ErrTypeMismatch         = errors.New("type mismatch")
+		ErrKindMismatch         = errors.New("kind mismatch")
+		ErrAssertionFailure     = errors.New("assertion failure")
+	)
+	var NOT negated
 	    NOT (a singleton) constrains all negated assertions to their own namespace.
 	
 	
 	FUNCTIONS
+	
+	func BeEmpty(actual interface{}, expected ...interface{}) error
+	    BeEmpty uses reflection to verify that len(actual) == 0.
 	
 	func BeFalse(actual interface{}, expected ...interface{}) error
 	    BeFalse verifies that actual is the boolean false value.
@@ -26,6 +35,11 @@
 	    Equal verifies that the actual value is equal to the expected value. It uses
 	    reflect.DeepEqual in most cases.
 	
+	func HaveLength(actual interface{}, expected ...interface{}) error
+	    HaveLength uses reflection to verify that len(actual) == 0.
+	
+	func Panic(actual interface{}, expected ...interface{}) (err error)
+	func WrapError(actual interface{}, expected ...interface{}) error
 
 ---
 
