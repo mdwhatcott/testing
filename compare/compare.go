@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"runtime/debug"
 	"strings"
-	"testing"
 	"time"
 )
 
@@ -29,9 +28,6 @@ type comparer struct {
 	config *config
 }
 
-func ForTesting(t *testing.T, options ...Option) Comparer {
-	return New(append(options, testingT(t))...)
-}
 func New(options ...Option) Comparer {
 	return comparer{config: newConfig(options...)}
 }
@@ -39,7 +35,6 @@ func New(options ...Option) Comparer {
 func (this comparer) Compare(a, b interface{}) (result Comparison) {
 	result.ok = this.check(a, b)
 	result.report = report(result.OK(), this.resolveFormatter(a), a, b)
-	this.config.reportT(result)
 	return result
 }
 
@@ -66,9 +61,6 @@ func (this comparer) check(a, b interface{}) bool {
 
 type Option func(*config)
 
-func testingT(t *testing.T) Option {
-	return func(this *config) { this.t = t }
-}
 func With(specs ...Specification) Option {
 	return func(this *config) { this.specs = append(this.specs, specs...) }
 }
@@ -94,7 +86,6 @@ func FormatJSON(indent string) Option {
 }
 
 type config struct {
-	t         *testing.T
 	specs     []Specification
 	formatter Formatter
 }
@@ -108,15 +99,6 @@ func newConfig(options ...Option) *config {
 		this.specs = []Specification{NumericEquality{}, TimeEquality{}, DeepEquality{}}
 	}
 	return this
-}
-func (this *config) reportT(result Comparison) {
-	if result.OK() {
-		return
-	}
-	if this.t == nil {
-		return
-	}
-	this.t.Error(result.Report())
 }
 
 type Specification interface {

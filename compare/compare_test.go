@@ -191,7 +191,7 @@ func (this TestCase) Run(t *testing.T) {
 		t.Skip()
 	}
 	if this.AreEqual {
-		comparer := compare.ForTesting(t, this.Options...)
+		comparer := compare.New(this.Options...)
 		result := comparer.Compare(this.Expected, this.Actual)
 		report := result.Report()
 		if result.OK() {
