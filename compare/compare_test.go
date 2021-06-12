@@ -169,26 +169,6 @@ func Test(t *testing.T) {
 				compare.FormatJSON("  "),
 			},
 		},
-		{
-			Skip:     false,
-			Expected: "1111",
-			Actual:   "2222",
-			AreEqual: true,
-			Options: []compare.Option{
-				compare.With(compare.LengthEquality{}),
-				compare.FormatLength(),
-			},
-		},
-		{
-			Skip:     false,
-			Expected: "1111",
-			Actual:   "11111",
-			AreEqual: false,
-			Options: []compare.Option{
-				compare.With(compare.LengthEquality{}),
-				compare.FormatLength(),
-			},
-		},
 	})
 }
 

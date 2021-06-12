@@ -78,11 +78,6 @@ func Format(formatter Formatter) Option {
 func FormatVerb(verb string) Option {
 	return Format(func(v interface{}) string { return fmt.Sprintf(verb, v) })
 }
-func FormatLength() Option {
-	return Format(func(v interface{}) string {
-		return fmt.Sprintf("Length: %d  Value: %#v", reflect.ValueOf(v).Len(), v)
-	})
-}
 func FormatJSON(indent string) Option {
 	return Format(func(v interface{}) string {
 		raw, err := json.Marshal(v)
@@ -200,26 +195,6 @@ func (this TimeEquality) Compare(a, b interface{}) bool {
 func isTime(v interface{}) bool {
 	_, ok := v.(time.Time)
 	return ok
-}
-
-// LengthEquality compares values that can serve as valid arguments to the built-in len function
-// (with the exception of pointers to arrays, which are not yet supported herein).
-// https://golang.org/pkg/builtin/#len
-type LengthEquality struct{}
-
-func (this LengthEquality) IsSatisfiedBy(a, b interface{}) bool {
-	return hasLen(a) && hasLen(b)
-}
-func (this LengthEquality) Compare(a, b interface{}) bool {
-	return reflect.ValueOf(a).Len() == reflect.ValueOf(b).Len()
-}
-func hasLen(v interface{}) bool {
-	switch reflect.TypeOf(v).Kind() {
-	case reflect.Array, reflect.Map, reflect.Slice, reflect.Chan, reflect.String:
-		return true
-	default:
-		return false
-	}
 }
 
 type Formatter func(interface{}) string
