@@ -1,17 +1,18 @@
 package should
 
 import (
+	"errors"
 	"reflect"
 	"strings"
 
 	"github.com/mdwhatcott/testing/compare"
 )
 
-// Contain determines whether actual is a member of expected[0].
-// The expected value may be a map, array, slice, or string:
-//   - In the case of maps the actual value is assumed to be a map key.
-//   - In the case of slices and arrays the actual value is assumed to be a member.
-//   - In the case of strings the actual value may be a rune or substring.
+// Contain determines whether actual contains expected[0].
+// The actual value may be a map, array, slice, or string:
+//   - In the case of maps the expected value is assumed to be a map key.
+//   - In the case of slices and arrays the expected value is assumed to be a member.
+//   - In the case of strings the expected value may be a rune or substring.
 func Contain(actual interface{}, expected ...interface{}) error {
 	err := validateExpected(1, expected)
 	if err != nil {
@@ -63,6 +64,24 @@ func Contain(actual interface{}, expected ...interface{}) error {
 		"   item absent: %#v\n"+
 		"   within:      %#v",
 		EXPECTED,
+		actual,
+	)
+}
+
+func (negated) Contain(actual interface{}, expected ...interface{}) error {
+	err := Contain(actual, expected...)
+	if errors.Is(err, ErrAssertionFailure) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return failure("\n"+
+		"item found: %#v\n"+
+		"within:     %#v",
+		expected[0],
 		actual,
 	)
 }
