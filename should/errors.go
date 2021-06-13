@@ -14,15 +14,13 @@ var (
 
 func failure(format string, args ...interface{}) error {
 	full := fmt.Sprintf(format, args...)
-	format = "%w: " + full
-	return fmt.Errorf(format, ErrAssertionFailure)
+	return fmt.Errorf("%w: "+full, ErrAssertionFailure)
 }
 
 /*
 
 ## TODO
 
-- BeIn             (&NOT) for slices, strings, arrays, map keys
 - StartWith        (&NOT) for slices, strings, arrays
 - EndWith          (&NOT) for slices, strings, arrays
 
