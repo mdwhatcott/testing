@@ -89,4 +89,9 @@ func (negated) Contain(actual interface{}, expected ...interface{}) error {
 
 const reflectRune = reflect.Int32
 
-var containerKinds = []reflect.Kind{reflect.Map, reflect.Array, reflect.Slice, reflect.String}
+var containerKinds = []reflect.Kind{
+	reflect.Map,
+	reflect.Array,
+	reflect.Slice,
+	reflect.String,
+}

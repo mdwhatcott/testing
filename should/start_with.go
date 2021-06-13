@@ -58,4 +58,8 @@ func StartWith(actual interface{}, expected ...interface{}) error {
 	)
 }
 
-var orderedContainerKinds = []reflect.Kind{reflect.Array, reflect.Slice, reflect.String}
+var orderedContainerKinds = []reflect.Kind{
+	reflect.Array,
+	reflect.Slice,
+	reflect.String,
+}
