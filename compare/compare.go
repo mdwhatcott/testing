@@ -96,7 +96,11 @@ func newConfig(options ...Option) *config {
 		option(this)
 	}
 	if len(this.specs) == 0 {
-		this.specs = []Specification{NumericEquality{}, TimeEquality{}, DeepEquality{}}
+		this.specs = []Specification{
+			NumericEquality{},
+			TimeEquality{},
+			DeepEquality{},
+		}
 	}
 	return this
 }

@@ -27,7 +27,8 @@ func interfaceHasNilValue(actual interface{}) bool {
 		kind == reflect.Ptr ||
 		kind == reflect.Map
 
-	// Careful: reflect.Value.IsNil() will panic unless it's an interface, chan, map, func, slice, or ptr
+	// Careful: reflect.Value.IsNil() will panic unless it's
+	// an interface, chan, map, func, slice, or ptr
 	// Reference: http://golang.org/pkg/reflect/#Value.IsNil
 	return nillable && value.IsNil()
 }

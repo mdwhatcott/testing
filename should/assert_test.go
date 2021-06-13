@@ -17,7 +17,10 @@ func invalid(t *testing.T, actual, expected error) {
 			actual,
 		)
 	} else if testing.Verbose() {
-		t.Log("\n", actual, "\n", "(above error report printed for visual inspection)")
+		t.Log(
+			"\n", actual, "\n",
+			"(above error report printed for visual inspection)",
+		)
 	}
 }
 func fail(t *testing.T, err error) {
@@ -25,7 +28,10 @@ func fail(t *testing.T, err error) {
 	if !errors.Is(err, should.ErrAssertionFailure) {
 		t.Error("[FAIL] expected assertion failure, got:", err)
 	} else if testing.Verbose() {
-		t.Log("\n", err, "\n", "(above error report printed for visual inspection)")
+		t.Log(
+			"\n", err, "\n",
+			"(above error report printed for visual inspection)",
+		)
 	}
 }
 func pass(t *testing.T, actual error) {

@@ -203,9 +203,16 @@ func (this TestCase) Run(t *testing.T) {
 		comparer := compare.New(this.Options...)
 		result := comparer.Compare(this.Expected, this.Actual)
 		if !result.OK() {
-			t.Log("(report printed below for visual inspection)", result.Report())
+			t.Log(
+				"(report printed below for visual inspection)",
+				result.Report(),
+			)
 		} else {
-			t.Errorf("unequal values %v and %v erroneously deemed equal", this.Expected, this.Actual)
+			t.Errorf(
+				"unequal values %v and %v erroneously deemed equal",
+				this.Expected,
+				this.Actual,
+			)
 		}
 	}
 }
