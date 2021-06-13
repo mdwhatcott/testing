@@ -16,11 +16,3 @@ func failure(format string, args ...interface{}) error {
 	full := fmt.Sprintf(format, args...)
 	return fmt.Errorf("%w: "+full, ErrAssertionFailure)
 }
-
-/*
-
-## TODO
-
-- EndWith          (&NOT) for slices, strings, arrays
-
-*/
