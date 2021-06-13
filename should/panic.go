@@ -2,6 +2,8 @@ package should
 
 import "errors"
 
+// Panic invokes the func() provided as actual and recovers from any
+// panic. It returns an error if actual() does not result in a panic.
 func Panic(actual interface{}, expected ...interface{}) (err error) {
 	err = NOT.Panic(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
@@ -18,6 +20,7 @@ func Panic(actual interface{}, expected ...interface{}) (err error) {
 	)
 }
 
+// Panic (negated!) expects the func() provided as actual to run without panicking.
 func (negated) Panic(actual interface{}, expected ...interface{}) (err error) {
 	err = validateExpected(0, expected)
 	if err != nil {

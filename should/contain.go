@@ -7,6 +7,11 @@ import (
 	"github.com/mdwhatcott/testing/compare"
 )
 
+// Contain determines whether actual is a member of expected[0].
+// The expected value may be a map, array, slice, or string:
+//   - In the case of maps the actual value is assumed to be a map key.
+//   - In the case of slices and arrays the actual value is assumed to be a member.
+//   - In the case of strings the actual value may be a rune or substring.
 func Contain(actual interface{}, expected ...interface{}) error {
 	err := validateExpected(1, expected)
 	if err != nil {

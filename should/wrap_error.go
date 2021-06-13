@@ -6,6 +6,8 @@ import (
 	"reflect"
 )
 
+// WrapError uses errors.Is to verify that actual is an error value
+// that wraps expected[0] (also an error value).
 func WrapError(actual interface{}, expected ...interface{}) error {
 	err := validateExpected(1, expected)
 	if err != nil {

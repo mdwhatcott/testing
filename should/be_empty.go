@@ -26,6 +26,7 @@ func BeEmpty(actual interface{}, expected ...interface{}) error {
 	return failure("got len(%s) == %d, want empty %s", TYPE, length, TYPE)
 }
 
+// BeEmpty (negated!)
 func (negated) BeEmpty(actual interface{}, expected ...interface{}) error {
 	err := BeEmpty(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {

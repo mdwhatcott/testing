@@ -31,6 +31,14 @@
 	func BeTrue(actual interface{}, expected ...interface{}) error
 	    BeTrue verifies that actual is the boolean true value.
 	
+	func Contain(actual interface{}, expected ...interface{}) error
+	    Contain determines whether actual is a member of expected[0]. The expected
+	    value may be a map, array, slice, or string:
+	
+	        - In the case of maps the actual value is assumed to be a map key.
+	        - In the case of slices and arrays the actual value is assumed to be a member.
+	        - In the case of strings the actual value may be a rune or substring.
+	
 	func Equal(actual interface{}, EXPECTED ...interface{}) error
 	    Equal verifies that the actual value is equal to the expected value. It uses
 	    reflect.DeepEqual in most cases.
@@ -39,7 +47,13 @@
 	    HaveLength uses reflection to verify that len(actual) == 0.
 	
 	func Panic(actual interface{}, expected ...interface{}) (err error)
+	    Panic invokes the func() provided as actual and recovers from any panic. It
+	    returns an error if actual() does not result in a panic.
+	
 	func WrapError(actual interface{}, expected ...interface{}) error
+	    WrapError uses errors.Is to verify that actual is an error value that wraps
+	    expected[0] (also an error value).
+	
 
 ---
 
