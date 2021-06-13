@@ -13,8 +13,9 @@ var (
 )
 
 func failure(format string, args ...interface{}) error {
-	args = append([]interface{}{ErrAssertionFailure}, args...)
-	return fmt.Errorf("%w: "+format, args...)
+	full := fmt.Sprintf(format, args...)
+	format = "%w: " + full
+	return fmt.Errorf(format, ErrAssertionFailure)
 }
 
 /*
