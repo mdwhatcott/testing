@@ -24,9 +24,4 @@ func failure(format string, args ...interface{}) error {
 - StartWith        (&NOT) for slices, strings, arrays
 - EndWith          (&NOT) for slices, strings, arrays
 
-- BeGreaterThan           for numerics, time.Time
-- BeGreaterThanOrEqualTo  for numerics, time.Time
-- BeLessThan              for numerics, time.Time
-- BeLessThanOrEqualTo     for numerics, time.Time
-
 */
