@@ -43,5 +43,5 @@ func (negated) BeNil(actual interface{}, expected ...interface{}) error {
 		return err
 	}
 
-	return negatedFailure("got nil, want non-<nil>")
+	return failure("got nil, want non-<nil>")
 }

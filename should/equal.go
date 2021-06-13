@@ -33,7 +33,7 @@ func (negated) Equal(actual interface{}, expected ...interface{}) error {
 		return err
 	}
 
-	return negatedFailure("\n"+
+	return failure("\n"+
 		"  expected:     %#v\n"+
 		"  to not equal: %#v\n"+
 		"  (but it did)",

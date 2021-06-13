@@ -12,10 +12,6 @@ var (
 	ErrAssertionFailure     = errors.New("assertion failure")
 )
 
-func negatedFailure(format string, args ...interface{}) error {
-	args = append([]interface{}{ErrAssertionFailure}, args...)
-	return fmt.Errorf("negated %w: "+format, args...)
-}
 func failure(format string, args ...interface{}) error {
 	args = append([]interface{}{ErrAssertionFailure}, args...)
 	return fmt.Errorf("%w: "+format, args...)

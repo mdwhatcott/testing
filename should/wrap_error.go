@@ -29,9 +29,8 @@ func WrapError(actual interface{}, expected ...interface{}) error {
 	}
 
 	return fmt.Errorf("%w:\n"+
-		"\touter err:  (%s)\n"+
-		"\tdoes not\n"+
-		"\twrap inner: (%s)",
+		"\t            outer err: (%s)\n"+
+		"\tshould wrap inner err: (%s)",
 		ErrAssertionFailure,
 		outer,
 		inner,

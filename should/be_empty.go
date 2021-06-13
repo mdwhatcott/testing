@@ -36,7 +36,7 @@ func (negated) BeEmpty(actual interface{}, expected ...interface{}) error {
 		return err
 	}
 	TYPE := reflect.TypeOf(actual).String()
-	return negatedFailure("got empty %s, want non-empty %s", TYPE, TYPE)
+	return failure("got empty %s, want non-empty %s", TYPE, TYPE)
 }
 
 var kindsWithLength = []reflect.Kind{
