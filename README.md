@@ -2,65 +2,6 @@
 
 
 
-	package should // import "github.com/mdwhatcott/testing/should"
-	
-	
-	VARIABLES
-	
-	var (
-		ErrExpectedCountInvalid = errors.New("expected count invalid")
-		ErrTypeMismatch         = errors.New("type mismatch")
-		ErrKindMismatch         = errors.New("kind mismatch")
-		ErrAssertionFailure     = errors.New("assertion failure")
-	)
-	var NOT negated // TODO: NOT or Not?
-	    NOT (a singleton) constrains all negated assertions to their own namespace.
-	
-	
-	FUNCTIONS
-	
-	func BeEmpty(actual interface{}, expected ...interface{}) error
-	    BeEmpty uses reflection to verify that len(actual) == 0.
-	
-	func BeFalse(actual interface{}, expected ...interface{}) error
-	    BeFalse verifies that actual is the boolean false value.
-	
-	func BeIn(actual interface{}, expected ...interface{}) error
-	    BeIn determines whether actual is a member of expected[0]. It defers to
-	    Contain.
-	
-	func BeNil(actual interface{}, expected ...interface{}) error
-	    BeNil verifies that actual is the nil value.
-	
-	func BeTrue(actual interface{}, expected ...interface{}) error
-	    BeTrue verifies that actual is the boolean true value.
-	
-	func Contain(actual interface{}, expected ...interface{}) error
-	    Contain determines whether actual contains expected[0]. The actual value may
-	    be a map, array, slice, or string:
-	
-	        - In the case of maps the expected value is assumed to be a map key.
-	        - In the case of slices and arrays the expected value is assumed to be a member.
-	        - In the case of strings the expected value may be a rune or substring.
-	
-	func Equal(actual interface{}, EXPECTED ...interface{}) error
-	    Equal verifies that the actual value is equal to the expected value. It uses
-	    reflect.DeepEqual in most cases.
-	
-	func HaveLength(actual interface{}, expected ...interface{}) error
-	    HaveLength uses reflection to verify that len(actual) == 0.
-	
-	func Panic(actual interface{}, expected ...interface{}) (err error)
-	    Panic invokes the func() provided as actual and recovers from any panic. It
-	    returns an error if actual() does not result in a panic.
-	
-	func WrapError(actual interface{}, expected ...interface{}) error
-	    WrapError uses errors.Is to verify that actual is an error value that wraps
-	    expected[0] (also an error value).
-	
-
----
-
 	package suite // import "github.com/mdwhatcott/testing/suite"
 	
 	Package suite implements an xUnit-style test runner, aiming for an optimum
@@ -168,3 +109,62 @@
 	    Write implements io.Writer allowing for the suite to serve as a convenient
 	    log target, among other use cases.
 	
+---
+
+	package should // import "github.com/mdwhatcott/testing/should"
+	
+	
+	VARIABLES
+	
+	var (
+		ErrExpectedCountInvalid = errors.New("expected count invalid")
+		ErrTypeMismatch         = errors.New("type mismatch")
+		ErrKindMismatch         = errors.New("kind mismatch")
+		ErrAssertionFailure     = errors.New("assertion failure")
+	)
+	var NOT negated // TODO: NOT or Not?
+	    NOT (a singleton) constrains all negated assertions to their own namespace.
+	
+	
+	FUNCTIONS
+	
+	func BeEmpty(actual interface{}, expected ...interface{}) error
+	    BeEmpty uses reflection to verify that len(actual) == 0.
+	
+	func BeFalse(actual interface{}, expected ...interface{}) error
+	    BeFalse verifies that actual is the boolean false value.
+	
+	func BeIn(actual interface{}, expected ...interface{}) error
+	    BeIn determines whether actual is a member of expected[0]. It defers to
+	    Contain.
+	
+	func BeNil(actual interface{}, expected ...interface{}) error
+	    BeNil verifies that actual is the nil value.
+	
+	func BeTrue(actual interface{}, expected ...interface{}) error
+	    BeTrue verifies that actual is the boolean true value.
+	
+	func Contain(actual interface{}, expected ...interface{}) error
+	    Contain determines whether actual contains expected[0]. The actual value may
+	    be a map, array, slice, or string:
+	
+	        - In the case of maps the expected value is assumed to be a map key.
+	        - In the case of slices and arrays the expected value is assumed to be a member.
+	        - In the case of strings the expected value may be a rune or substring.
+	
+	func Equal(actual interface{}, EXPECTED ...interface{}) error
+	    Equal verifies that the actual value is equal to the expected value. It uses
+	    reflect.DeepEqual in most cases.
+	
+	func HaveLength(actual interface{}, expected ...interface{}) error
+	    HaveLength uses reflection to verify that len(actual) == 0.
+	
+	func Panic(actual interface{}, expected ...interface{}) (err error)
+	    Panic invokes the func() provided as actual and recovers from any panic. It
+	    returns an error if actual() does not result in a panic.
+	
+	func WrapError(actual interface{}, expected ...interface{}) error
+	    WrapError uses errors.Is to verify that actual is an error value that wraps
+	    expected[0] (also an error value).
+	
+

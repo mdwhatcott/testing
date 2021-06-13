@@ -11,8 +11,8 @@ doc:
 		head -n 1 go.mod | sed 's/^module //' >> README.md && \
 		echo >> README.md && \
 		echo >> README.md && \
-		go doc -all should | sed 's/^/\t/' >> README.md && \
-		echo >> README.md && \
+		go doc -all suite  | sed 's/^/\t/' >> README.md && \
 		echo '---' >> README.md && \
 		echo >> README.md && \
-		go doc -all suite  | sed 's/^/\t/' >> README.md
+		go doc -all should | sed 's/^/\t/' >> README.md && \
+		echo >> README.md
