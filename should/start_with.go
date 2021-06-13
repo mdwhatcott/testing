@@ -25,11 +25,11 @@ func StartWith(actual interface{}, expected ...interface{}) error {
 
 	switch reflect.TypeOf(actual).Kind() {
 	case reflect.Array, reflect.Slice:
-		comparer := compare.New().Compare
 		if actualValue.Len() == 0 {
 			break
 		}
-		if comparer(EXPECTED, actualValue.Index(0).Interface()).OK() {
+		first := actualValue.Index(0).Interface()
+		if compare.New().Compare(EXPECTED, first).OK() {
 			return nil
 		}
 	case reflect.String:

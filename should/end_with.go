@@ -25,12 +25,11 @@ func EndWith(actual interface{}, expected ...interface{}) error {
 
 	switch reflect.TypeOf(actual).Kind() {
 	case reflect.Array, reflect.Slice:
-		comparer := compare.New().Compare
 		if actualValue.Len() == 0 {
 			break
 		}
 		last := actualValue.Index(actualValue.Len() - 1).Interface()
-		if comparer(EXPECTED, last).OK() {
+		if compare.New().Compare(EXPECTED, last).OK() {
 			return nil
 		}
 	case reflect.String:
