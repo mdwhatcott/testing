@@ -7,8 +7,8 @@ import (
 )
 
 func TestShouldBeTrue(t *testing.T) {
-	assertPass(t, should.BeTrue(true))
-	assertFail(t, should.BeTrue(1, 2), should.ErrExpectedCountInvalid)
-	assertFail(t, should.BeTrue(1), should.ErrTypeMismatch)
-	assertFail(t, should.BeTrue(false), should.ErrAssertionFailure)
+	invalid(t, should.BeTrue(1, 2), should.ErrExpectedCountInvalid)
+	invalid(t, should.BeTrue(1), should.ErrTypeMismatch)
+	fail(t, should.BeTrue(false))
+	pass(t, should.BeTrue(true))
 }

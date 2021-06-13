@@ -7,15 +7,15 @@ import (
 )
 
 func TestShouldPanic(t *testing.T) {
-	assertFail(t, should.Panic("to", "many"), should.ErrExpectedCountInvalid)
-	assertFail(t, should.Panic("wrong type"), should.ErrTypeMismatch)
-	assertFail(t, should.Panic(func() {}), should.ErrAssertionFailure)
-	assertPass(t, should.Panic(func() { panic("yay") }))
+	invalid(t, should.Panic("to", "many"), should.ErrExpectedCountInvalid)
+	invalid(t, should.Panic("wrong type"), should.ErrTypeMismatch)
+	fail(t, should.Panic(func() {}))
+	pass(t, should.Panic(func() { panic("yay") }))
 }
 
 func TestShouldNotPanic(t *testing.T) {
-	assertFail(t, should.NOT.Panic("to", "many"), should.ErrExpectedCountInvalid)
-	assertFail(t, should.NOT.Panic("wrong type"), should.ErrTypeMismatch)
-	assertFail(t, should.NOT.Panic(func() { panic("boo") }), should.ErrAssertionFailure)
-	assertPass(t, should.NOT.Panic(func() {}))
+	invalid(t, should.NOT.Panic("to", "many"), should.ErrExpectedCountInvalid)
+	invalid(t, should.NOT.Panic("wrong type"), should.ErrTypeMismatch)
+	fail(t, should.NOT.Panic(func() { panic("boo") }))
+	pass(t, should.NOT.Panic(func() {}))
 }
