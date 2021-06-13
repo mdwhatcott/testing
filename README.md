@@ -13,7 +13,7 @@
 		ErrKindMismatch         = errors.New("kind mismatch")
 		ErrAssertionFailure     = errors.New("assertion failure")
 	)
-	var NOT negated
+	var NOT negated // TODO: NOT or Not?
 	    NOT (a singleton) constrains all negated assertions to their own namespace.
 	
 	
@@ -25,6 +25,10 @@
 	func BeFalse(actual interface{}, expected ...interface{}) error
 	    BeFalse verifies that actual is the boolean false value.
 	
+	func BeIn(actual interface{}, expected ...interface{}) error
+	    BeIn determines whether actual is a member of expected[0]. It defers to
+	    Contain.
+	
 	func BeNil(actual interface{}, expected ...interface{}) error
 	    BeNil verifies that actual is the nil value.
 	
@@ -32,12 +36,12 @@
 	    BeTrue verifies that actual is the boolean true value.
 	
 	func Contain(actual interface{}, expected ...interface{}) error
-	    Contain determines whether actual is a member of expected[0]. The expected
-	    value may be a map, array, slice, or string:
+	    Contain determines whether actual contains expected[0]. The actual value may
+	    be a map, array, slice, or string:
 	
-	        - In the case of maps the actual value is assumed to be a map key.
-	        - In the case of slices and arrays the actual value is assumed to be a member.
-	        - In the case of strings the actual value may be a rune or substring.
+	        - In the case of maps the expected value is assumed to be a map key.
+	        - In the case of slices and arrays the expected value is assumed to be a member.
+	        - In the case of strings the expected value may be a rune or substring.
 	
 	func Equal(actual interface{}, EXPECTED ...interface{}) error
 	    Equal verifies that the actual value is equal to the expected value. It uses

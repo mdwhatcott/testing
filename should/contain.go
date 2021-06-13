@@ -68,6 +68,7 @@ func Contain(actual interface{}, expected ...interface{}) error {
 	)
 }
 
+// Contain (negated!)
 func (negated) Contain(actual interface{}, expected ...interface{}) error {
 	err := Contain(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
