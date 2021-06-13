@@ -21,9 +21,11 @@ func invalid(t *testing.T, actual, expected error) {
 	}
 }
 func fail(t *testing.T, err error) {
+	t.Helper()
 	if !errors.Is(err, should.ErrAssertionFailure) {
-		t.Helper()
 		t.Error("[FAIL] expected assertion failure, got:", err)
+	} else if testing.Verbose() {
+		t.Log("\n", err, "\n", "(above error report printed for visual inspection)")
 	}
 }
 func pass(t *testing.T, actual error) {

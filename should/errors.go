@@ -21,7 +21,6 @@ func failure(format string, args ...interface{}) error {
 
 ## TODO
 
-- StartWith        (&NOT) for slices, strings, arrays
 - EndWith          (&NOT) for slices, strings, arrays
 
 */
