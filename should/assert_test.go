@@ -16,7 +16,7 @@ func assertFail(t *testing.T, actual, expected error) {
 	t.Helper()
 
 	if !errors.Is(actual, expected) {
-		t.Errorf("\n"+
+		t.Errorf("[FAIL]\n"+
 			"expected: %v\n"+
 			"actual:   %v",
 			expected,
