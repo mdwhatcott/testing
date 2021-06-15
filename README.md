@@ -122,7 +122,7 @@
 		ErrKindMismatch         = errors.New("kind mismatch")
 		ErrAssertionFailure     = errors.New("assertion failure")
 	)
-	var NOT negated // TODO: NOT or Not?
+	var NOT negated
 	    NOT (a singleton) constrains all negated assertions to their own namespace.
 	
 	
