@@ -84,6 +84,12 @@ func Test(t *testing.T) {
 		},
 		{
 			Skip:     false,
+			Expected: "hi\nbye",
+			Actual:   "hi\nbyu",
+			AreEqual: false,
+		},
+		{
+			Skip:     false,
 			Expected: now.In(notUTC),
 			Actual:   now.In(time.UTC),
 			AreEqual: true,
@@ -142,15 +148,6 @@ func Test(t *testing.T) {
 			Actual:   func() {},
 			AreEqual: false,
 		},
-		{
-			Skip:     false,
-			Expected: Thing{Integer: 42},
-			Actual:   Thing{Integer: 43},
-			AreEqual: false,
-			Options: []compare.Option{
-				compare.FormatJSON("  "),
-			},
-		},
 	})
 }
 
@@ -173,7 +170,6 @@ type TestCase struct {
 	Expected interface{}
 	Actual   interface{}
 	AreEqual bool
-	Options  []compare.Option
 }
 
 func (this TestCase) Title(x int) string {
@@ -191,7 +187,7 @@ func (this TestCase) Run(t *testing.T) {
 		t.Skip()
 	}
 	if this.AreEqual {
-		comparer := compare.New(this.Options...)
+		comparer := compare.New()
 		result := comparer.Compare(this.Expected, this.Actual)
 		report := result.Report()
 		if result.OK() {
@@ -200,7 +196,7 @@ func (this TestCase) Run(t *testing.T) {
 			t.Error(report)
 		}
 	} else {
-		comparer := compare.New(this.Options...)
+		comparer := compare.New()
 		result := comparer.Compare(this.Expected, this.Actual)
 		if !result.OK() {
 			t.Log(

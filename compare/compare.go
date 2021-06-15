@@ -2,8 +2,6 @@
 package compare
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"math"
 	"reflect"
@@ -28,8 +26,8 @@ type comparer struct {
 	config *config
 }
 
-func New(options ...Option) Comparer {
-	return comparer{config: newConfig(options...)}
+func New() Comparer {
+	return comparer{config: newConfig()}
 }
 
 func (this comparer) Compare(a, b interface{}) (result Comparison) {
@@ -38,13 +36,13 @@ func (this comparer) Compare(a, b interface{}) (result Comparison) {
 	return result
 }
 
-func (this comparer) resolveFormatter(a interface{}) Formatter {
-	if this.config.formatter != nil {
-		return this.config.formatter
+func (this comparer) resolveFormatter(v interface{}) formatter {
+	switch {
+	case isNumeric(v) || isTime(v):
+		return FormatVerb("%v")
+	default:
+		return FormatVerb("%#v")
 	}
-	config := new(config)
-	defaultFormatterForType(a)(config)
-	return config.formatter
 }
 func (this comparer) check(a, b interface{}) bool {
 	for _, spec := range this.config.specs {
@@ -61,40 +59,17 @@ func (this comparer) check(a, b interface{}) bool {
 
 type Option func(*config)
 
-func With(specs ...Specification) Option {
-	return func(this *config) { this.specs = append(this.specs, specs...) }
-}
-func Format(formatter Formatter) Option {
-	return func(this *config) { this.formatter = formatter }
-}
-func FormatVerb(verb string) Option {
-	return Format(func(v interface{}) string { return fmt.Sprintf(verb, v) })
-}
-func FormatJSON(indent string) Option {
-	return Format(func(v interface{}) string {
-		raw, err := json.Marshal(v)
-		if err != nil {
-			return err.Error()
-		}
-		if indent == "" {
-			return string(raw)
-		}
-		indented := new(bytes.Buffer)
-		_ = json.Indent(indented, raw, "", indent)
-		return indented.String()
-	})
+func FormatVerb(verb string) formatter {
+	return func(v interface{}) string { return fmt.Sprintf(verb, v) }
 }
 
 type config struct {
 	specs     []Specification
-	formatter Formatter
+	formatter formatter
 }
 
-func newConfig(options ...Option) *config {
+func newConfig() *config {
 	this := new(config)
-	for _, option := range options {
-		option(this)
-	}
 	if len(this.specs) == 0 {
 		this.specs = []Specification{
 			NumericEquality{},
@@ -172,9 +147,9 @@ func isTime(v interface{}) bool {
 	return ok
 }
 
-type Formatter func(interface{}) string
+type formatter func(interface{}) string
 
-func report(equal bool, format Formatter, a, b interface{}) string {
+func report(equal bool, format formatter, a, b interface{}) string {
 	if equal {
 		return fmt.Sprintf("%s == %s", format(a), format(b))
 	}
@@ -198,19 +173,7 @@ func report(equal bool, format Formatter, a, b interface{}) string {
 	return builder.String()
 }
 
-func defaultFormatterForType(v interface{}) Option {
-	switch {
-	case isNumeric(v) || isTime(v):
-		return FormatVerb("%v")
-	default:
-		return FormatVerb("%#v")
-	}
-}
-
 func diff(a, b string) string {
-	if strings.Contains(a, "\n") || strings.Contains(b, "\n") {
-		return ""
-	}
 	result := new(strings.Builder)
 
 	for x := 0; ; x++ {
