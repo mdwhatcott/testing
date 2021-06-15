@@ -1,22 +1,15 @@
 package should
 
-import (
-	"fmt"
-	"reflect"
-)
+import "reflect"
 
 func validateExpected(count int, expected []interface{}) error {
-	if len(expected) == count {
+	length := len(expected)
+	if length == count {
 		return nil
 	}
 
-	return fmt.Errorf(
-		"%w: got %d value%s, want %d",
-		ErrExpectedCountInvalid,
-		len(expected),
-		pluralize(len(expected)),
-		count,
-	)
+	s := pluralize(length)
+	return wrap(ErrExpectedCountInvalid, "got %d value%s, want %d", length, s, count)
 }
 
 func pluralize(count int) string {
@@ -32,26 +25,16 @@ func validateType(actual, expected interface{}) error {
 	if ACTUAL == EXPECTED {
 		return nil
 	}
-	return fmt.Errorf(
-		"%w: got %s, want %s",
-		ErrTypeMismatch,
-		ACTUAL.String(),
-		EXPECTED.String(),
-	)
+	return wrap(ErrTypeMismatch, "got %s, want %s", ACTUAL, EXPECTED)
 }
 
 func validateKind(actual interface{}, kinds ...reflect.Kind) error {
-	ACTUAL := reflect.ValueOf(actual)
-	kind := ACTUAL.Kind()
+	value := reflect.ValueOf(actual)
+	kind := value.Kind()
 	for _, k := range kinds {
 		if k == kind {
 			return nil
 		}
 	}
-	return fmt.Errorf(
-		"%w: got %s, want one of %v",
-		ErrKindMismatch,
-		kind.String(),
-		kinds,
-	)
+	return wrap(ErrKindMismatch, "got %s, want one of %v", kind, kinds)
 }

@@ -13,6 +13,8 @@ var (
 )
 
 func failure(format string, args ...interface{}) error {
-	full := fmt.Sprintf(format, args...)
-	return fmt.Errorf("%w: "+full, ErrAssertionFailure)
+	return wrap(ErrAssertionFailure, format, args...)
+}
+func wrap(inner error, format string, args ...interface{}) error {
+	return fmt.Errorf("%w: "+fmt.Sprintf(format, args...), inner)
 }
