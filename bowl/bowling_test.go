@@ -1,4 +1,4 @@
-package bowling
+package bowl
 
 import (
 	"testing"
