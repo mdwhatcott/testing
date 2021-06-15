@@ -7,7 +7,7 @@ import (
 	"github.com/mdwhatcott/testing/suite"
 )
 
-func TestSuiteWithSetupsAndTeardownsSkipped(t *testing.T) {
+func TestSuiteWithSetupsAndTeardownsSkippedEntirelyIfAllTestsSkipped(t *testing.T) {
 	fixture := &Suite06{T: &suite.T{T: t}}
 
 	suite.Run(fixture, suite.Options.SharedFixture())
