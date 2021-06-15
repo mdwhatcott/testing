@@ -1,9 +1,12 @@
 #!/usr/bin/make -f
 
 test:
+	@go version
 	go fmt ./...
 	go mod tidy
+	@echo
 	go test        -cover -timeout=1s -race ./...
+	@echo
 	go test -short -cover -timeout=1s -race ./...
 
 doc:

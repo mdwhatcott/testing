@@ -152,6 +152,10 @@
 	        - In the case of slices and arrays the expected value is assumed to be a member.
 	        - In the case of strings the expected value may be a rune or substring.
 	
+	func EndWith(actual interface{}, expected ...interface{}) error
+	    EndWith verifies that actual ends with expected[0]. The actual value may be
+	    an array, slice, or string.
+	
 	func Equal(actual interface{}, EXPECTED ...interface{}) error
 	    Equal verifies that the actual value is equal to the expected value. It uses
 	    reflect.DeepEqual in most cases.
@@ -162,6 +166,10 @@
 	func Panic(actual interface{}, expected ...interface{}) (err error)
 	    Panic invokes the func() provided as actual and recovers from any panic. It
 	    returns an error if actual() does not result in a panic.
+	
+	func StartWith(actual interface{}, expected ...interface{}) error
+	    StartWith verified that actual starts with expected[0]. The actual value may
+	    be an array, slice, or string.
 	
 	func WrapError(actual interface{}, expected ...interface{}) error
 	    WrapError uses errors.Is to verify that actual is an error value that wraps
