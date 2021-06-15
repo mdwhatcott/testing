@@ -29,7 +29,7 @@ func EndWith(actual interface{}, expected ...interface{}) error {
 			break
 		}
 		last := actualValue.Index(actualValue.Len() - 1).Interface()
-		if compare.New().Compare(EXPECTED, last).OK() {
+		if compare.Compare(EXPECTED, last) == nil {
 			return nil
 		}
 	case reflect.String:

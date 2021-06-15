@@ -14,12 +14,12 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 		return err
 	}
 
-	result := compare.New().Compare(actual, EXPECTED[0])
-	if result.OK() {
+	err = compare.Compare(actual, EXPECTED[0])
+	if err == nil {
 		return nil
 	}
 
-	return failure(result.Report())
+	return failure(err.Error())
 }
 
 // Equal negated!

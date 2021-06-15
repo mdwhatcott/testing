@@ -186,29 +186,12 @@ func (this TestCase) Run(t *testing.T) {
 	if this.Skip {
 		t.Skip()
 	}
-	if this.AreEqual {
-		comparer := compare.New()
-		result := comparer.Compare(this.Expected, this.Actual)
-		report := result.Report()
-		if result.OK() {
-			t.Log(report)
-		} else {
-			t.Error(report)
-		}
+	err := compare.Compare(this.Expected, this.Actual)
+	if this.AreEqual && err != nil {
+		t.Fatal("[FAIL]", err)
+	} else if !this.AreEqual && err == nil {
+		t.Fatalf("[FAIL] unequal values %v and %v erroneously deemed equal", this.Expected, this.Actual)
 	} else {
-		comparer := compare.New()
-		result := comparer.Compare(this.Expected, this.Actual)
-		if !result.OK() {
-			t.Log(
-				"(report printed below for visual inspection)",
-				result.Report(),
-			)
-		} else {
-			t.Errorf(
-				"unequal values %v and %v erroneously deemed equal",
-				this.Expected,
-				this.Actual,
-			)
-		}
+		t.Log("[PASS] (report printed below for visual inspection)", err)
 	}
 }

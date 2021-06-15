@@ -29,7 +29,7 @@ func StartWith(actual interface{}, expected ...interface{}) error {
 			break
 		}
 		first := actualValue.Index(0).Interface()
-		if compare.New().Compare(EXPECTED, first).OK() {
+		if compare.Compare(EXPECTED, first) == nil {
 			return nil
 		}
 	case reflect.String:
