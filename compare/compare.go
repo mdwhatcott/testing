@@ -11,24 +11,25 @@ import (
 	"time"
 )
 
-func Compare(a, b interface{}) error {
-	if check(a, b) {
-		return nil
-	}
-	return errors.New(report(resolveFormatter(a), a, b))
+var ErrUnequal = errors.New("")
+
+var specs = []specification{
+	numericEquality{},
+	timeEquality{},
+	deepEquality{},
 }
 
-func check(a, b interface{}) bool {
-	for _, spec := range []specification{numericEquality{}, timeEquality{}, deepEquality{}} {
+func Equal(a, b interface{}) error {
+	for _, spec := range specs {
 		if !spec.IsSatisfiedBy(a, b) {
 			continue
 		}
 		if spec.Compare(a, b) {
-			return true
+			return nil
 		}
 		break
 	}
-	return false
+	return fmt.Errorf(report(resolveFormatter(a), a, b)+"%w", ErrUnequal)
 }
 func resolveFormatter(v interface{}) formatter {
 	formatVerb := func(verb string) formatter {

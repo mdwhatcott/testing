@@ -163,7 +163,7 @@ func (this TestCase) Run(t *testing.T) {
 	if this.Skip {
 		t.Skip()
 	}
-	err := compare.Compare(this.Expected, this.Actual)
+	err := compare.Equal(this.Expected, this.Actual)
 	if this.AreEqual && err != nil {
 		t.Fatal("[FAIL]", err)
 	} else if !this.AreEqual && err == nil {

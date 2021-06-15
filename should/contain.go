@@ -37,7 +37,7 @@ func Contain(actual interface{}, expected ...interface{}) error {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < actualValue.Len(); i++ {
 			item := actualValue.Index(i).Interface()
-			err := compare.Compare(EXPECTED, item)
+			err := compare.Equal(EXPECTED, item)
 			if err == nil {
 				return nil
 			}

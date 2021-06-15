@@ -14,7 +14,7 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 		return err
 	}
 
-	err = compare.Compare(actual, EXPECTED[0])
+	err = compare.Equal(actual, EXPECTED[0])
 	if err == nil {
 		return nil
 	}
