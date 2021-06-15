@@ -7,25 +7,28 @@ import (
 )
 
 func TestShouldStartWith(t *testing.T) {
-	invalid(t, should.StartWith("not enough"), should.ErrExpectedCountInvalid)
-	invalid(t, should.StartWith("too", "many", "args"), should.ErrExpectedCountInvalid)
-	invalid(t, should.StartWith("string", false), should.ErrKindMismatch)
-	invalid(t, should.StartWith(1, "hi"), should.ErrKindMismatch)
+	assert := NewAssertion(t)
+
+	assert.ExpectedCountInvalid("actual", should.StartWith)
+	assert.ExpectedCountInvalid("actual", should.StartWith, "EXPECTED", "EXTRA")
+
+	assert.KindMismatch("string", should.StartWith, false)
+	assert.KindMismatch(1, should.StartWith, "hi")
 
 	// strings:
-	fail(t, should.StartWith("", "no"))
-	pass(t, should.StartWith("abc", 'a'))
-	pass(t, should.StartWith("integrate", "in"))
+	assert.Fail("", should.StartWith, "no")
+	assert.Pass("abc", should.StartWith, 'a')
+	assert.Pass("integrate", should.StartWith, "in")
 
 	// slices:
-	fail(t, should.StartWith([]byte{}, 'b'))
-	fail(t, should.StartWith([]byte(nil), 'b'))
-	fail(t, should.StartWith([]byte("abc"), 'b'))
-	pass(t, should.StartWith([]byte("abc"), 'a'))
-	pass(t, should.StartWith([]byte("abc"), 97))
+	assert.Fail([]byte{}, should.StartWith, 'b')
+	assert.Fail([]byte(nil), should.StartWith, 'b')
+	assert.Fail([]byte("abc"), should.StartWith, 'b')
+	assert.Pass([]byte("abc"), should.StartWith, 'a')
+	assert.Pass([]byte("abc"), should.StartWith, 97)
 
 	// arrays:
-	fail(t, should.StartWith([3]byte{'a', 'b', 'c'}, 'b'))
-	pass(t, should.StartWith([3]byte{'a', 'b', 'c'}, 'a'))
-	pass(t, should.StartWith([3]byte{'a', 'b', 'c'}, 97))
+	assert.Fail([3]byte{'a', 'b', 'c'}, should.StartWith, 'b')
+	assert.Pass([3]byte{'a', 'b', 'c'}, should.StartWith, 'a')
+	assert.Pass([3]byte{'a', 'b', 'c'}, should.StartWith, 97)
 }

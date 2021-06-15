@@ -7,26 +7,29 @@ import (
 )
 
 func TestShouldHaveLength(t *testing.T) {
-	invalid(t, should.HaveLength("", 1, "too many"), should.ErrExpectedCountInvalid)
-	invalid(t, should.HaveLength(true, 0), should.ErrKindMismatch)
-	invalid(t, should.HaveLength(42, 0), should.ErrKindMismatch)
-	invalid(t, should.HaveLength("", ""), should.ErrKindMismatch)
+	assert := NewAssertion(t)
 
-	pass(t, should.HaveLength([]string(nil), 0))
-	pass(t, should.HaveLength([]string{}, 0))
-	pass(t, should.HaveLength([]string{""}, 1))
-	fail(t, should.HaveLength([]string{""}, 2))
+	assert.ExpectedCountInvalid("actual", should.HaveLength, " EXPECTED", "EXTRA")
+	assert.KindMismatch(true, should.HaveLength, 0)
 
-	pass(t, should.HaveLength([0]string{}, 0)) // The only possible empty array!
-	fail(t, should.HaveLength([1]string{}, 2))
+	assert.KindMismatch(42, should.HaveLength, 0)
+	assert.KindMismatch("", should.HaveLength, "")
 
-	pass(t, should.HaveLength(chan string(nil), 0))
-	fail(t, should.HaveLength(nonEmptyChannel(), 2))
+	assert.Pass([]string(nil), should.HaveLength, 0)
+	assert.Pass([]string{}, should.HaveLength, 0)
+	assert.Pass([]string{""}, should.HaveLength, 1)
+	assert.Fail([]string{""}, should.HaveLength, 2)
 
-	pass(t, should.HaveLength(map[string]string{"": ""}, 1))
-	fail(t, should.HaveLength(map[string]string{"": ""}, 2))
+	assert.Pass([0]string{}, should.HaveLength, 0) // The only possible empty array!
+	assert.Fail([1]string{}, should.HaveLength, 2)
 
-	pass(t, should.HaveLength("", 0))
-	pass(t, should.HaveLength("123", 3))
-	fail(t, should.HaveLength("123", 4))
+	assert.Pass(chan string(nil), should.HaveLength, 0)
+	assert.Fail(nonEmptyChannel(), should.HaveLength, 2)
+
+	assert.Pass(map[string]string{"": ""}, should.HaveLength, 1)
+	assert.Fail(map[string]string{"": ""}, should.HaveLength, 2)
+
+	assert.Pass("", should.HaveLength, 0)
+	assert.Pass("123", should.HaveLength, 3)
+	assert.Fail("123", should.HaveLength, 4)
 }

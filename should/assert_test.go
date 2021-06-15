@@ -2,41 +2,60 @@ package should_test
 
 import (
 	"errors"
+	"fmt"
+	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/mdwhatcott/testing/should"
 )
 
-func invalid(t *testing.T, actual, expected error) {
-	t.Helper()
-	if !errors.Is(actual, expected) {
-		t.Errorf("[FAIL]\n"+
-			"expected: %v\n"+
-			"actual:   %v",
-			expected,
-			actual,
-		)
-	} else if testing.Verbose() {
-		t.Log(
-			"\n", actual, "\n",
-			"(above error report printed for visual inspection)",
-		)
-	}
+type Assertion struct{ *testing.T }
+
+func NewAssertion(t *testing.T) *Assertion {
+	return &Assertion{T: t}
 }
-func fail(t *testing.T, err error) {
-	t.Helper()
-	if !errors.Is(err, should.ErrAssertionFailure) {
-		t.Error("[FAIL] expected assertion failure, got:", err)
-	} else if testing.Verbose() {
-		t.Log(
-			"\n", err, "\n",
-			"(above error report printed for visual inspection)",
-		)
-	}
+func (this *Assertion) ExpectedCountInvalid(actual interface{}, assertion assertion, expected ...interface{}) {
+	this.Helper()
+	this.err(actual, assertion, expected, should.ErrExpectedCountInvalid)
 }
-func pass(t *testing.T, actual error) {
-	if actual != nil {
+func (this *Assertion) TypeMismatch(actual interface{}, assertion assertion, expected ...interface{}) {
+	this.Helper()
+	this.err(actual, assertion, expected, should.ErrTypeMismatch)
+}
+func (this *Assertion) KindMismatch(actual interface{}, assertion assertion, expected ...interface{}) {
+	this.Helper()
+	this.err(actual, assertion, expected, should.ErrKindMismatch)
+}
+func (this *Assertion) Fail(actual interface{}, assertion assertion, expected ...interface{}) {
+	this.Helper()
+	this.err(actual, assertion, expected, should.ErrAssertionFailure)
+}
+func (this *Assertion) Pass(actual interface{}, assertion assertion, expected ...interface{}) {
+	this.Helper()
+	this.err(actual, assertion, expected, nil)
+}
+func (this *Assertion) err(actual interface{}, assertion assertion, expected []interface{}, expectedErr error) {
+	this.Helper()
+	_, file, line, _ := runtime.Caller(2)
+	subTest := fmt.Sprintf("%s:%d", filepath.Base(file), line)
+	this.Run(subTest, func(t *testing.T) {
 		t.Helper()
-		t.Error("[FAIL] expected nil err, got:", actual)
-	}
+		err := assertion(actual, expected...)
+		if !errors.Is(err, expectedErr) {
+			t.Errorf("[FAIL]\n"+
+				"expected: %v\n"+
+				"actual:   %v",
+				expected,
+				actual,
+			)
+		} else if testing.Verbose() {
+			t.Log(
+				"\n", err, "\n",
+				"(above error report printed for visual inspection)",
+			)
+		}
+	})
 }
+
+type assertion func(actual interface{}, expected ...interface{}) error

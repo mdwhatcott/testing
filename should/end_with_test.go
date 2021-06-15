@@ -7,25 +7,28 @@ import (
 )
 
 func TestShouldEndWith(t *testing.T) {
-	invalid(t, should.EndWith("not enough"), should.ErrExpectedCountInvalid)
-	invalid(t, should.EndWith("too", "many", "args"), should.ErrExpectedCountInvalid)
-	invalid(t, should.EndWith("string", false), should.ErrKindMismatch)
-	invalid(t, should.EndWith(1, "hi"), should.ErrKindMismatch)
+	assert := NewAssertion(t)
+
+	assert.ExpectedCountInvalid("actual", should.EndWith)
+	assert.ExpectedCountInvalid("actual", should.EndWith, "EXPECTED", "EXTRA")
+
+	assert.KindMismatch("string", should.EndWith, false)
+	assert.KindMismatch(1, should.EndWith, "hi")
 
 	// strings:
-	fail(t, should.EndWith("", "no"))
-	pass(t, should.EndWith("abc", 'c'))
-	pass(t, should.EndWith("integrate", "ate"))
+	assert.Fail("", should.EndWith, "no")
+	assert.Pass("abc", should.EndWith, 'c')
+	assert.Pass("integrate", should.EndWith, "ate")
 
 	// slices:
-	fail(t, should.EndWith([]byte{}, 'b'))
-	fail(t, should.EndWith([]byte(nil), 'b'))
-	fail(t, should.EndWith([]byte("abc"), 'b'))
-	pass(t, should.EndWith([]byte("abc"), 'c'))
-	pass(t, should.EndWith([]byte("abc"), 99))
+	assert.Fail([]byte{}, should.EndWith, 'b')
+	assert.Fail([]byte(nil), should.EndWith, 'b')
+	assert.Fail([]byte("abc"), should.EndWith, 'b')
+	assert.Pass([]byte("abc"), should.EndWith, 'c')
+	assert.Pass([]byte("abc"), should.EndWith, 99)
 
 	// arrays:
-	fail(t, should.EndWith([3]byte{'a', 'b', 'c'}, 'b'))
-	pass(t, should.EndWith([3]byte{'a', 'b', 'c'}, 'c'))
-	pass(t, should.EndWith([3]byte{'a', 'b', 'c'}, 99))
+	assert.Fail([3]byte{'a', 'b', 'c'}, should.EndWith, 'b')
+	assert.Pass([3]byte{'a', 'b', 'c'}, should.EndWith, 'c')
+	assert.Pass([3]byte{'a', 'b', 'c'}, should.EndWith, 99)
 }

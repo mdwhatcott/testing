@@ -9,14 +9,16 @@ import (
 )
 
 func TestShouldWrapError(t *testing.T) {
-	invalid(t, should.WrapError(0), should.ErrExpectedCountInvalid)
-	invalid(t, should.WrapError(0, 1, 2), should.ErrExpectedCountInvalid)
+	assert := NewAssertion(t)
 
-	invalid(t, should.WrapError(inner, 42), should.ErrTypeMismatch)
-	invalid(t, should.WrapError(42, inner), should.ErrTypeMismatch)
+	assert.ExpectedCountInvalid("actual", should.WrapError)
+	assert.ExpectedCountInvalid("actual", should.WrapError, "EXPECTED", "EXTRA")
 
-	pass(t, should.WrapError(outer, inner))
-	fail(t, should.WrapError(inner, outer))
+	assert.TypeMismatch(inner, should.WrapError, 42)
+	assert.TypeMismatch(42, should.WrapError, inner)
+
+	assert.Pass(outer, should.WrapError, inner)
+	assert.Fail(inner, should.WrapError, outer)
 }
 
 var (

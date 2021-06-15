@@ -7,9 +7,11 @@ import (
 )
 
 func TestShouldBeFalse(t *testing.T) {
-	invalid(t, should.BeFalse(1, 2), should.ErrExpectedCountInvalid)
-	invalid(t, should.BeFalse(1), should.ErrTypeMismatch)
+	assert := NewAssertion(t)
 
-	fail(t, should.BeFalse(true))
-	pass(t, should.BeFalse(false))
+	assert.ExpectedCountInvalid("actual", should.BeFalse, "EXTRA")
+	assert.TypeMismatch(1, should.BeFalse)
+
+	assert.Fail(true, should.BeFalse)
+	assert.Pass(false, should.BeFalse)
 }

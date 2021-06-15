@@ -8,27 +8,32 @@ import (
 )
 
 func TestShouldEqual(t *testing.T) {
-	invalid(t, should.Equal("not enough args"), should.ErrExpectedCountInvalid)
-	invalid(t, should.Equal("too", "many", "args"), should.ErrExpectedCountInvalid)
+	assert := NewAssertion(t)
 
-	fail(t, should.Equal(1, 2))
-	pass(t, should.Equal(1, 1))
-	pass(t, should.Equal(1, uint(1)))
+	assert.ExpectedCountInvalid("actual", should.Equal)
+	assert.ExpectedCountInvalid("actual", should.Equal, "EXPECTED", "EXTRA")
+
+	assert.Fail(1, should.Equal, 2)
+	assert.Pass(1, should.Equal, 1)
+	assert.Pass(1, should.Equal, uint(1))
 
 	now := time.Now()
-	pass(t, should.Equal(now.UTC(), now.In(time.Local)))
-	fail(t, should.Equal(time.Now(), time.Now()))
+	assert.Pass(now.UTC(), should.Equal, now.In(time.Local))
+	assert.Fail(time.Now(), should.Equal, time.Now())
 
-	fail(t, should.Equal(struct{ A string }{}, struct{ B string }{}))
-	pass(t, should.Equal(struct{ A string }{}, struct{ A string }{}))
+	assert.Fail(struct{ A string }{}, should.Equal, struct{ B string }{})
+	assert.Pass(struct{ A string }{}, should.Equal, struct{ A string }{})
 
-	fail(t, should.Equal([]byte("hi"), []byte("bye")))
-	pass(t, should.Equal([]byte("hi"), []byte("hi")))
+	assert.Fail([]byte("hi"), should.Equal, []byte("bye"))
+	assert.Pass([]byte("hi"), should.Equal, []byte("hi"))
 }
 
 func TestShouldNotEqual(t *testing.T) {
-	invalid(t, should.NOT.Equal("not enough args"), should.ErrExpectedCountInvalid)
-	invalid(t, should.NOT.Equal("too", "many", "args"), should.ErrExpectedCountInvalid)
-	fail(t, should.NOT.Equal(1, 1))
-	pass(t, should.NOT.Equal(1, 2))
+	assert := NewAssertion(t)
+
+	assert.ExpectedCountInvalid("actual", should.NOT.Equal)
+	assert.ExpectedCountInvalid("actual", should.NOT.Equal, "EXPECTED", "EXTRA")
+
+	assert.Fail(1, should.NOT.Equal, 1)
+	assert.Pass(1, should.NOT.Equal, 2)
 }

@@ -7,57 +7,62 @@ import (
 )
 
 func TestShouldBeEmpty(t *testing.T) {
-	invalid(t, should.BeEmpty([]string(nil), "extra"), should.ErrExpectedCountInvalid)
-	invalid(t, should.BeEmpty(42), should.ErrKindMismatch)
+	assert := NewAssertion(t)
 
-	pass(t, should.BeEmpty([]string(nil)))
-	pass(t, should.BeEmpty(make([]string, 0, 0)))
-	pass(t, should.BeEmpty(make([]string, 0, 1)))
-	fail(t, should.BeEmpty([]string{""}))
+	assert.ExpectedCountInvalid("actual", should.BeEmpty, "EXTRA")
 
-	pass(t, should.BeEmpty([0]string{})) // The only possible empty array!
-	fail(t, should.BeEmpty([1]string{}))
+	assert.KindMismatch(42, should.BeEmpty)
 
-	pass(t, should.BeEmpty(chan string(nil)))
-	pass(t, should.BeEmpty(make(chan string)))
-	pass(t, should.BeEmpty(make(chan string, 1)))
-	fail(t, should.BeEmpty(nonEmptyChannel()))
+	assert.Pass([]string(nil), should.BeEmpty)
+	assert.Pass(make([]string, 0, 0), should.BeEmpty)
+	assert.Pass(make([]string, 0, 1), should.BeEmpty)
+	assert.Fail([]string{""}, should.BeEmpty)
 
-	pass(t, should.BeEmpty(map[string]string(nil)))
-	pass(t, should.BeEmpty(make(map[string]string)))
-	pass(t, should.BeEmpty(make(map[string]string, 1)))
-	fail(t, should.BeEmpty(map[string]string{"": ""}))
+	assert.Pass([0]string{}, should.BeEmpty) // The only possible empty array!
+	assert.Fail([1]string{}, should.BeEmpty)
 
-	pass(t, should.BeEmpty(""))
-	pass(t, should.BeEmpty(*new(string)))
-	fail(t, should.BeEmpty(" "))
+	assert.Pass(chan string(nil), should.BeEmpty)
+	assert.Pass(make(chan string), should.BeEmpty)
+	assert.Pass(make(chan string, 1), should.BeEmpty)
+	assert.Fail(nonEmptyChannel(), should.BeEmpty)
+
+	assert.Pass(map[string]string(nil), should.BeEmpty)
+	assert.Pass(make(map[string]string), should.BeEmpty)
+	assert.Pass(make(map[string]string, 1), should.BeEmpty)
+	assert.Fail(map[string]string{"": ""}, should.BeEmpty)
+
+	assert.Pass("", should.BeEmpty)
+	assert.Pass(*new(string), should.BeEmpty)
+	assert.Fail(" ", should.BeEmpty)
 }
 
 func TestShouldNotBeEmpty(t *testing.T) {
-	invalid(t, should.NOT.BeEmpty([]string(nil), "extra"), should.ErrExpectedCountInvalid)
-	invalid(t, should.NOT.BeEmpty(42), should.ErrKindMismatch)
+	assert := NewAssertion(t)
 
-	fail(t, should.NOT.BeEmpty([]string(nil)))
-	fail(t, should.NOT.BeEmpty(make([]string, 0, 0)))
-	fail(t, should.NOT.BeEmpty(make([]string, 0, 1)))
-	pass(t, should.NOT.BeEmpty([]string{""}))
+	assert.ExpectedCountInvalid("actual", should.NOT.BeEmpty, "EXTRA")
+	assert.KindMismatch(42, should.NOT.BeEmpty)
 
-	fail(t, should.NOT.BeEmpty([0]string{}))
-	pass(t, should.NOT.BeEmpty([1]string{}))
+	assert.Fail([]string(nil), should.NOT.BeEmpty)
+	assert.Fail(make([]string, 0, 0), should.NOT.BeEmpty)
+	assert.Fail(make([]string, 0, 1), should.NOT.BeEmpty)
+	assert.Pass([]string{""}, should.NOT.BeEmpty)
 
-	fail(t, should.NOT.BeEmpty(chan string(nil)))
-	fail(t, should.NOT.BeEmpty(make(chan string)))
-	fail(t, should.NOT.BeEmpty(make(chan string, 1)))
-	pass(t, should.NOT.BeEmpty(nonEmptyChannel()))
+	assert.Fail([0]string{}, should.NOT.BeEmpty)
+	assert.Pass([1]string{}, should.NOT.BeEmpty)
 
-	fail(t, should.NOT.BeEmpty(map[string]string(nil)))
-	fail(t, should.NOT.BeEmpty(make(map[string]string)))
-	fail(t, should.NOT.BeEmpty(make(map[string]string, 1)))
-	pass(t, should.NOT.BeEmpty(map[string]string{"": ""}))
+	assert.Fail(chan string(nil), should.NOT.BeEmpty)
+	assert.Fail(make(chan string), should.NOT.BeEmpty)
+	assert.Fail(make(chan string, 1), should.NOT.BeEmpty)
+	assert.Pass(nonEmptyChannel(), should.NOT.BeEmpty)
 
-	fail(t, should.NOT.BeEmpty(""))
-	fail(t, should.NOT.BeEmpty(*new(string)))
-	pass(t, should.NOT.BeEmpty(" "))
+	assert.Fail(map[string]string(nil), should.NOT.BeEmpty)
+	assert.Fail(make(map[string]string), should.NOT.BeEmpty)
+	assert.Fail(make(map[string]string, 1), should.NOT.BeEmpty)
+	assert.Pass(map[string]string{"": ""}, should.NOT.BeEmpty)
+
+	assert.Fail("", should.NOT.BeEmpty)
+	assert.Fail(*new(string), should.NOT.BeEmpty)
+	assert.Pass(" ", should.NOT.BeEmpty)
 }
 
 func nonEmptyChannel() chan string {

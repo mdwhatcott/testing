@@ -7,53 +7,57 @@ import (
 )
 
 func TestShouldBeIn(t *testing.T) {
-	invalid(t, should.BeIn("not enough"), should.ErrExpectedCountInvalid)
-	invalid(t, should.BeIn("too", "many", "args"), should.ErrExpectedCountInvalid)
-	invalid(t, should.BeIn(false, "string"), should.ErrKindMismatch)
-	invalid(t, should.BeIn("hi", 1), should.ErrKindMismatch)
+	assert := NewAssertion(t)
+
+	assert.ExpectedCountInvalid("actual", should.BeIn)
+	assert.ExpectedCountInvalid("actual", should.BeIn, "EXPECTED", "EXTRA")
+
+	assert.KindMismatch(false, should.BeIn, "string")
+	assert.KindMismatch("hi", should.BeIn, 1)
 
 	// strings:
-	fail(t, should.BeIn("no", ""))
-	pass(t, should.BeIn("rat", "integrate"))
-	pass(t, should.BeIn('b', "abc"))
+	assert.Fail("no", should.BeIn, "")
+	assert.Pass("rat", should.BeIn, "integrate")
+	assert.Pass('b', should.BeIn, "abc")
 
 	// slices:
-	fail(t, should.BeIn('d', []byte("abc")))
-	pass(t, should.BeIn('b', []byte("abc")))
-	pass(t, should.BeIn(98, []byte("abc")))
+	assert.Fail('d', should.BeIn, []byte("abc"))
+	assert.Pass('b', should.BeIn, []byte("abc"))
+	assert.Pass(98, should.BeIn, []byte("abc"))
 
 	// arrays:
-	fail(t, should.BeIn('d', [3]byte{'a', 'b', 'c'}))
-	pass(t, should.BeIn('b', [3]byte{'a', 'b', 'c'}))
-	pass(t, should.BeIn(98, [3]byte{'a', 'b', 'c'}))
+	assert.Fail('d', should.BeIn, [3]byte{'a', 'b', 'c'})
+	assert.Pass('b', should.BeIn, [3]byte{'a', 'b', 'c'})
+	assert.Pass(98, should.BeIn, [3]byte{'a', 'b', 'c'})
 
 	// maps:
-	fail(t, should.BeIn('b', map[rune]int{'a': 1}))
-	pass(t, should.BeIn('a', map[rune]int{'a': 1}))
+	assert.Fail('b', should.BeIn, map[rune]int{'a': 1})
+	assert.Pass('a', should.BeIn, map[rune]int{'a': 1})
 }
 
 func TestShouldNotBeIn(t *testing.T) {
-	invalid(t, should.NOT.BeIn("not enough"), should.ErrExpectedCountInvalid)
-	invalid(t, should.NOT.BeIn("too", "many", "args"), should.ErrExpectedCountInvalid)
-	invalid(t, should.NOT.BeIn(false, "string"), should.ErrKindMismatch)
-	invalid(t, should.NOT.BeIn("hi", 1), should.ErrKindMismatch)
+	assert := NewAssertion(t)
+	assert.ExpectedCountInvalid("actual", should.NOT.BeIn)
+	assert.ExpectedCountInvalid("actual", should.NOT.BeIn, "EXPECTED", "EXTRA")
+	assert.KindMismatch(false, should.NOT.BeIn, "string")
+	assert.KindMismatch("hi", should.NOT.BeIn, 1)
 
 	// strings:
-	pass(t, should.NOT.BeIn("no", "yes")) // So("no", should.NOT.BeIn, "")
-	fail(t, should.NOT.BeIn("rat", "integrate"))
-	fail(t, should.NOT.BeIn('b', "abc"))
+	assert.Pass("no", should.NOT.BeIn, "yes")
+	assert.Fail("rat", should.NOT.BeIn, "integrate")
+	assert.Fail('b', should.NOT.BeIn, "abc")
 
 	// slices:
-	pass(t, should.NOT.BeIn('d', []byte("abc")))
-	fail(t, should.NOT.BeIn('b', []byte("abc")))
-	fail(t, should.NOT.BeIn(98, []byte("abc")))
+	assert.Pass('d', should.NOT.BeIn, []byte("abc"))
+	assert.Fail('b', should.NOT.BeIn, []byte("abc"))
+	assert.Fail(98, should.NOT.BeIn, []byte("abc"))
 
 	// arrays:
-	pass(t, should.NOT.BeIn('d', [3]byte{'a', 'b', 'c'}))
-	fail(t, should.NOT.BeIn('b', [3]byte{'a', 'b', 'c'}))
-	fail(t, should.NOT.BeIn(98, [3]byte{'a', 'b', 'c'}))
+	assert.Pass('d', should.NOT.BeIn, [3]byte{'a', 'b', 'c'})
+	assert.Fail('b', should.NOT.BeIn, [3]byte{'a', 'b', 'c'})
+	assert.Fail(98, should.NOT.BeIn, [3]byte{'a', 'b', 'c'})
 
 	// maps:
-	pass(t, should.NOT.BeIn('b', map[rune]int{'a': 1}))
-	fail(t, should.NOT.BeIn('a', map[rune]int{'a': 1}))
+	assert.Pass('b', should.NOT.BeIn, map[rune]int{'a': 1})
+	assert.Fail('a', should.NOT.BeIn, map[rune]int{'a': 1})
 }

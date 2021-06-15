@@ -8,18 +8,24 @@ import (
 )
 
 func TestShouldBeNil(t *testing.T) {
-	invalid(t, should.BeNil(1, 2), should.ErrExpectedCountInvalid)
-	fail(t, should.BeNil(notNil))
-	pass(t, should.BeNil(nil))
-	pass(t, should.BeNil([]string(nil)))
-	pass(t, should.BeNil((*string)(nil)))
+	assert := NewAssertion(t)
+
+	assert.ExpectedCountInvalid("actual", should.BeNil, "EXTRA")
+
+	assert.Pass(nil, should.BeNil)
+	assert.Pass([]string(nil), should.BeNil)
+	assert.Pass((*string)(nil), should.BeNil)
+	assert.Fail(notNil, should.BeNil)
 }
 
 func TestShouldNotBeNil(t *testing.T) {
-	invalid(t, should.NOT.BeNil(1, 2), should.ErrExpectedCountInvalid)
-	fail(t, should.NOT.BeNil(nil))
-	fail(t, should.NOT.BeNil([]string(nil)))
-	pass(t, should.NOT.BeNil(notNil))
+	assert := NewAssertion(t)
+
+	assert.ExpectedCountInvalid("actual", should.NOT.BeNil, "EXTRA")
+
+	assert.Fail(nil, should.NOT.BeNil)
+	assert.Fail([]string(nil), should.NOT.BeNil)
+	assert.Pass(notNil, should.NOT.BeNil)
 }
 
 var notNil = errors.New("not nil")
