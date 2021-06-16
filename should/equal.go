@@ -11,7 +11,9 @@ import (
 )
 
 // Equal verifies that the actual value is equal to the expected value.
-// It uses reflect.DeepEqual in most cases.
+// It uses reflect.DeepEqual in most cases, but also compares numerics
+// regardless of specific type and compares time.Time values using the
+// time.Equal method.
 func Equal(actual interface{}, EXPECTED ...interface{}) error {
 	err := validateExpected(1, EXPECTED)
 	if err != nil {
@@ -24,7 +26,7 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 		if !spec.isSatisfiedBy(actual, expected) {
 			continue
 		}
-		if spec.compare(actual, expected) {
+		if spec.areEqual(actual, expected) {
 			return nil
 		}
 		break
@@ -120,7 +122,7 @@ type formatter func(interface{}) string
 
 type specification interface {
 	isSatisfiedBy(a, b interface{}) bool
-	compare(a, b interface{}) bool
+	areEqual(a, b interface{}) bool
 }
 
 // deepEquality compares any two values using reflect.DeepEqual.
@@ -130,7 +132,7 @@ type deepEquality struct{}
 func (this deepEquality) isSatisfiedBy(a, b interface{}) bool {
 	return reflect.TypeOf(a) == reflect.TypeOf(b)
 }
-func (this deepEquality) compare(a, b interface{}) bool {
+func (this deepEquality) areEqual(a, b interface{}) bool {
 	return reflect.DeepEqual(a, b)
 }
 
@@ -143,10 +145,7 @@ type numericEquality struct{}
 func (this numericEquality) isSatisfiedBy(a, b interface{}) bool {
 	return isNumeric(a) && isNumeric(b)
 }
-func (this numericEquality) compare(a, b interface{}) bool {
-	if a == b {
-		return true
-	}
+func (this numericEquality) areEqual(a, b interface{}) bool {
 	aValue := reflect.ValueOf(a)
 	bValue := reflect.ValueOf(b)
 	aAsB := aValue.Convert(bValue.Type()).Interface()
@@ -154,19 +153,8 @@ func (this numericEquality) compare(a, b interface{}) bool {
 	return a == bAsA && b == aAsB
 }
 func isNumeric(v interface{}) bool {
-	kind := reflect.TypeOf(v).Kind()
-	return kind == reflect.Int ||
-		kind == reflect.Int8 ||
-		kind == reflect.Int16 ||
-		kind == reflect.Int32 ||
-		kind == reflect.Int64 ||
-		kind == reflect.Uint ||
-		kind == reflect.Uint8 ||
-		kind == reflect.Uint16 ||
-		kind == reflect.Uint32 ||
-		kind == reflect.Uint64 ||
-		kind == reflect.Float32 ||
-		kind == reflect.Float64
+	_, found := numericKinds[reflect.TypeOf(v).Kind()]
+	return found
 }
 
 // timeEquality compares values both of type time.Time using their Equal method.
@@ -176,10 +164,25 @@ type timeEquality struct{}
 func (this timeEquality) isSatisfiedBy(a, b interface{}) bool {
 	return isTime(a) && isTime(b)
 }
-func (this timeEquality) compare(a, b interface{}) bool {
+func (this timeEquality) areEqual(a, b interface{}) bool {
 	return a.(time.Time).Equal(b.(time.Time))
 }
 func isTime(v interface{}) bool {
 	_, ok := v.(time.Time)
 	return ok
+}
+
+var numericKinds = map[reflect.Kind]struct{}{
+	reflect.Int:     {},
+	reflect.Int8:    {},
+	reflect.Int16:   {},
+	reflect.Int32:   {},
+	reflect.Int64:   {},
+	reflect.Uint:    {},
+	reflect.Uint8:   {},
+	reflect.Uint16:  {},
+	reflect.Uint32:  {},
+	reflect.Uint64:  {},
+	reflect.Float32: {},
+	reflect.Float64: {},
 }

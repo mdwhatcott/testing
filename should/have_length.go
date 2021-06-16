@@ -14,7 +14,7 @@ func HaveLength(actual interface{}, expected ...interface{}) error {
 		return err
 	}
 
-	err = validateKind(expected[0], numericKinds...)
+	err = validateKind(expected[0], integerKinds...)
 	if err != nil {
 		return err
 	}
@@ -28,7 +28,7 @@ func HaveLength(actual interface{}, expected ...interface{}) error {
 	return failure("got length of %d, want %d", actualLength, expectedLength)
 }
 
-var numericKinds = []reflect.Kind{
+var integerKinds = []reflect.Kind{
 	reflect.Int,
 	reflect.Int8,
 	reflect.Int16,
