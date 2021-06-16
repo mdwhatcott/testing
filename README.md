@@ -158,7 +158,8 @@
 	
 	func Equal(actual interface{}, EXPECTED ...interface{}) error
 	    Equal verifies that the actual value is equal to the expected value. It uses
-	    reflect.DeepEqual in most cases.
+	    reflect.DeepEqual in most cases, but also compares numerics regardless of
+	    specific type and compares time.Time values using the time.Equal method.
 	
 	func HaveLength(actual interface{}, expected ...interface{}) error
 	    HaveLength uses reflection to verify that len(actual) == 0.
