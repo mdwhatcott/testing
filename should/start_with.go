@@ -3,8 +3,6 @@ package should
 import (
 	"reflect"
 	"strings"
-
-	"github.com/mdwhatcott/testing/compare"
 )
 
 // StartWith verified that actual starts with expected[0].
@@ -29,7 +27,7 @@ func StartWith(actual interface{}, expected ...interface{}) error {
 			break
 		}
 		first := actualValue.Index(0).Interface()
-		if compare.Equal(EXPECTED, first) == nil {
+		if Equal(EXPECTED, first) == nil {
 			return nil
 		}
 	case reflect.String:

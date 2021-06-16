@@ -1,4 +1,4 @@
-package bowl
+package bowling
 
 type Game struct {
 	score  int

@@ -3,8 +3,6 @@ package should
 import (
 	"reflect"
 	"strings"
-
-	"github.com/mdwhatcott/testing/compare"
 )
 
 // EndWith verifies that actual ends with expected[0].
@@ -29,7 +27,7 @@ func EndWith(actual interface{}, expected ...interface{}) error {
 			break
 		}
 		last := actualValue.Index(actualValue.Len() - 1).Interface()
-		if compare.Equal(EXPECTED, last) == nil {
+		if Equal(EXPECTED, last) == nil {
 			return nil
 		}
 	case reflect.String:

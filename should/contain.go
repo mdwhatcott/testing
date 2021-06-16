@@ -4,8 +4,6 @@ import (
 	"errors"
 	"reflect"
 	"strings"
-
-	"github.com/mdwhatcott/testing/compare"
 )
 
 // Contain determines whether actual contains expected[0].
@@ -37,8 +35,7 @@ func Contain(actual interface{}, expected ...interface{}) error {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < actualValue.Len(); i++ {
 			item := actualValue.Index(i).Interface()
-			err := compare.Equal(EXPECTED, item)
-			if err == nil {
+			if Equal(EXPECTED, item) == nil {
 				return nil
 			}
 		}
