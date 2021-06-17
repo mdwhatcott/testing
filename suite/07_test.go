@@ -31,7 +31,7 @@ func TestAssertionMethods(t *testing.T) {
 		t.Error("want false, got true")
 	}
 	err := fixture.VerifySo(1, should.Equal, 2)
-	if err != nil {
+	if err == nil {
 		t.Error("want err, got nil")
 	}
 }
