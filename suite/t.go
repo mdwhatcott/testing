@@ -6,6 +6,11 @@ import "testing"
 // hooks for making assertions and other operations.
 type T struct{ *testing.T }
 
+// New prepares a *T for use with the fixture passed to Run.
+func New(t *testing.T) *T {
+	return &T{T: t}
+}
+
 // So invokes the provided assertion with the provided args.
 // In the event of an assertion failure it calls *testing.T.Error.
 func (this *T) So(actual interface{}, assertion assertion, expected ...interface{}) {

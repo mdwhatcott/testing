@@ -8,7 +8,7 @@ import (
 )
 
 func TestSuiteWithSetupsAndTeardowns(t *testing.T) {
-	fixture := &Suite01{T: &suite.T{T: t}}
+	fixture := &Suite01{T: suite.New(t)}
 
 	suite.Run(fixture, suite.Options.IntegrationTests())
 

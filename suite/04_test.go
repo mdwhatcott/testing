@@ -11,7 +11,7 @@ func TestLong(t *testing.T) {
 	if !testing.Short() {
 		t.Skip("This test only to be run in when -test.short flag passed.")
 	}
-	fixture := &Suite04{T: &suite.T{T: t}}
+	fixture := &Suite04{T: suite.New(t)}
 	suite.Run(fixture)
 	fixture.So(t.Failed(), should.BeFalse)
 }

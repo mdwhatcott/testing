@@ -11,7 +11,7 @@ For those using GoLand by JetBrains, you may
 find the following "live template" helpful:
 
 	func Test$NAME$Suite(t *testing.T) {
-		suite.Run(&$NAME$Suite{T: &suite.T{T: t}}, suite.Options.UnitTests())
+		suite.Run(&$NAME$Suite{T: suite.New(t)}, suite.Options.UnitTests())
 	}
 
 	type $NAME$Suite struct {

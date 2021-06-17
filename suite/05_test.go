@@ -9,7 +9,7 @@ import (
 
 func TestFocus(t *testing.T) {
 	fixture := &Suite05{
-		T:      &suite.T{T: t},
+		T:      suite.New(t),
 		events: make(map[string]struct{}),
 	}
 

@@ -8,7 +8,7 @@ import (
 )
 
 func TestSuiteWithSkippedTests(t *testing.T) {
-	fixture := &Suite07{T: &suite.T{T: t}}
+	fixture := &Suite07{T: suite.New(t)}
 
 	suite.Run(fixture, suite.Options.SharedFixture())
 
@@ -22,7 +22,7 @@ func TestSuiteWithSkippedTests(t *testing.T) {
 }
 
 func TestAssertionMethods(t *testing.T) {
-	fixture := &Suite07{T: &suite.T{T: t}}
+	fixture := &Suite07{T: suite.New(t)}
 
 	suite.Run(fixture, suite.Options.SharedFixture())
 

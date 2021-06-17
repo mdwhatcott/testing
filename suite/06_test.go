@@ -8,7 +8,7 @@ import (
 )
 
 func TestSuiteWithSetupsAndTeardownsSkippedEntirelyIfAllTestsSkipped(t *testing.T) {
-	fixture := &Suite06{T: &suite.T{T: t}}
+	fixture := &Suite06{T: suite.New(t)}
 
 	suite.Run(fixture, suite.Options.SharedFixture())
 

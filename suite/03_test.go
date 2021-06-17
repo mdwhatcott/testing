@@ -8,7 +8,7 @@ import (
 )
 
 func TestSkip(t *testing.T) {
-	fixture := &Suite03{T: &suite.T{T: t}}
+	fixture := &Suite03{T: suite.New(t)}
 	suite.Run(fixture)
 	fixture.So(t.Failed(), should.BeFalse)
 }

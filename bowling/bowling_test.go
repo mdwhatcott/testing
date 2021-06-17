@@ -9,7 +9,7 @@ import (
 )
 
 func TestGameFixture(t *testing.T) {
-	suite.Run(&GameFixture{T: &suite.T{T: t}}, suite.Options.UnitTests())
+	suite.Run(&GameFixture{T: suite.New(t)}, suite.Options.UnitTests())
 }
 
 type GameFixture struct {
