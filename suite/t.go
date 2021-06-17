@@ -13,31 +13,23 @@ func New(t *testing.T) *T {
 
 // So invokes the provided assertion with the provided args.
 // In the event of an assertion failure it calls *testing.T.Error.
-func (this *T) So(actual interface{}, assertion assertion, expected ...interface{}) {
+func (this *T) So(actual interface{}, assertion assertion, expected ...interface{}) bool {
 	err := assertion(actual, expected...)
 	if err != nil {
 		this.Helper()
 		this.Error(err)
 	}
+	return err == nil
 }
 
 // FatalSo is like So but in the event of an assertion failure it calls *testing.T.Fatal.
-func (this *T) FatalSo(actual interface{}, assertion assertion, expected ...interface{}) {
+func (this *T) FatalSo(actual interface{}, assertion assertion, expected ...interface{}) bool {
 	err := assertion(actual, expected...)
 	if err != nil {
 		this.Helper()
 		this.Fatal(err)
 	}
-}
-
-// VerifySo simply invokes the provided assertion and returns the resulting error.
-func (this *T) VerifySo(actual interface{}, assertion assertion, expected ...interface{}) error {
-	return assertion(actual, expected...)
-}
-
-// CheckSo simply invokes the provided assertion and returns whether the resulting error is nil.
-func (this *T) CheckSo(actual interface{}, assertion assertion, expected ...interface{}) bool {
-	return assertion(actual, expected...) == nil
+	return true
 }
 
 // Write implements io.Writer allowing for the

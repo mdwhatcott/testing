@@ -21,21 +21,6 @@ func TestSuiteWithSkippedTests(t *testing.T) {
 	})
 }
 
-func TestAssertionMethods(t *testing.T) {
-	fixture := &Suite07{T: suite.New(t)}
-
-	suite.Run(fixture, suite.Options.SharedFixture())
-
-	ok := fixture.CheckSo(1, should.Equal, 2)
-	if ok {
-		t.Error("want false, got true")
-	}
-	err := fixture.VerifySo(1, should.Equal, 2)
-	if err == nil {
-		t.Error("want err, got nil")
-	}
-}
-
 type Suite07 struct {
 	*suite.T
 	events []string
