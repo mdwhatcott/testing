@@ -85,9 +85,9 @@ func report(format formatter, a, b interface{}) string {
 
 	builder := new(strings.Builder)
 	_, _ = fmt.Fprintf(builder, "\n")
-	_, _ = fmt.Fprintf(builder, "A: %s %s\n", aType, aFormat)
-	_, _ = fmt.Fprintf(builder, "B: %s %s\n", bType, bFormat)
-	_, _ = fmt.Fprintf(builder, "   %s %s\n", typeDiff, valueDiff)
+	_, _ = fmt.Fprintf(builder, "Expected: %s %s\n", bType, bFormat)
+	_, _ = fmt.Fprintf(builder, "Actual  : %s %s\n", aType, aFormat)
+	_, _ = fmt.Fprintf(builder, "          %s %s\n", typeDiff, valueDiff)
 	_, _ = fmt.Fprintf(builder, "Stack (filtered):\n%s\n", stack())
 
 	return builder.String()
