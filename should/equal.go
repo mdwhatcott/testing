@@ -31,7 +31,7 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 		}
 		break
 	}
-	return failure(report(resolveFormatter(actual), actual, expected))
+	return failure(report(actual, expected))
 }
 
 // Equal negated!
@@ -60,26 +60,14 @@ var specs = []specification{
 	deepEquality{},
 }
 
-func resolveFormatter(v interface{}) formatter {
-	formatVerb := func(verb string) formatter {
-		return func(v interface{}) string {
-			return fmt.Sprintf(verb, v)
-		}
-	}
-	if isNumeric(v) || isTime(v) {
-		return formatVerb("%v")
-	} else {
-		return formatVerb("%#v")
-	}
-}
-func report(format formatter, a, b interface{}) string {
+func report(a, b interface{}) string {
 	aType := fmt.Sprintf("(%v)", reflect.TypeOf(a))
 	bType := fmt.Sprintf("(%v)", reflect.TypeOf(b))
 	longestType := int(math.Max(float64(len(aType)), float64(len(bType))))
 	aType += strings.Repeat(" ", longestType-len(aType))
 	bType += strings.Repeat(" ", longestType-len(bType))
-	aFormat := format(a)
-	bFormat := format(b)
+	aFormat := fmt.Sprintf(format(a), a)
+	bFormat := fmt.Sprintf(format(b), b)
 	typeDiff := diff(bType, aType)
 	valueDiff := diff(bFormat, aFormat)
 
@@ -91,6 +79,13 @@ func report(format formatter, a, b interface{}) string {
 	_, _ = fmt.Fprintf(builder, "Stack (filtered):\n%s\n", stack())
 
 	return builder.String()
+}
+func format(v interface{}) string {
+	if isNumeric(v) || isTime(v) {
+		return "%v"
+	} else {
+		return "%#v"
+	}
 }
 func diff(a, b string) string {
 	result := new(strings.Builder)
