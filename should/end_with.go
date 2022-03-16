@@ -7,7 +7,7 @@ import (
 
 // EndWith verifies that actual ends with expected[0].
 // The actual value may be an array, slice, or string.
-func EndWith(actual interface{}, expected ...interface{}) error {
+func EndWith(actual any, expected ...any) error {
 	err := validateExpected(1, expected)
 	if err != nil {
 		return err

@@ -12,9 +12,9 @@ var (
 	ErrAssertionFailure     = errors.New("assertion failure")
 )
 
-func failure(format string, args ...interface{}) error {
+func failure(format string, args ...any) error {
 	return wrap(ErrAssertionFailure, format, args...)
 }
-func wrap(inner error, format string, args ...interface{}) error {
+func wrap(inner error, format string, args ...any) error {
 	return fmt.Errorf("%w: "+fmt.Sprintf(format, args...), inner)
 }

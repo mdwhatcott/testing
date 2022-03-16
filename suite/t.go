@@ -13,7 +13,7 @@ func New(t *testing.T) *T {
 
 // So invokes the provided assertion with the provided args.
 // In the event of an assertion failure it calls *testing.T.Error.
-func (this *T) So(actual interface{}, assertion assertion, expected ...interface{}) bool {
+func (this *T) So(actual any, assertion assertion, expected ...any) bool {
 	err := assertion(actual, expected...)
 	if err != nil {
 		this.Helper()
@@ -23,7 +23,7 @@ func (this *T) So(actual interface{}, assertion assertion, expected ...interface
 }
 
 // FatalSo is like So but in the event of an assertion failure it calls *testing.T.Fatal.
-func (this *T) FatalSo(actual interface{}, assertion assertion, expected ...interface{}) bool {
+func (this *T) FatalSo(actual any, assertion assertion, expected ...any) bool {
 	err := assertion(actual, expected...)
 	if err != nil {
 		this.Helper()
@@ -41,4 +41,4 @@ func (this *T) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-type assertion func(actual interface{}, expected ...interface{}) error
+type assertion func(actual any, expected ...any) error

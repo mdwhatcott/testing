@@ -1,7 +1,7 @@
 package should
 
 // BeFalse verifies that actual is the boolean false value.
-func BeFalse(actual interface{}, expected ...interface{}) error {
+func BeFalse(actual any, expected ...any) error {
 	err := validateExpected(0, expected)
 	if err != nil {
 		return err

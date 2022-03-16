@@ -54,7 +54,7 @@ would proceed as follows:
 The methods provided by Options may be supplied
 to this function to tweak the execution.
 */
-func Run(fixture interface{}, options ...Option) {
+func Run(fixture any, options ...Option) {
 	config := new(config)
 	for _, option := range options {
 		option(config)

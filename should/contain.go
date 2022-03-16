@@ -11,7 +11,7 @@ import (
 //   - In the case of maps the expected value is assumed to be a map key.
 //   - In the case of slices and arrays the expected value is assumed to be a member.
 //   - In the case of strings the expected value may be a rune or substring.
-func Contain(actual interface{}, expected ...interface{}) error {
+func Contain(actual any, expected ...any) error {
 	err := validateExpected(1, expected)
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func Contain(actual interface{}, expected ...interface{}) error {
 }
 
 // Contain (negated!)
-func (negated) Contain(actual interface{}, expected ...interface{}) error {
+func (negated) Contain(actual any, expected ...any) error {
 	err := Contain(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
 		return nil

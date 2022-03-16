@@ -1,18 +1,18 @@
 package assert
 
-type Assertion func(actual interface{}, expected ...interface{}) error
+type Assertion func(actual any, expected ...any) error
 
 // So runs the provided Assertion and returns the error, as in:
 // err := assert.So(1, should.Equal, 1)
-func So(actual interface{}, assertion Assertion, expected ...interface{}) error {
+func So(actual any, assertion Assertion, expected ...any) error {
 	return assertion(actual, expected...)
 }
 
 type testingT interface {
 	Helper()
-	Log(args ...interface{})
-	Error(args ...interface{})
-	Fatal(args ...interface{})
+	Log(args ...any)
+	Error(args ...any)
+	Fatal(args ...any)
 }
 
 // Log receives a *testing.T, and prepares the caller for a So call.
@@ -33,14 +33,14 @@ func Fatal(t testingT) TestingT { return TestingT{helper: t.Helper, report: t.Fa
 // TestingT is an intermediate type, not for direct instantiation.
 type TestingT struct {
 	helper func()
-	report func(...interface{})
+	report func(...any)
 }
 
 // So runs the provided Assertion and calls the configured reporting function, as in:
 // - assert.Log(t).So(1, should.Equal, 1)
 // - assert.Error(t).So(1, should.Equal, 1)
 // - assert.Fatal(t).So(1, should.Equal, 1)
-func (this TestingT) So(actual interface{}, assertion Assertion, expected ...interface{}) {
+func (this TestingT) So(actual any, assertion Assertion, expected ...any) {
 	err := assertion(actual, expected...)
 	if err != nil {
 		this.helper()

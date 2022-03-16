@@ -6,7 +6,7 @@ import (
 )
 
 // BeNil verifies that actual is the nil value.
-func BeNil(actual interface{}, expected ...interface{}) error {
+func BeNil(actual any, expected ...any) error {
 	err := validateExpected(0, expected)
 	if err != nil {
 		return err
@@ -18,7 +18,7 @@ func BeNil(actual interface{}, expected ...interface{}) error {
 
 	return failure("got %#v, want <nil>", actual)
 }
-func interfaceHasNilValue(actual interface{}) bool {
+func interfaceHasNilValue(actual any) bool {
 	value := reflect.ValueOf(actual)
 	kind := value.Kind()
 	nillable := kind == reflect.Slice ||
@@ -34,7 +34,7 @@ func interfaceHasNilValue(actual interface{}) bool {
 }
 
 // BeNil negated!
-func (negated) BeNil(actual interface{}, expected ...interface{}) error {
+func (negated) BeNil(actual any, expected ...any) error {
 	err := BeNil(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
 		return nil

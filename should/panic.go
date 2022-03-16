@@ -4,7 +4,7 @@ import "errors"
 
 // Panic invokes the func() provided as actual and recovers from any
 // panic. It returns an error if actual() does not result in a panic.
-func Panic(actual interface{}, expected ...interface{}) (err error) {
+func Panic(actual any, expected ...any) (err error) {
 	err = NOT.Panic(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
 		return nil
@@ -21,7 +21,7 @@ func Panic(actual interface{}, expected ...interface{}) (err error) {
 }
 
 // Panic (negated!) expects the func() provided as actual to run without panicking.
-func (negated) Panic(actual interface{}, expected ...interface{}) (err error) {
+func (negated) Panic(actual any, expected ...any) (err error) {
 	err = validateExpected(0, expected)
 	if err != nil {
 		return err

@@ -3,7 +3,7 @@ package should
 import "reflect"
 
 // HaveLength uses reflection to verify that len(actual) == 0.
-func HaveLength(actual interface{}, expected ...interface{}) error {
+func HaveLength(actual any, expected ...any) error {
 	err := validateExpected(1, expected)
 	if err != nil {
 		return err

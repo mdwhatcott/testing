@@ -86,7 +86,7 @@ func TestFatal_Fail_Fatals(t *testing.T) {
 	})
 }
 
-func assertEqual(t *testing.T, actual, expected interface{}) {
+func assertEqual(t *testing.T, actual, expected any) {
 	if reflect.DeepEqual(actual, expected) {
 		return
 	}
@@ -112,12 +112,12 @@ func assertNil(t *testing.T, err error) {
 	t.Error("Expected <nil> value, got:", err)
 }
 
-func shouldPass(actual interface{}, expected ...interface{}) error {
+func shouldPass(actual any, expected ...any) error {
 	_ = actual
 	_ = expected
 	return nil
 }
-func shouldFail(actual interface{}, expected ...interface{}) error {
+func shouldFail(actual any, expected ...any) error {
 	_ = actual
 	_ = expected
 	return errors.New("failure")
@@ -132,12 +132,12 @@ type FakeT struct {
 
 func (this *FakeT) Helper() { this.helps++ }
 
-func (this *FakeT) Log(args ...interface{}) {
+func (this *FakeT) Log(args ...any) {
 	this.logs = append(this.logs, fmt.Sprint(args...))
 }
-func (this *FakeT) Error(args ...interface{}) {
+func (this *FakeT) Error(args ...any) {
 	this.errors = append(this.errors, fmt.Sprint(args...))
 }
-func (this *FakeT) Fatal(args ...interface{}) {
+func (this *FakeT) Fatal(args ...any) {
 	this.fatals = append(this.fatals, fmt.Sprint(args...))
 }

@@ -15,27 +15,27 @@ type Assertion struct{ *testing.T }
 func NewAssertion(t *testing.T) *Assertion {
 	return &Assertion{T: t}
 }
-func (this *Assertion) ExpectedCountInvalid(actual interface{}, assertion assertion, expected ...interface{}) {
+func (this *Assertion) ExpectedCountInvalid(actual any, assertion assertion, expected ...any) {
 	this.Helper()
 	this.err(actual, assertion, expected, should.ErrExpectedCountInvalid)
 }
-func (this *Assertion) TypeMismatch(actual interface{}, assertion assertion, expected ...interface{}) {
+func (this *Assertion) TypeMismatch(actual any, assertion assertion, expected ...any) {
 	this.Helper()
 	this.err(actual, assertion, expected, should.ErrTypeMismatch)
 }
-func (this *Assertion) KindMismatch(actual interface{}, assertion assertion, expected ...interface{}) {
+func (this *Assertion) KindMismatch(actual any, assertion assertion, expected ...any) {
 	this.Helper()
 	this.err(actual, assertion, expected, should.ErrKindMismatch)
 }
-func (this *Assertion) Fail(actual interface{}, assertion assertion, expected ...interface{}) {
+func (this *Assertion) Fail(actual any, assertion assertion, expected ...any) {
 	this.Helper()
 	this.err(actual, assertion, expected, should.ErrAssertionFailure)
 }
-func (this *Assertion) Pass(actual interface{}, assertion assertion, expected ...interface{}) {
+func (this *Assertion) Pass(actual any, assertion assertion, expected ...any) {
 	this.Helper()
 	this.err(actual, assertion, expected, nil)
 }
-func (this *Assertion) err(actual interface{}, assertion assertion, expected []interface{}, expectedErr error) {
+func (this *Assertion) err(actual any, assertion assertion, expected []any, expectedErr error) {
 	this.Helper()
 	_, file, line, _ := runtime.Caller(2)
 	subTest := fmt.Sprintf("%s:%d", filepath.Base(file), line)
@@ -58,4 +58,4 @@ func (this *Assertion) err(actual interface{}, assertion assertion, expected []i
 	})
 }
 
-type assertion func(actual interface{}, expected ...interface{}) error
+type assertion func(actual any, expected ...any) error

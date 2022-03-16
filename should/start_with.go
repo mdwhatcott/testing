@@ -7,7 +7,7 @@ import (
 
 // StartWith verified that actual starts with expected[0].
 // The actual value may be an array, slice, or string.
-func StartWith(actual interface{}, expected ...interface{}) error {
+func StartWith(actual any, expected ...any) error {
 	err := validateExpected(1, expected)
 	if err != nil {
 		return err

@@ -6,7 +6,7 @@ import (
 )
 
 // BeEmpty uses reflection to verify that len(actual) == 0.
-func BeEmpty(actual interface{}, expected ...interface{}) error {
+func BeEmpty(actual any, expected ...any) error {
 	err := validateExpected(0, expected)
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func BeEmpty(actual interface{}, expected ...interface{}) error {
 }
 
 // BeEmpty (negated!)
-func (negated) BeEmpty(actual interface{}, expected ...interface{}) error {
+func (negated) BeEmpty(actual any, expected ...any) error {
 	err := BeEmpty(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
 		return nil

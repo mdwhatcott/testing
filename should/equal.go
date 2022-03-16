@@ -14,7 +14,7 @@ import (
 // It uses reflect.DeepEqual in most cases, but also compares numerics
 // regardless of specific type and compares time.Time values using the
 // time.Equal method.
-func Equal(actual interface{}, EXPECTED ...interface{}) error {
+func Equal(actual any, EXPECTED ...any) error {
 	err := validateExpected(1, EXPECTED)
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func Equal(actual interface{}, EXPECTED ...interface{}) error {
 }
 
 // Equal negated!
-func (negated) Equal(actual interface{}, expected ...interface{}) error {
+func (negated) Equal(actual any, expected ...any) error {
 	err := Equal(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
 		return nil
@@ -60,7 +60,7 @@ var specs = []specification{
 	deepEquality{},
 }
 
-func report(a, b interface{}) string {
+func report(a, b any) string {
 	aType := fmt.Sprintf("(%v)", reflect.TypeOf(a))
 	bType := fmt.Sprintf("(%v)", reflect.TypeOf(b))
 	longestType := int(math.Max(float64(len(aType)), float64(len(bType))))
@@ -80,7 +80,7 @@ func report(a, b interface{}) string {
 
 	return builder.String()
 }
-func format(v interface{}) string {
+func format(v any) string {
 	if isNumeric(v) || isTime(v) {
 		return "%v"
 	} else {
@@ -113,21 +113,21 @@ func stack() string {
 	return "> " + strings.Join(filtered, "\n> ")
 }
 
-type formatter func(interface{}) string
+type formatter func(any) string
 
 type specification interface {
-	isSatisfiedBy(a, b interface{}) bool
-	areEqual(a, b interface{}) bool
+	isSatisfiedBy(a, b any) bool
+	areEqual(a, b any) bool
 }
 
 // deepEquality compares any two values using reflect.DeepEqual.
 // https://golang.org/pkg/reflect/#DeepEqual
 type deepEquality struct{}
 
-func (this deepEquality) isSatisfiedBy(a, b interface{}) bool {
+func (this deepEquality) isSatisfiedBy(a, b any) bool {
 	return reflect.TypeOf(a) == reflect.TypeOf(b)
 }
-func (this deepEquality) areEqual(a, b interface{}) bool {
+func (this deepEquality) areEqual(a, b any) bool {
 	return reflect.DeepEqual(a, b)
 }
 
@@ -137,17 +137,17 @@ func (this deepEquality) areEqual(a, b interface{}) bool {
 // directions. https://golang.org/pkg/reflect/#Kind
 type numericEquality struct{}
 
-func (this numericEquality) isSatisfiedBy(a, b interface{}) bool {
+func (this numericEquality) isSatisfiedBy(a, b any) bool {
 	return isNumeric(a) && isNumeric(b)
 }
-func (this numericEquality) areEqual(a, b interface{}) bool {
+func (this numericEquality) areEqual(a, b any) bool {
 	aValue := reflect.ValueOf(a)
 	bValue := reflect.ValueOf(b)
 	aAsB := aValue.Convert(bValue.Type()).Interface()
 	bAsA := bValue.Convert(aValue.Type()).Interface()
 	return a == bAsA && b == aAsB
 }
-func isNumeric(v interface{}) bool {
+func isNumeric(v any) bool {
 	_, found := numericKinds[reflect.TypeOf(v).Kind()]
 	return found
 }
@@ -156,13 +156,13 @@ func isNumeric(v interface{}) bool {
 // https://golang.org/pkg/time/#Time.Equal
 type timeEquality struct{}
 
-func (this timeEquality) isSatisfiedBy(a, b interface{}) bool {
+func (this timeEquality) isSatisfiedBy(a, b any) bool {
 	return isTime(a) && isTime(b)
 }
-func (this timeEquality) areEqual(a, b interface{}) bool {
+func (this timeEquality) areEqual(a, b any) bool {
 	return a.(time.Time).Equal(b.(time.Time))
 }
-func isTime(v interface{}) bool {
+func isTime(v any) bool {
 	_, ok := v.(time.Time)
 	return ok
 }

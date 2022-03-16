@@ -2,7 +2,7 @@ package should
 
 import "reflect"
 
-func validateExpected(count int, expected []interface{}) error {
+func validateExpected(count int, expected []any) error {
 	length := len(expected)
 	if length == count {
 		return nil
@@ -19,7 +19,7 @@ func pluralize(count int) string {
 	return "s"
 }
 
-func validateType(actual, expected interface{}) error {
+func validateType(actual, expected any) error {
 	ACTUAL := reflect.TypeOf(actual)
 	EXPECTED := reflect.TypeOf(expected)
 	if ACTUAL == EXPECTED {
@@ -28,7 +28,7 @@ func validateType(actual, expected interface{}) error {
 	return wrap(ErrTypeMismatch, "got %s, want %s", ACTUAL, EXPECTED)
 }
 
-func validateKind(actual interface{}, kinds ...reflect.Kind) error {
+func validateKind(actual any, kinds ...reflect.Kind) error {
 	value := reflect.ValueOf(actual)
 	kind := value.Kind()
 	for _, k := range kinds {

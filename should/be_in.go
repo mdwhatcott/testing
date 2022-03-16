@@ -2,7 +2,7 @@ package should
 
 // BeIn determines whether actual is a member of expected[0].
 // It defers to Contain.
-func BeIn(actual interface{}, expected ...interface{}) error {
+func BeIn(actual any, expected ...any) error {
 	err := validateExpected(1, expected)
 	if err != nil {
 		return err
@@ -17,7 +17,7 @@ func BeIn(actual interface{}, expected ...interface{}) error {
 }
 
 // BeIn (negated!)
-func (negated) BeIn(actual interface{}, expected ...interface{}) error {
+func (negated) BeIn(actual any, expected ...any) error {
 	err := validateExpected(1, expected)
 	if err != nil {
 		return err
