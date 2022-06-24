@@ -38,11 +38,3 @@ func (negated) BeEmpty(actual any, expected ...any) error {
 	TYPE := reflect.TypeOf(actual).String()
 	return failure("got empty %s, want non-empty %s", TYPE, TYPE)
 }
-
-var kindsWithLength = []reflect.Kind{
-	reflect.Map,
-	reflect.Chan,
-	reflect.Array,
-	reflect.Slice,
-	reflect.String,
-}

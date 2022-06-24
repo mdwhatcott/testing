@@ -55,9 +55,3 @@ func StartWith(actual any, expected ...any) error {
 		actual,
 	)
 }
-
-var orderedContainerKinds = []reflect.Kind{
-	reflect.Array,
-	reflect.Slice,
-	reflect.String,
-}

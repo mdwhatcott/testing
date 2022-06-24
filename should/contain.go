@@ -85,10 +85,3 @@ func (negated) Contain(actual any, expected ...any) error {
 }
 
 const reflectRune = reflect.Int32
-
-var containerKinds = []reflect.Kind{
-	reflect.Map,
-	reflect.Array,
-	reflect.Slice,
-	reflect.String,
-}

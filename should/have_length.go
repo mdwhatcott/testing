@@ -27,11 +27,3 @@ func HaveLength(actual any, expected ...any) error {
 
 	return failure("got length of %d, want %d", actualLength, expectedLength)
 }
-
-var integerKinds = []reflect.Kind{
-	reflect.Int,
-	reflect.Int8,
-	reflect.Int16,
-	reflect.Int32,
-	reflect.Int64,
-}

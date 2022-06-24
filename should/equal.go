@@ -147,10 +147,6 @@ func (this numericEquality) areEqual(a, b any) bool {
 	bAsA := bValue.Convert(aValue.Type()).Interface()
 	return a == bAsA && b == aAsB
 }
-func isNumeric(v any) bool {
-	_, found := numericKinds[reflect.TypeOf(v).Kind()]
-	return found
-}
 
 // timeEquality compares values both of type time.Time using their Equal method.
 // https://golang.org/pkg/time/#Time.Equal
@@ -165,19 +161,4 @@ func (this timeEquality) areEqual(a, b any) bool {
 func isTime(v any) bool {
 	_, ok := v.(time.Time)
 	return ok
-}
-
-var numericKinds = map[reflect.Kind]struct{}{
-	reflect.Int:     {},
-	reflect.Int8:    {},
-	reflect.Int16:   {},
-	reflect.Int32:   {},
-	reflect.Int64:   {},
-	reflect.Uint:    {},
-	reflect.Uint8:   {},
-	reflect.Uint16:  {},
-	reflect.Uint32:  {},
-	reflect.Uint64:  {},
-	reflect.Float32: {},
-	reflect.Float64: {},
 }
