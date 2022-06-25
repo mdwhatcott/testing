@@ -22,7 +22,7 @@ func Equal(actual any, EXPECTED ...any) error {
 
 	expected := EXPECTED[0]
 
-	for _, spec := range specs {
+	for _, spec := range equalitySpecs {
 		if !spec.assertable(actual, expected) {
 			continue
 		}
@@ -54,7 +54,7 @@ func (negated) Equal(actual any, expected ...any) error {
 	)
 }
 
-var specs = []specification{
+var equalitySpecs = []specification{
 	numericEquality{},
 	timeEquality{},
 	deepEquality{},
@@ -111,13 +111,6 @@ func stack() string {
 		}
 	}
 	return "> " + strings.Join(filtered, "\n> ")
-}
-
-type formatter func(any) string
-
-type specification interface {
-	assertable(a, b any) bool
-	passes(a, b any) bool
 }
 
 // deepEquality compares any two values using reflect.DeepEqual.
