@@ -117,10 +117,10 @@ func stack() string {
 // https://golang.org/pkg/reflect/#DeepEqual
 type deepEquality struct{}
 
-func (this deepEquality) assertable(a, b any) bool {
+func (deepEquality) assertable(a, b any) bool {
 	return reflect.TypeOf(a) == reflect.TypeOf(b)
 }
-func (this deepEquality) passes(a, b any) bool {
+func (deepEquality) passes(a, b any) bool {
 	return reflect.DeepEqual(a, b)
 }
 
@@ -130,10 +130,10 @@ func (this deepEquality) passes(a, b any) bool {
 // directions. https://golang.org/pkg/reflect/#Kind
 type numericEquality struct{}
 
-func (this numericEquality) assertable(a, b any) bool {
+func (numericEquality) assertable(a, b any) bool {
 	return isNumeric(a) && isNumeric(b)
 }
-func (this numericEquality) passes(a, b any) bool {
+func (numericEquality) passes(a, b any) bool {
 	aValue := reflect.ValueOf(a)
 	bValue := reflect.ValueOf(b)
 	aAsB := aValue.Convert(bValue.Type()).Interface()
@@ -145,10 +145,10 @@ func (this numericEquality) passes(a, b any) bool {
 // https://golang.org/pkg/time/#Time.Equal
 type timeEquality struct{}
 
-func (this timeEquality) assertable(a, b any) bool {
+func (timeEquality) assertable(a, b any) bool {
 	return isTime(a) && isTime(b)
 }
-func (this timeEquality) passes(a, b any) bool {
+func (timeEquality) passes(a, b any) bool {
 	return a.(time.Time).Equal(b.(time.Time))
 }
 func isTime(v any) bool {
