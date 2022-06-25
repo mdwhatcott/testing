@@ -23,10 +23,10 @@ func Equal(actual any, EXPECTED ...any) error {
 	expected := EXPECTED[0]
 
 	for _, spec := range specs {
-		if !spec.isSatisfiedBy(actual, expected) {
+		if !spec.assertable(actual, expected) {
 			continue
 		}
-		if spec.areEqual(actual, expected) {
+		if spec.passes(actual, expected) {
 			return nil
 		}
 		break
@@ -116,18 +116,18 @@ func stack() string {
 type formatter func(any) string
 
 type specification interface {
-	isSatisfiedBy(a, b any) bool
-	areEqual(a, b any) bool
+	assertable(a, b any) bool
+	passes(a, b any) bool
 }
 
 // deepEquality compares any two values using reflect.DeepEqual.
 // https://golang.org/pkg/reflect/#DeepEqual
 type deepEquality struct{}
 
-func (this deepEquality) isSatisfiedBy(a, b any) bool {
+func (this deepEquality) assertable(a, b any) bool {
 	return reflect.TypeOf(a) == reflect.TypeOf(b)
 }
-func (this deepEquality) areEqual(a, b any) bool {
+func (this deepEquality) passes(a, b any) bool {
 	return reflect.DeepEqual(a, b)
 }
 
@@ -137,10 +137,10 @@ func (this deepEquality) areEqual(a, b any) bool {
 // directions. https://golang.org/pkg/reflect/#Kind
 type numericEquality struct{}
 
-func (this numericEquality) isSatisfiedBy(a, b any) bool {
+func (this numericEquality) assertable(a, b any) bool {
 	return isNumeric(a) && isNumeric(b)
 }
-func (this numericEquality) areEqual(a, b any) bool {
+func (this numericEquality) passes(a, b any) bool {
 	aValue := reflect.ValueOf(a)
 	bValue := reflect.ValueOf(b)
 	aAsB := aValue.Convert(bValue.Type()).Interface()
@@ -152,10 +152,10 @@ func (this numericEquality) areEqual(a, b any) bool {
 // https://golang.org/pkg/time/#Time.Equal
 type timeEquality struct{}
 
-func (this timeEquality) isSatisfiedBy(a, b any) bool {
+func (this timeEquality) assertable(a, b any) bool {
 	return isTime(a) && isTime(b)
 }
-func (this timeEquality) areEqual(a, b any) bool {
+func (this timeEquality) passes(a, b any) bool {
 	return a.(time.Time).Equal(b.(time.Time))
 }
 func isTime(v any) bool {
