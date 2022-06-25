@@ -14,7 +14,7 @@ func HaveLength(actual any, expected ...any) error {
 		return err
 	}
 
-	err = validateKind(expected[0], integerKinds...)
+	err = validateKind(expected[0], kindSlice(signedIntegerKinds)...)
 	if err != nil {
 		return err
 	}
