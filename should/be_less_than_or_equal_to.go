@@ -2,6 +2,8 @@ package should
 
 import "errors"
 
+// BeLessThanOrEqualTo verifies that actual is less than or equal to expected.
+// Both actual and expected must be strings or numeric in type.
 func BeLessThanOrEqualTo(actual any, expected ...any) error {
 	err := Equal(actual, expected...)
 	if err == nil {
@@ -16,4 +18,24 @@ func BeLessThanOrEqualTo(actual any, expected ...any) error {
 		return err
 	}
 	return nil
+}
+
+func (negated) BeLessThanOrEqualTo(actual any, expected ...any) error {
+	err := BeLessThanOrEqualTo(actual, expected...)
+	if errors.Is(err, ErrAssertionFailure) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return failure("\n"+
+		"  expected:                        %#v\n"+
+		"  to not be less than or equal to: %#v\n"+
+		"  (but it was)",
+		expected[0],
+		actual,
+	)
+
 }
