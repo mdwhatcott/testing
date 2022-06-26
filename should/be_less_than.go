@@ -1,6 +1,7 @@
 package should
 
 import (
+	"errors"
 	"math"
 	"reflect"
 )
@@ -27,10 +28,30 @@ func BeLessThan(actual any, EXPECTED ...any) error {
 	}
 
 	if failed {
-		return failure("%v was not greater than %v", actual, expected)
+		return failure("%v was not less than %v", actual, expected)
 	}
 	return wrap(ErrTypeMismatch, "could not compare [%v] and [%v]",
 		reflect.TypeOf(actual), reflect.TypeOf(expected))
+}
+
+// BeLessThan negated!
+func (negated) BeLessThan(actual any, expected ...any) error {
+	err := BeLessThan(actual, expected...)
+	if errors.Is(err, ErrAssertionFailure) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return failure("\n"+
+		"  expected:            %#v\n"+
+		"  to not be less than: %#v\n"+
+		"  (but it was)",
+		expected[0],
+		actual,
+	)
 }
 
 var lessThanSpecs = []specification{
