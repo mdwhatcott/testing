@@ -6,7 +6,8 @@ import (
 	"reflect"
 )
 
-// BeLessThan verifies that actual is greater than expected. Both actual and expected must be numeric in type.
+// BeLessThan verifies that actual is less than expected.
+// Both actual and expected must be strings or numeric in type.
 func BeLessThan(actual any, EXPECTED ...any) error {
 	err := validateExpected(1, EXPECTED)
 	if err != nil {
