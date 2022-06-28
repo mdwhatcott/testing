@@ -37,5 +37,4 @@ func (negated) BeLessThanOrEqualTo(actual any, expected ...any) error {
 		expected[0],
 		actual,
 	)
-
 }

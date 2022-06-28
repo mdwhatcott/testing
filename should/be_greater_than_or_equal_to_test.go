@@ -58,3 +58,56 @@ func TestShouldBeGreaterThanOrEqualTo(t *testing.T) {
 	assert.Pass(2, should.BeGreaterThanOrEqualTo, 2.0)
 	assert.Fail(1, should.BeGreaterThanOrEqualTo, 2.0)
 }
+
+func TestShouldNOTBeGreaterThanOrEqualTo(t *testing.T) {
+	assert := NewAssertion(t)
+
+	assert.ExpectedCountInvalid("actual-but-missing-expected", should.NOT.BeGreaterThanOrEqualTo)
+	assert.ExpectedCountInvalid("actual", should.NOT.BeGreaterThanOrEqualTo, "expected", "required")
+	assert.TypeMismatch(true, should.NOT.BeGreaterThanOrEqualTo, 1)
+	assert.TypeMismatch(1, should.NOT.BeGreaterThanOrEqualTo, true)
+
+	assert.Pass("a", should.NOT.BeGreaterThanOrEqualTo, "b") // both strings
+	assert.Fail("a", should.NOT.BeGreaterThanOrEqualTo, "a")
+	assert.Fail("b", should.NOT.BeGreaterThanOrEqualTo, "a")
+
+	assert.Pass(1, should.NOT.BeGreaterThanOrEqualTo, 2) // both ints
+	assert.Fail(1, should.NOT.BeGreaterThanOrEqualTo, 1)
+	assert.Fail(2, should.NOT.BeGreaterThanOrEqualTo, 1)
+
+	assert.Fail(float32(2.0), should.NOT.BeGreaterThanOrEqualTo, float64(1)) // both floats
+	assert.Fail(float32(2.0), should.NOT.BeGreaterThanOrEqualTo, float64(2))
+	assert.Pass(1.0, should.NOT.BeGreaterThanOrEqualTo, 2.0)
+
+	assert.Fail(int32(2), should.NOT.BeGreaterThanOrEqualTo, int64(1)) // both signed
+	assert.Fail(int32(2), should.NOT.BeGreaterThanOrEqualTo, int64(2))
+	assert.Pass(int32(1), should.NOT.BeGreaterThanOrEqualTo, int64(2))
+
+	assert.Fail(uint32(2), should.NOT.BeGreaterThanOrEqualTo, uint64(1)) // both unsigned
+	assert.Fail(uint32(2), should.NOT.BeGreaterThanOrEqualTo, uint64(2))
+	assert.Pass(uint32(1), should.NOT.BeGreaterThanOrEqualTo, uint64(2))
+
+	assert.Fail(int32(2), should.NOT.BeGreaterThanOrEqualTo, uint32(1)) // signed and unsigned
+	assert.Fail(int32(2), should.NOT.BeGreaterThanOrEqualTo, uint32(2))
+	assert.Pass(int32(1), should.NOT.BeGreaterThanOrEqualTo, uint32(2))
+	// if actual < 0: true
+	// (because by definition the expected value, an unsigned value must be >= 0)
+	const reallyBig uint64 = math.MaxUint64 - 1 // TODO: remove decrement (see issue #5: https://github.com/mdwhatcott/testing/issues/5)
+	assert.Pass(-1, should.NOT.BeGreaterThanOrEqualTo, reallyBig)
+
+	assert.Fail(uint32(2), should.NOT.BeGreaterThanOrEqualTo, int32(1)) // unsigned and signed
+	assert.Fail(uint32(2), should.NOT.BeGreaterThanOrEqualTo, int32(2))
+	assert.Pass(uint32(1), should.NOT.BeGreaterThanOrEqualTo, int32(2))
+	// if actual > math.MaxInt64: false
+	// (because by definition the expected value, a signed value can't be > math.MaxInt64)
+	const tooBig uint64 = math.MaxInt64 + 1
+	assert.Fail(tooBig, should.NOT.BeGreaterThanOrEqualTo, 42)
+
+	assert.Fail(2.0, should.NOT.BeGreaterThanOrEqualTo, 1) // float and integer
+	assert.Fail(2.0, should.NOT.BeGreaterThanOrEqualTo, 2)
+	assert.Pass(1.0, should.NOT.BeGreaterThanOrEqualTo, 2)
+
+	assert.Fail(2, should.NOT.BeGreaterThanOrEqualTo, 1.0) // integer and float
+	assert.Fail(2, should.NOT.BeGreaterThanOrEqualTo, 2.0)
+	assert.Pass(1, should.NOT.BeGreaterThanOrEqualTo, 2.0)
+}
