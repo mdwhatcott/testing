@@ -14,6 +14,10 @@ import (
 // It uses reflect.DeepEqual in most cases, but also compares numerics
 // regardless of specific type and compares time.Time values using the
 // time.Equal method.
+//
+// WARNING: the numeric equality comparison currently cannot distinguish
+// between values of different type that have the same binary representation.
+// ie. int(-1) == math.MaxUint64
 func Equal(actual any, EXPECTED ...any) error {
 	err := validateExpected(1, EXPECTED)
 	if err != nil {

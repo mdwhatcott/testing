@@ -1,6 +1,7 @@
 package should_test
 
 import (
+	"math"
 	"testing"
 	"time"
 
@@ -26,6 +27,10 @@ func TestShouldEqual(t *testing.T) {
 
 	assert.Fail([]byte("hi"), should.Equal, []byte("bye"))
 	assert.Pass([]byte("hi"), should.Equal, []byte("hi"))
+
+	// WARNING: edge case!
+	const max uint64 = math.MaxUint64
+	assert.Pass(-1, should.Equal, max)
 }
 
 func TestShouldNotEqual(t *testing.T) {
