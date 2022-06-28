@@ -76,14 +76,14 @@ func TestShouldNOTBeLessThan(t *testing.T) {
 
 	assert.Fail(int32(1), should.NOT.BeLessThan, uint32(2)) // signed and unsigned
 	assert.Pass(int32(2), should.NOT.BeLessThan, uint32(1))
-	// if actual < 0: true
+	// if actual < 0: false
 	// (because by definition the expected value, an unsigned value can't be < 0)
 	const reallyBig uint64 = math.MaxUint64
 	assert.Fail(-1, should.NOT.BeLessThan, reallyBig)
 
 	assert.Fail(uint32(1), should.NOT.BeLessThan, int32(2)) // unsigned and signed
 	assert.Pass(uint32(2), should.NOT.BeLessThan, int32(1))
-	// if actual > math.MaxInt64: false
+	// if actual > math.MaxInt64: true
 	// (because by definition the expected value, a signed value can't be > math.MaxInt64)
 	const tooBig uint64 = math.MaxInt64 + 1
 	assert.Pass(tooBig, should.NOT.BeLessThan, 42)
