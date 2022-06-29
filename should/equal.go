@@ -14,10 +14,6 @@ import (
 // It uses reflect.DeepEqual in most cases, but also compares numerics
 // regardless of specific type and compares time.Time values using the
 // time.Equal method.
-//
-// WARNING: the numeric equality comparison currently cannot distinguish
-// between values of different type that have the same binary representation.
-// ie. int(-1) == math.MaxUint64
 func Equal(actual any, EXPECTED ...any) error {
 	err := validateExpected(1, EXPECTED)
 	if err != nil {
@@ -131,7 +127,9 @@ func (deepEquality) passes(a, b any) bool {
 // numericEquality compares numeric values using the built-in equality
 // operator (`==`). Values of differing numeric reflect.Kind are each
 // converted to the type of the other and are compared with `==` in both
-// directions. https://golang.org/pkg/reflect/#Kind
+// directions, with one exception: two mixed integers (one signed and one
+// unsigned) are always unequal in the case that the unsigned value is
+// greater than math.MaxInt64. https://golang.org/pkg/reflect/#Kind
 type numericEquality struct{}
 
 func (numericEquality) assertable(a, b any) bool {
@@ -140,6 +138,12 @@ func (numericEquality) assertable(a, b any) bool {
 func (numericEquality) passes(a, b any) bool {
 	aValue := reflect.ValueOf(a)
 	bValue := reflect.ValueOf(b)
+	if isUnsignedInteger(a) && isSignedInteger(b) && aValue.Uint() >= math.MaxInt64 {
+		return false
+	}
+	if isSignedInteger(a) && isUnsignedInteger(b) && bValue.Uint() >= math.MaxInt64 {
+		return false
+	}
 	aAsB := aValue.Convert(bValue.Type()).Interface()
 	bAsA := bValue.Convert(aValue.Type()).Interface()
 	return a == bAsA && b == aAsB

@@ -39,7 +39,7 @@ func TestShouldBeGreaterThanOrEqualTo(t *testing.T) {
 	assert.Fail(int32(1), should.BeGreaterThanOrEqualTo, uint32(2))
 	// if actual < 0: false
 	// (because by definition the expected value, an unsigned value must be >= 0)
-	const reallyBig uint64 = math.MaxUint64 - 1 // TODO: remove decrement (see issue #5: https://github.com/mdwhatcott/testing/issues/5)
+	const reallyBig uint64 = math.MaxUint64
 	assert.Fail(-1, should.BeGreaterThanOrEqualTo, reallyBig)
 
 	assert.Pass(uint32(2), should.BeGreaterThanOrEqualTo, int32(1)) // unsigned and signed
@@ -92,7 +92,7 @@ func TestShouldNOTBeGreaterThanOrEqualTo(t *testing.T) {
 	assert.Pass(int32(1), should.NOT.BeGreaterThanOrEqualTo, uint32(2))
 	// if actual < 0: true
 	// (because by definition the expected value, an unsigned value must be >= 0)
-	const reallyBig uint64 = math.MaxUint64 - 1 // TODO: remove decrement (see issue #5: https://github.com/mdwhatcott/testing/issues/5)
+	const reallyBig uint64 = math.MaxUint64
 	assert.Pass(-1, should.NOT.BeGreaterThanOrEqualTo, reallyBig)
 
 	assert.Fail(uint32(2), should.NOT.BeGreaterThanOrEqualTo, int32(1)) // unsigned and signed

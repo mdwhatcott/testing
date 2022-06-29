@@ -28,9 +28,9 @@ func TestShouldEqual(t *testing.T) {
 	assert.Fail([]byte("hi"), should.Equal, []byte("bye"))
 	assert.Pass([]byte("hi"), should.Equal, []byte("hi"))
 
-	// WARNING: edge case!
 	const max uint64 = math.MaxUint64
-	assert.Pass(-1, should.Equal, max)
+	assert.Fail(-1, should.Equal, max)
+	assert.Fail(max, should.Equal, -1)
 }
 
 func TestShouldNotEqual(t *testing.T) {
