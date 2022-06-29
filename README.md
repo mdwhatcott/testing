@@ -1,6 +1,7 @@
 # github.com/mdwhatcott/testing
 
 
+
 	package suite // import "github.com/mdwhatcott/testing/suite"
 	
 	Package suite implements an xUnit-style test runner, aiming for an optimum
@@ -31,7 +32,7 @@
 	
 	FUNCTIONS
 	
-	func Run(fixture interface{}, options ...Option)
+	func Run(fixture any, options ...Option)
 	    Run accepts a fixture with Test* methods and optional setup/teardown methods
 	    and executes the suite. Fixtures must be struct types which embed a
 	    *testing.T. Assuming a fixture struct with test methods 'Test1' and 'Test2'
@@ -102,11 +103,11 @@
 	func New(t *testing.T) *T
 	    New prepares a *T for use with the fixture passed to Run.
 	
-	func (this *T) FatalSo(actual interface{}, assertion assertion, expected ...interface{}) bool
+	func (this *T) FatalSo(actual any, assertion assertion, expected ...any) bool
 	    FatalSo is like So but in the event of an assertion failure it calls
 	    *testing.T.Fatal.
 	
-	func (this *T) So(actual interface{}, assertion assertion, expected ...interface{}) bool
+	func (this *T) So(actual any, assertion assertion, expected ...any) bool
 	    So invokes the provided assertion with the provided args. In the event of an
 	    assertion failure it calls *testing.T.Error.
 	
@@ -133,23 +134,39 @@
 	
 	FUNCTIONS
 	
-	func BeEmpty(actual interface{}, expected ...interface{}) error
+	func BeEmpty(actual any, expected ...any) error
 	    BeEmpty uses reflection to verify that len(actual) == 0.
 	
-	func BeFalse(actual interface{}, expected ...interface{}) error
+	func BeFalse(actual any, expected ...any) error
 	    BeFalse verifies that actual is the boolean false value.
 	
-	func BeIn(actual interface{}, expected ...interface{}) error
+	func BeGreaterThan(actual any, EXPECTED ...any) error
+	    BeGreaterThan verifies that actual is greater than expected. Both actual and
+	    expected must be strings or numeric in type.
+	
+	func BeGreaterThanOrEqualTo(actual any, expected ...any) error
+	    BeGreaterThanOrEqualTo verifies that actual is less than or equal to
+	    expected. Both actual and expected must be strings or numeric in type.
+	
+	func BeIn(actual any, expected ...any) error
 	    BeIn determines whether actual is a member of expected[0]. It defers to
 	    Contain.
 	
-	func BeNil(actual interface{}, expected ...interface{}) error
+	func BeLessThan(actual any, EXPECTED ...any) error
+	    BeLessThan verifies that actual is less than expected. Both actual and
+	    expected must be strings or numeric in type.
+	
+	func BeLessThanOrEqualTo(actual any, expected ...any) error
+	    BeLessThanOrEqualTo verifies that actual is less than or equal to expected.
+	    Both actual and expected must be strings or numeric in type.
+	
+	func BeNil(actual any, expected ...any) error
 	    BeNil verifies that actual is the nil value.
 	
-	func BeTrue(actual interface{}, expected ...interface{}) error
+	func BeTrue(actual any, expected ...any) error
 	    BeTrue verifies that actual is the boolean true value.
 	
-	func Contain(actual interface{}, expected ...interface{}) error
+	func Contain(actual any, expected ...any) error
 	    Contain determines whether actual contains expected[0]. The actual value may
 	    be a map, array, slice, or string:
 	
@@ -157,27 +174,27 @@
 	        - In the case of slices and arrays the expected value is assumed to be a member.
 	        - In the case of strings the expected value may be a rune or substring.
 	
-	func EndWith(actual interface{}, expected ...interface{}) error
+	func EndWith(actual any, expected ...any) error
 	    EndWith verifies that actual ends with expected[0]. The actual value may be
 	    an array, slice, or string.
 	
-	func Equal(actual interface{}, EXPECTED ...interface{}) error
+	func Equal(actual any, EXPECTED ...any) error
 	    Equal verifies that the actual value is equal to the expected value. It uses
 	    reflect.DeepEqual in most cases, but also compares numerics regardless of
 	    specific type and compares time.Time values using the time.Equal method.
 	
-	func HaveLength(actual interface{}, expected ...interface{}) error
+	func HaveLength(actual any, expected ...any) error
 	    HaveLength uses reflection to verify that len(actual) == 0.
 	
-	func Panic(actual interface{}, expected ...interface{}) (err error)
+	func Panic(actual any, expected ...any) (err error)
 	    Panic invokes the func() provided as actual and recovers from any panic. It
 	    returns an error if actual() does not result in a panic.
 	
-	func StartWith(actual interface{}, expected ...interface{}) error
+	func StartWith(actual any, expected ...any) error
 	    StartWith verified that actual starts with expected[0]. The actual value may
 	    be an array, slice, or string.
 	
-	func WrapError(actual interface{}, expected ...interface{}) error
+	func WrapError(actual any, expected ...any) error
 	    WrapError uses errors.Is to verify that actual is an error value that wraps
 	    expected[0] (also an error value).
 	

@@ -20,6 +20,7 @@ func BeLessThanOrEqualTo(actual any, expected ...any) error {
 	return nil
 }
 
+// BeLessThanOrEqualTo negated!
 func (negated) BeLessThanOrEqualTo(actual any, expected ...any) error {
 	err := BeLessThanOrEqualTo(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {

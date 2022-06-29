@@ -1,14 +1,12 @@
 package should
 
-import (
-	"errors"
-	"fmt"
-)
+import "errors"
 
+// BeGreaterThanOrEqualTo verifies that actual is less than or equal to expected.
+// Both actual and expected must be strings or numeric in type.
 func BeGreaterThanOrEqualTo(actual any, expected ...any) error {
 	err := Equal(actual, expected...)
 	if err == nil {
-		fmt.Println("HIHIHIHI")
 		return nil
 	}
 	err = BeGreaterThan(actual, expected...)
@@ -22,6 +20,7 @@ func BeGreaterThanOrEqualTo(actual any, expected ...any) error {
 	return nil
 }
 
+// BeGreaterThanOrEqualTo negated!
 func (negated) BeGreaterThanOrEqualTo(actual any, expected ...any) error {
 	err := BeGreaterThanOrEqualTo(actual, expected...)
 	if errors.Is(err, ErrAssertionFailure) {
