@@ -4,10 +4,10 @@ runner, aiming for an optimum balance between
 simplicity and utility. It is based on the
 following packages:
 
-	- [github.com/stretchr/testify/suite](https://pkg.go.dev/github.com/stretchr/testify/suite)
-	- [github.com/smartystreets/gunit](https://pkg.go.dev/github.com/smartystreets/gunit)
+  - [github.com/stretchr/testify/suite](https://pkg.go.dev/github.com/stretchr/testify/suite)
+  - [github.com/smartystreets/gunit](https://pkg.go.dev/github.com/smartystreets/gunit)
 
-For those using GoLand by JetBrains, you may
+For those using an IDE by JetBrains, you may
 find the following "live template" helpful:
 
 	func Test$NAME$Suite(t *testing.T) {
@@ -42,14 +42,14 @@ embed a *testing.T. Assuming a fixture struct
 with test methods 'Test1' and 'Test2' execution
 would proceed as follows:
 
-	1. fixture.SetupSuite()
-	2. fixture.Setup()
-	3. fixture.Test1()
-	4. fixture.Teardown()
-	5. fixture.Setup()
-	6. fixture.Test2()
-	7. fixture.Teardown()
-	8. fixture.TeardownSuite()
+ 1. fixture.SetupSuite()
+ 2. fixture.Setup()
+ 3. fixture.Test1()
+ 4. fixture.Teardown()
+ 5. fixture.Setup()
+ 6. fixture.Test2()
+ 7. fixture.Teardown()
+ 8. fixture.TeardownSuite()
 
 The methods provided by Options may be supplied
 to this function to tweak the execution.
