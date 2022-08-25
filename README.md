@@ -5,14 +5,13 @@
 	package suite // import "github.com/mdwhatcott/testing/suite"
 	
 	Package suite implements an xUnit-style test runner, aiming for an optimum
-	balance between simplicity and utility. It is based on the following
-	packages:
+	balance between simplicity and utility. It is based on the following packages:
 	
-	    - [github.com/stretchr/testify/suite](https://pkg.go.dev/github.com/stretchr/testify/suite)
-	    - [github.com/smartystreets/gunit](https://pkg.go.dev/github.com/smartystreets/gunit)
+	  - github.com/stretchr/testify/suite(https://pkg.go.dev/github.com/stretchr/testify/suite)
+	  - github.com/smartystreets/gunit(https://pkg.go.dev/github.com/smartystreets/gunit)
 	
-	For those using GoLand by JetBrains, you may find the following "live
-	template" helpful:
+	For those using an IDE by JetBrains, you may find the following "live template"
+	helpful:
 	
 	    func Test$NAME$Suite(t *testing.T) {
 	    	suite.Run(&$NAME$Suite{T: suite.New(t)}, suite.Options.UnitTests())
@@ -33,19 +32,19 @@
 	FUNCTIONS
 	
 	func Run(fixture any, options ...Option)
-	    Run accepts a fixture with Test* methods and optional setup/teardown methods
-	    and executes the suite. Fixtures must be struct types which embed a
+	    Run accepts a fixture with Test* methods and optional setup/teardown
+	    methods and executes the suite. Fixtures must be struct types which embed a
 	    *testing.T. Assuming a fixture struct with test methods 'Test1' and 'Test2'
 	    execution would proceed as follows:
 	
-	        1. fixture.SetupSuite()
-	        2. fixture.Setup()
-	        3. fixture.Test1()
-	        4. fixture.Teardown()
-	        5. fixture.Setup()
-	        6. fixture.Test2()
-	        7. fixture.Teardown()
-	        8. fixture.TeardownSuite()
+	     1. fixture.SetupSuite()
+	     2. fixture.Setup()
+	     3. fixture.Test1()
+	     4. fixture.Teardown()
+	     5. fixture.Setup()
+	     6. fixture.Test2()
+	     7. fixture.Teardown()
+	     8. fixture.TeardownSuite()
 	
 	    The methods provided by Options may be supplied to this function to tweak
 	    the execution.
@@ -83,8 +82,8 @@
 	    that `go test` was invoked with the -parallel flag.
 	
 	func (Opt) SharedFixture() Option
-	    SharedFixture signals to Run that the provided fixture instance is to be
-	    used to run all test methods. This mode is not compatible with
+	    SharedFixture signals to Run that the provided fixture instance is
+	    to be used to run all test methods. This mode is not compatible with
 	    ParallelFixture or ParallelTests and disables them.
 	
 	func (Opt) UnitTests() Option
@@ -169,10 +168,10 @@
 	func Contain(actual any, expected ...any) error
 	    Contain determines whether actual contains expected[0]. The actual value may
 	    be a map, array, slice, or string:
-	
-	        - In the case of maps the expected value is assumed to be a map key.
-	        - In the case of slices and arrays the expected value is assumed to be a member.
-	        - In the case of strings the expected value may be a rune or substring.
+	      - In the case of maps the expected value is assumed to be a map key.
+	      - In the case of slices and arrays the expected value is assumed to be a
+	        member.
+	      - In the case of strings the expected value may be a rune or substring.
 	
 	func EndWith(actual any, expected ...any) error
 	    EndWith verifies that actual ends with expected[0]. The actual value may be
@@ -187,8 +186,8 @@
 	    HaveLength uses reflection to verify that len(actual) == 0.
 	
 	func Panic(actual any, expected ...any) (err error)
-	    Panic invokes the func() provided as actual and recovers from any panic. It
-	    returns an error if actual() does not result in a panic.
+	    Panic invokes the func() provided as actual and recovers from any panic.
+	    It returns an error if actual() does not result in a panic.
 	
 	func StartWith(actual any, expected ...any) error
 	    StartWith verified that actual starts with expected[0]. The actual value may
