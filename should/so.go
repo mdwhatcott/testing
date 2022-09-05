@@ -1,11 +1,11 @@
-package assert
+package should
 
 import (
 	"fmt"
 	"log"
 )
 
-func So(t T, actual any, assertion Func, expected ...any) {
+func So(t t, actual any, assertion Func, expected ...any) {
 	if t == nil {
 		t = Fmt{}
 	}
@@ -16,7 +16,7 @@ func So(t T, actual any, assertion Func, expected ...any) {
 	}
 }
 
-type T interface {
+type t interface {
 	Helper()
 	Error(...any)
 }

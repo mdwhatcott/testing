@@ -38,7 +38,7 @@ import (
 Run accepts a fixture with Test* methods and
 optional setup/teardown methods and executes
 the suite. Fixtures must be struct types which
-embed a *testing.T. Assuming a fixture struct
+embed a *suite.T. Assuming a fixture struct
 with test methods 'Test1' and 'Test2' execution
 would proceed as follows:
 
