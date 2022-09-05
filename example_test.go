@@ -1,4 +1,4 @@
-package bowling
+package testing
 
 import (
 	"testing"
@@ -8,29 +8,29 @@ import (
 )
 
 func TestGameFixture(t *testing.T) {
-	suite.Run(&GameFixture{T: suite.New(t)}, suite.Options.UnitTests())
+	should.Run(&GameFixture{T: should.New(t)}, should.Options.UnitTests())
 }
 
 type GameFixture struct {
-	*suite.T
-	game *Game
+	*should.T
+	game *bowling
 }
 
 func (this *GameFixture) Setup() {
-	this.game = new(Game)
+	this.game = new(bowling)
 }
 func (this *GameFixture) assertScore(expected int) {
 	this.Helper()
-	this.So(this.game.CalculateScore(), should.Equal, expected)
+	this.So(this.game.calculateScore(), should.Equal, expected)
 }
 func (this *GameFixture) rollMany(times, pins int) {
 	for x := 0; x < times; x++ {
-		this.game.RecordRoll(pins)
+		this.game.recordRoll(pins)
 	}
 }
 func (this *GameFixture) rollSeveral(throws ...int) {
 	for _, throw := range throws {
-		this.game.RecordRoll(throw)
+		this.game.recordRoll(throw)
 	}
 }
 func (this *GameFixture) TestGutterGame() {

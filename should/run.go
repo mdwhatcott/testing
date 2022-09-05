@@ -1,32 +1,4 @@
-/*
-Package suite implements an xUnit-style test
-runner, aiming for an optimum balance between
-simplicity and utility. It is based on the
-following packages:
-
-  - [github.com/stretchr/testify/suite](https://pkg.go.dev/github.com/stretchr/testify/suite)
-  - [github.com/smartystreets/gunit](https://pkg.go.dev/github.com/smartystreets/gunit)
-
-For those using an IDE by JetBrains, you may
-find the following "live template" helpful:
-
-	func Test$NAME$Suite(t *testing.T) {
-		suite.Run(&$NAME$Suite{T: suite.New(t)}, suite.Options.UnitTests())
-	}
-
-	type $NAME$Suite struct {
-		*suite.T
-	}
-
-	func (this *$NAME$Suite) Setup() {
-	}
-
-	func (this *$NAME$Suite) Test$END$() {
-	}
-
-Happy testing!
-*/
-package suite
+package should
 
 import (
 	"reflect"

@@ -1,18 +1,15 @@
-package suite_test
+package should_test
 
 import (
 	"testing"
-
-	"github.com/mdwhatcott/testing/should"
-	"github.com/mdwhatcott/testing/suite"
 )
 
 func TestSuiteWithSetupsAndTeardowns(t *testing.T) {
-	fixture := &Suite01{T: suite.New(t)}
+	fixture := &Suite01{T: New(t)}
 
-	suite.Run(fixture, suite.Options.IntegrationTests())
+	Run(fixture, Options.IntegrationTests())
 
-	fixture.So(fixture.events, should.Equal, []string{
+	fixture.So(fixture.events, Equal, []string{
 		"SetupSuite",
 		"Setup",
 		"Test",
@@ -22,7 +19,7 @@ func TestSuiteWithSetupsAndTeardowns(t *testing.T) {
 }
 
 type Suite01 struct {
-	*suite.T
+	*T
 	events []string
 }
 

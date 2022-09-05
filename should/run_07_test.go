@@ -1,18 +1,15 @@
-package suite_test
+package should_test
 
 import (
 	"testing"
-
-	"github.com/mdwhatcott/testing/should"
-	"github.com/mdwhatcott/testing/suite"
 )
 
 func TestSuiteWithSkippedTests(t *testing.T) {
-	fixture := &Suite07{T: suite.New(t)}
+	fixture := &Suite07{T: New(t)}
 
-	suite.Run(fixture, suite.Options.SharedFixture())
+	Run(fixture, Options.SharedFixture())
 
-	fixture.So(fixture.events, should.Equal, []string{
+	fixture.So(fixture.events, Equal, []string{
 		"SetupSuite",
 		"Setup",
 		"Test1",
@@ -22,7 +19,7 @@ func TestSuiteWithSkippedTests(t *testing.T) {
 }
 
 type Suite07 struct {
-	*suite.T
+	*T
 	events []string
 }
 
