@@ -1,17 +1,17 @@
-package testing
+package bowling
 
-type bowling struct {
+type game struct {
 	score  int
 	throw  int
 	throws [21]int
 }
 
-func (this *bowling) recordRoll(pins int) {
+func (this *game) recordRoll(pins int) {
 	this.throws[this.throw] = pins
 	this.throw++
 }
 
-func (this *bowling) calculateScore() int {
+func (this *game) calculateScore() int {
 	this.throw = 0
 	this.score = 0
 	for frame := 0; frame < 10; frame++ {
@@ -20,7 +20,7 @@ func (this *bowling) calculateScore() int {
 	}
 	return this.score
 }
-func (this *bowling) scoreCurrentFrame() int {
+func (this *game) scoreCurrentFrame() int {
 	if this.currentFrameIsStrike() {
 		return this.scoreStrikeFrame()
 	} else if this.currentFrameIsSpare() {
@@ -29,28 +29,28 @@ func (this *bowling) scoreCurrentFrame() int {
 		return this.scoreRegularFrame()
 	}
 }
-func (this *bowling) currentFrameIsStrike() bool {
+func (this *game) currentFrameIsStrike() bool {
 	return this.pins(0) == 10
 }
-func (this *bowling) currentFrameIsSpare() bool {
+func (this *game) currentFrameIsSpare() bool {
 	return this.frameScore() == 10
 }
-func (this *bowling) scoreStrikeFrame() int {
+func (this *game) scoreStrikeFrame() int {
 	return 10 + this.pins(1) + this.pins(2)
 }
-func (this *bowling) scoreSpareFrame() int {
+func (this *game) scoreSpareFrame() int {
 	return 10 + this.pins(2)
 }
-func (this *bowling) scoreRegularFrame() int {
+func (this *game) scoreRegularFrame() int {
 	return this.frameScore()
 }
-func (this *bowling) frameScore() int {
+func (this *game) frameScore() int {
 	return this.pins(0) + this.pins(1)
 }
-func (this *bowling) pins(offset int) int {
+func (this *game) pins(offset int) int {
 	return this.throws[this.throw+offset]
 }
-func (this *bowling) advanceFrame() int {
+func (this *game) advanceFrame() int {
 	if this.currentFrameIsStrike() {
 		return 1
 	} else {

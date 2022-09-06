@@ -1,10 +1,9 @@
-package testing
+package bowling
 
 import (
 	"testing"
 
 	"github.com/mdwhatcott/testing/should"
-	"github.com/mdwhatcott/testing/suite"
 )
 
 func TestGameFixture(t *testing.T) {
@@ -13,11 +12,11 @@ func TestGameFixture(t *testing.T) {
 
 type GameFixture struct {
 	*should.T
-	game *bowling
+	game *game
 }
 
 func (this *GameFixture) Setup() {
-	this.game = new(bowling)
+	this.game = new(game)
 }
 func (this *GameFixture) assertScore(expected int) {
 	this.Helper()
