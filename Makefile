@@ -10,7 +10,7 @@ test:
 	go test -short -cover -timeout=1s -race ./...
 
 onefile:
-	go-mergepkg -dirs "should" -header "$(shell git describe) (a little copy-paste is better than a little dependency)"
+	@go-mergepkg -dirs "should" -header "github.com/mdwhatcott/testing@$(shell git describe) (a little copy-paste is better than a little dependency)"
 
 doc:
 	printf '# ' > README.md && \
