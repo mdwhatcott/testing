@@ -2,19 +2,21 @@ package should_test
 
 import (
 	"testing"
+
+	"github.com/mdwhatcott/testing/should"
 )
 
 func TestLong(t *testing.T) {
 	if !testing.Short() {
 		t.Skip("This test only to be run in when -test.short flag passed.")
 	}
-	fixture := &Suite04{T: New(t)}
-	Run(fixture)
-	fixture.So(t.Failed(), BeFalse)
+	fixture := &Suite04{T: should.New(t)}
+	should.Run(fixture)
+	fixture.So(t.Failed(), should.BeFalse)
 }
 
-type Suite04 struct{ *T }
+type Suite04 struct{ *should.T }
 
 func (this *Suite04) LongTestThatWouldFailButShouldBeSkippedInShortMode() {
-	this.So(1, Equal, 2)
+	this.So(1, should.Equal, 2)
 }

@@ -2,18 +2,20 @@ package should_test
 
 import (
 	"testing"
+
+	"github.com/mdwhatcott/testing/should"
 )
 
 func TestSuiteWithSetupsAndTeardownsSkippedEntirelyIfAllTestsSkipped(t *testing.T) {
-	fixture := &Suite06{T: New(t)}
+	fixture := &Suite06{T: should.New(t)}
 
-	Run(fixture, Options.SharedFixture())
+	should.Run(fixture, should.Options.SharedFixture())
 
-	fixture.So(fixture.events, BeNil)
+	fixture.So(fixture.events, should.BeNil)
 }
 
 type Suite06 struct {
-	*T
+	*should.T
 	events []string
 }
 

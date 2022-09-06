@@ -2,19 +2,21 @@ package should_test
 
 import (
 	"testing"
+
+	"github.com/mdwhatcott/testing/should"
 )
 
 func TestSkip(t *testing.T) {
-	fixture := &Suite03{T: New(t)}
-	Run(fixture)
-	fixture.So(t.Failed(), BeFalse)
+	fixture := &Suite03{T: should.New(t)}
+	should.Run(fixture)
+	fixture.So(t.Failed(), should.BeFalse)
 }
 
-type Suite03 struct{ *T }
+type Suite03 struct{ *should.T }
 
 func (this *Suite03) SkipTestThatFails() {
-	this.So(1, Equal, 2)
+	this.So(1, should.Equal, 2)
 }
 func (this *Suite03) SkipLongTestThatFails() {
-	this.So(1, Equal, 2)
+	this.So(1, should.Equal, 2)
 }

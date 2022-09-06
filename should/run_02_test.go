@@ -2,16 +2,18 @@ package should_test
 
 import (
 	"testing"
+
+	"github.com/mdwhatcott/testing/should"
 )
 
 func TestFreshFixture(t *testing.T) {
-	fixture := &Suite02{T: New(t)}
-	Run(fixture, Options.UnitTests())
-	fixture.So(fixture.counter, Equal, 0)
+	fixture := &Suite02{T: should.New(t)}
+	should.Run(fixture, should.Options.UnitTests())
+	fixture.So(fixture.counter, should.Equal, 0)
 }
 
 type Suite02 struct {
-	*T
+	*should.T
 	counter int
 }
 
