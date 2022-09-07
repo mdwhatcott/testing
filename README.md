@@ -37,11 +37,11 @@
 	helpful:
 	
 	    func Test$NAME$Suite(t *testing.T) {
-	    	suite.Run(&$NAME$Suite{T: suite.New(t)}, suite.Options.UnitTests())
+	    	should.Run(&$NAME$Suite{T: should.New(t)}, should.Options.UnitTests())
 	    }
 	
 	    type $NAME$Suite struct {
-	    	*suite.T
+	    	*should.T
 	    }
 	
 	    func (this *$NAME$Suite) Setup() {
@@ -121,6 +121,11 @@
 	    Equal verifies that the actual value is equal to the expected value. It uses
 	    reflect.DeepEqual in most cases, but also compares numerics regardless of
 	    specific type and compares time.Time values using the time.Equal method.
+	
+	func HappenOn(actual any, expected ...any) error
+	    HappenOn ensures that two time values happen at the same instant. See the
+	    time.Time.Equal method for teh details. This function defers to Equal to do
+	    the work.
 	
 	func HaveLength(actual any, expected ...any) error
 	    HaveLength uses reflection to verify that len(actual) == 0.
