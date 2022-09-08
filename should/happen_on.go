@@ -6,7 +6,7 @@ import (
 )
 
 // HappenOn ensures that two time values happen at the same instant.
-// See the time.Time.Equal method for teh details.
+// See the time.Time.Equal method for the details.
 // This function defers to Equal to do the work.
 func HappenOn(actual any, expected ...any) error {
 	err := validateExpected(1, expected)
