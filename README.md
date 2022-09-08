@@ -122,9 +122,12 @@
 	    reflect.DeepEqual in most cases, but also compares numerics regardless of
 	    specific type and compares time.Time values using the time.Equal method.
 	
+	func HappenAfter(actual any, expected ...any) error
+	    HappenAfter ensures that the first time value happens after the second.
+	
 	func HappenOn(actual any, expected ...any) error
 	    HappenOn ensures that two time values happen at the same instant. See the
-	    time.Time.Equal method for teh details. This function defers to Equal to do
+	    time.Time.Equal method for the details. This function defers to Equal to do
 	    the work.
 	
 	func HaveLength(actual any, expected ...any) error
