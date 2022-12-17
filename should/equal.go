@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math"
 	"reflect"
-	"runtime/debug"
 	"strings"
 	"time"
 )
@@ -75,8 +74,7 @@ func report(a, b any) string {
 	_, _ = fmt.Fprintf(builder, "\n")
 	_, _ = fmt.Fprintf(builder, "Expected: %s %s\n", bType, bFormat)
 	_, _ = fmt.Fprintf(builder, "Actual  : %s %s\n", aType, aFormat)
-	_, _ = fmt.Fprintf(builder, "          %s %s\n", typeDiff, valueDiff)
-	_, _ = fmt.Fprintf(builder, "Stack (filtered):\n%s\n", stack())
+	_, _ = fmt.Fprintf(builder, "          %s %s", typeDiff, valueDiff)
 
 	return builder.String()
 }
@@ -101,16 +99,6 @@ func diff(a, b string) string {
 		}
 	}
 	return result.String()
-}
-func stack() string {
-	lines := strings.Split(string(debug.Stack()), "\n")
-	var filtered []string
-	for x := 1; x < len(lines)-1; x += 2 {
-		if strings.Contains(lines[x+1], "_test.go:") {
-			filtered = append(filtered, lines[x], lines[x+1])
-		}
-	}
-	return "> " + strings.Join(filtered, "\n> ")
 }
 
 // deepEquality compares any two values using reflect.DeepEqual.
