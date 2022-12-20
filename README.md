@@ -125,6 +125,9 @@
 	func HappenAfter(actual any, expected ...any) error
 	    HappenAfter ensures that the first time value happens after the second.
 	
+	func HappenBefore(actual any, expected ...any) error
+	    HappenBefore ensures that the first time value happens before the second.
+	
 	func HappenOn(actual any, expected ...any) error
 	    HappenOn ensures that two time values happen at the same instant. See the
 	    time.Time.Equal method for the details. This function defers to Equal to do
