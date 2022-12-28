@@ -73,6 +73,10 @@
 	
 	FUNCTIONS
 	
+	func BeChronological(actual any, expected ...any) error
+	    BeChronological asserts whether actual is a []time.Time and whether the
+	    values are in chronological order.
+	
 	func BeEmpty(actual any, expected ...any) error
 	    BeEmpty uses reflection to verify that len(actual) == 0.
 	
