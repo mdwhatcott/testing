@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math"
 	"reflect"
+	"time"
 )
 
 // BeLessThan verifies that actual is less than expected.
@@ -64,6 +65,7 @@ var lessThanSpecs = []specification{
 	unsignedAndSignedLessThan{},
 	floatAndIntegerLessThan{},
 	integerAndFloatLessThan{},
+	bothTimesLessThan{},
 }
 
 type bothStringsLessThan struct{}
@@ -146,4 +148,13 @@ func (integerAndFloatLessThan) assertable(a, b any) bool {
 }
 func (integerAndFloatLessThan) passes(a, b any) bool {
 	return asFloat(a) < asFloat(b)
+}
+
+type bothTimesLessThan struct{}
+
+func (bothTimesLessThan) assertable(a, b any) bool {
+	return isTime(a) && isTime(b)
+}
+func (bothTimesLessThan) passes(a, b any) bool {
+	return a.(time.Time).Before(b.(time.Time))
 }

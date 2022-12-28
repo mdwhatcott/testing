@@ -16,10 +16,5 @@ func HappenAfter(actual any, expected ...any) error {
 	if err != nil {
 		return err
 	}
-	AFTER := actual.(time.Time)
-	BEFORE := expected[0].(time.Time)
-	if AFTER.After(BEFORE) {
-		return nil
-	}
-	return failure("unfortunately,\n%v did not happen after\n%v", AFTER, BEFORE)
+	return BeGreaterThan(actual, expected[0])
 }
