@@ -14,6 +14,7 @@ func TestShouldPanic(t *testing.T) {
 
 	assert.Fail(func() {}, should.Panic)
 	assert.Pass(func() { panic("yay") }, should.Panic)
+	assert.Pass(func() { panic(nil) }, should.Panic) // tricky!
 }
 
 func TestShouldNotPanic(t *testing.T) {

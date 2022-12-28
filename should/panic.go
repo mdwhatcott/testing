@@ -14,10 +14,7 @@ func Panic(actual any, expected ...any) (err error) {
 		return err
 	}
 
-	return failure("" +
-		"provided func did not panic as expected " +
-		"(...or it panicked with a <nil> value...)",
-	)
+	return failure("provided func did not panic as expected")
 }
 
 // Panic (negated!) expects the func() provided as actual to run without panicking.
@@ -32,9 +29,10 @@ func (negated) Panic(actual any, expected ...any) (err error) {
 		return err
 	}
 
+	panicked := true
 	defer func() {
 		r := recover()
-		if r != nil {
+		if panicked {
 			err = failure(""+
 				"provided func should not have"+
 				"panicked but it did with: %s", r,
@@ -43,5 +41,6 @@ func (negated) Panic(actual any, expected ...any) (err error) {
 	}()
 
 	actual.(func())()
+	panicked = false
 	return nil
 }
