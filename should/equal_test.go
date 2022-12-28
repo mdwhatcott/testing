@@ -31,6 +31,8 @@ func TestShouldEqual(t *testing.T) {
 	const max uint64 = math.MaxUint64
 	assert.Fail(-1, should.Equal, max)
 	assert.Fail(max, should.Equal, -1)
+
+	assert.Pass(returnsNilInterface(), should.Equal, nil)
 }
 
 func TestShouldNotEqual(t *testing.T) {
@@ -42,3 +44,5 @@ func TestShouldNotEqual(t *testing.T) {
 	assert.Fail(1, should.NOT.Equal, 1)
 	assert.Pass(1, should.NOT.Equal, 2)
 }
+
+func returnsNilInterface() any { return nil }

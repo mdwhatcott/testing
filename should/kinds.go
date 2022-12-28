@@ -70,7 +70,11 @@ var numericKinds = map[reflect.Kind]struct{}{
 }
 
 func isNumeric(v any) bool {
-	_, found := numericKinds[reflect.TypeOf(v).Kind()]
+	of := reflect.TypeOf(v)
+	if of == nil {
+		return false
+	}
+	_, found := numericKinds[of.Kind()]
 	return found
 }
 
