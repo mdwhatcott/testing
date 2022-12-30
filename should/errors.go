@@ -3,7 +3,9 @@ package should
 import (
 	"errors"
 	"fmt"
+	"os"
 	"runtime/debug"
+	"strconv"
 	"strings"
 )
 
@@ -26,9 +28,27 @@ func stack() string {
 	lines := strings.Split(string(debug.Stack()), "\n")
 	var filtered []string
 	for x := 1; x < len(lines)-1; x += 2 {
-		if strings.Contains(lines[x+1], "_test.go:") {
-			filtered = append(filtered, lines[x], lines[x+1])
+		fileLineRaw := lines[x+1]
+		if strings.Contains(fileLineRaw, "_test.go:") {
+			filtered = append(filtered, lines[x], fileLineRaw)
+			line, ok := readSourceCodeLine(fileLineRaw)
+			if ok {
+				filtered = append(filtered, "  "+line)
+			}
+
 		}
 	}
 	return "> " + strings.Join(filtered, "\n> ")
+}
+func readSourceCodeLine(fileLineRaw string) (string, bool) {
+	fileLineJoined := strings.Fields(strings.TrimSpace(fileLineRaw))[0]
+	fileLine := strings.Split(fileLineJoined, ":")
+	sourceCode, _ := os.ReadFile(fileLine[0])
+	sourceCodeLines := strings.Split(string(sourceCode), "\n")
+	lineNumber, _ := strconv.Atoi(fileLine[1])
+	lineNumber--
+	if len(sourceCodeLines) <= lineNumber {
+		return "", false
+	}
+	return sourceCodeLines[lineNumber], true
 }

@@ -73,7 +73,7 @@ func report(a, b any) string {
 	builder := new(strings.Builder)
 	_, _ = fmt.Fprintf(builder, "\n")
 	_, _ = fmt.Fprintf(builder, "Expected: %s %s\n", bType, bFormat)
-	_, _ = fmt.Fprintf(builder, "Actual  : %s %s\n", aType, aFormat)
+	_, _ = fmt.Fprintf(builder, "Actual:   %s %s\n", aType, aFormat)
 	_, _ = fmt.Fprintf(builder, "          %s %s", typeDiff, valueDiff)
 
 	return builder.String()
@@ -87,11 +87,7 @@ func format(v any) string {
 }
 func diff(a, b string) string {
 	result := new(strings.Builder)
-
-	for x := 0; ; x++ {
-		if x >= len(a) && x >= len(b) {
-			break
-		}
+	for x := 0; x < len(a) && x < len(b); x++ {
 		if x >= len(a) || x >= len(b) || a[x] != b[x] {
 			result.WriteString("^")
 		} else {
