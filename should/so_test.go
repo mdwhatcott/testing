@@ -1,6 +1,7 @@
 package should_test
 
 import (
+	"bytes"
 	"log"
 	"testing"
 
@@ -8,9 +9,8 @@ import (
 )
 
 func Test(t *testing.T) {
-	log.SetFlags(0)
 	should.So(t, true, should.BeTrue)
-	should.So(nil, true, should.BeFalse)
-	should.So(should.Fmt{}, true, should.BeFalse)
-	should.So(should.Log{}, nil, should.NOT.BeNil)
+	buffer := bytes.Buffer{}
+	should.So(log.New(&buffer, "", 0), true, should.BeFalse)
+	should.So(t, buffer.Len(), should.BeGreaterThan, 0)
 }

@@ -5,14 +5,18 @@ import (
 	"log"
 )
 
-func So(t t, actual any, assertion Func, expected ...any) {
-	if t == nil {
-		t = Fmt{}
-	}
-	t.Helper()
+func So(T, actual any, assertion Func, expected ...any) {
 	err := assertion(actual, expected...)
-	if err != nil {
-		t.Error(err)
+	if err == nil {
+		return
+	}
+	if tt, ok := T.(t); ok {
+		tt.Helper()
+		tt.Error(err)
+	} else if l, ok := T.(*log.Logger); ok {
+		l.Println(err)
+	} else {
+		fmt.Println(err)
 	}
 }
 
@@ -21,13 +25,22 @@ type t interface {
 	Error(...any)
 }
 
+// Deprecated: dead code
 type Fmt struct{}
+
+// Deprecated: dead code
 type Log struct{}
 
-func (Fmt) Helper() {}
-func (Log) Helper() {}
+// Deprecated: dead code
+func (Fmt) Helper() { panic("deprecated code") }
 
-func (Fmt) Error(a ...any) { fmt.Println(a...) }
-func (Log) Error(a ...any) { log.Println(a...) }
+// Deprecated: dead code
+func (Log) Helper() { panic("deprecated code") }
+
+// Deprecated: dead code
+func (Fmt) Error(a ...any) { panic("deprecated code") }
+
+// Deprecated: dead code
+func (Log) Error(a ...any) { panic("deprecated code") }
 
 type Func func(actual any, expected ...any) error
