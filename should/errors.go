@@ -17,12 +17,12 @@ var (
 )
 
 func failure(format string, args ...any) error {
-	return wrap(ErrAssertionFailure,
-		format+"\nStack: (filtered)\n%s",
-		append(args, stack())...)
-}
-func wrap(inner error, format string, args ...any) error {
-	return fmt.Errorf("%w: "+fmt.Sprintf(format, args...), inner)
+	trace := stack()
+	if len(trace) > 0 {
+		format += "\nStack: (filtered)\n%s"
+		args = append(args, trace)
+	}
+	return wrap(ErrAssertionFailure, format, args...)
 }
 func stack() string {
 	lines := strings.Split(string(debug.Stack()), "\n")
@@ -38,6 +38,9 @@ func stack() string {
 
 		}
 	}
+	if len(filtered) == 0 {
+		return ""
+	}
 	return "> " + strings.Join(filtered, "\n> ")
 }
 func readSourceCodeLine(fileLineRaw string) (string, bool) {
@@ -51,4 +54,7 @@ func readSourceCodeLine(fileLineRaw string) (string, bool) {
 		return "", false
 	}
 	return sourceCodeLines[lineNumber], true
+}
+func wrap(inner error, format string, args ...any) error {
+	return fmt.Errorf("%w: "+fmt.Sprintf(format, args...), inner)
 }
