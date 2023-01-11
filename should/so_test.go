@@ -1,16 +1,12 @@
 package should_test
 
 import (
-	"bytes"
-	"log"
 	"testing"
 
 	"github.com/mdwhatcott/testing/should"
 )
 
-func Test(t *testing.T) {
-	should.So(t, true, should.BeTrue)
-	buffer := bytes.Buffer{}
-	should.So(log.New(&buffer, "", 0), true, should.BeFalse)
-	should.So(t, buffer.Len(), should.BeGreaterThan, 0)
+func TestSo(t *testing.T) {
+	should.So(t, 1, should.Equal, 1)
+	should.New(t).So(1, should.Equal, 1)
 }

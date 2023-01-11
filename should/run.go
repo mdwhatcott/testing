@@ -34,7 +34,7 @@ func Run(fixture any, options ...Option) {
 
 	fixtureValue := reflect.ValueOf(fixture)
 	fixtureType := reflect.TypeOf(fixture)
-	t := fixtureValue.Elem().FieldByName("T").Interface().(*T)
+	t := fixtureValue.Elem().FieldByName("T").Elem().FieldByName("Reporter").Interface().(*TestingReporter)
 
 	var (
 		testNames        []string
@@ -99,7 +99,7 @@ func Run(fixture any, options ...Option) {
 }
 
 type testCase struct {
-	t            *T
+	t            *TestingReporter
 	name         string
 	config       *config
 	manualSkip   bool
@@ -133,7 +133,7 @@ func (this testCase) runTest(t *testing.T) {
 	if this.config.freshFixture {
 		fixtureValue = reflect.New(this.fixtureType.Elem())
 	}
-	fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(&T{T: t}))
+	fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(New(t)))
 
 	setup, hasSetup := fixtureValue.Interface().(setupTest)
 	if hasSetup {
