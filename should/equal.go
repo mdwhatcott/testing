@@ -74,7 +74,7 @@ func report(a, b any) string {
 	_, _ = fmt.Fprintf(builder, "\n")
 	_, _ = fmt.Fprintf(builder, "Expected: %s %s\n", bType, bFormat)
 	_, _ = fmt.Fprintf(builder, "Actual:   %s %s\n", aType, aFormat)
-	_, _ = fmt.Fprintf(builder, "          %s %s", typeDiff, valueDiff)
+	_, _ = fmt.Fprintf(builder, "          %s %s\n", typeDiff, valueDiff)
 
 	return builder.String()
 }
