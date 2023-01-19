@@ -1,6 +1,7 @@
 package should
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -75,7 +76,7 @@ func NewWriterReporter(writer io.Writer) *WriterReporter {
 }
 func (this *WriterReporter) Report(err error) {
 	if err != nil {
-		_, _ = io.WriteString(this, err.Error())
+		_, _ = fmt.Fprintln(this, err.Error())
 	}
 }
 
