@@ -57,3 +57,11 @@ func TestReporterIsWriter(t *testing.T) {
 	should.So(t, writer1.String(), should.Equal, message)
 	should.So(t, writer2.String(), should.Equal, message+"\n")
 }
+func TestReporterFmtOperations(t *testing.T) {
+	var writer bytes.Buffer
+	reporter := should.Report(should.NewWriterReporter(&writer))
+	reporter.Print("Hello ")
+	reporter.Println("world!")
+	reporter.Printf("%d", 42)
+	should.So(t, writer.String(), should.Equal, "Hello world!\n42")
+}
