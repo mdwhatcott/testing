@@ -11,6 +11,7 @@ import (
 type Func func(actual any, expected ...any) error
 
 type Reporter interface {
+	Helper()
 	Report(error)
 	io.Writer
 }
@@ -31,9 +32,18 @@ func (this *T) So(actual any, assertion Func, expected ...any) (ok bool) {
 	this.Reporter.Report(err)
 	return err == nil
 }
-func (this *T) Print(v ...any)            { _, _ = fmt.Fprint(this, v...) }
-func (this *T) Printf(f string, v ...any) { _, _ = fmt.Fprintf(this, f, v...) }
-func (this *T) Println(v ...any)          { _, _ = fmt.Fprintln(this, v...) }
+func (this *T) Print(v ...any) {
+	this.Reporter.Helper()
+	_, _ = this.Write([]byte(fmt.Sprint(v...)))
+}
+func (this *T) Printf(f string, v ...any) {
+	this.Reporter.Helper()
+	_, _ = this.Write([]byte(fmt.Sprintf(f, v...)))
+}
+func (this *T) Println(v ...any) {
+	this.Reporter.Helper()
+	_, _ = this.Write([]byte(fmt.Sprintln(v...)))
+}
 
 type TestingReporter struct{ *testing.T }
 
@@ -54,6 +64,12 @@ func (this *TestingReporter) Write(p []byte) (n int, err error) {
 
 type CompositeReporter struct{ reporters []Reporter }
 
+func (this *CompositeReporter) Helper() {
+	for _, reporter := range this.reporters {
+		reporter.Helper()
+	}
+}
+
 func NewCompositeReporter(reporters ...Reporter) *CompositeReporter {
 	return &CompositeReporter{reporters: reporters}
 }
@@ -73,6 +89,8 @@ func (this *CompositeReporter) Write(p []byte) (n int, err error) {
 }
 
 type WriterReporter struct{ io.Writer }
+
+func (this *WriterReporter) Helper() {}
 
 func NewWriterReporter(writer io.Writer) *WriterReporter {
 	return &WriterReporter{Writer: writer}
