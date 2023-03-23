@@ -116,3 +116,4 @@ func (this LogReporter) Write(p []byte) (n int, err error) {
 	this.logger.Print(string(p))
 	return len(p), nil
 }
+func (this LogReporter) Helper() {}
