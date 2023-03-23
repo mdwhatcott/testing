@@ -19,7 +19,7 @@ var (
 func failure(format string, args ...any) error {
 	trace := stack()
 	if len(trace) > 0 {
-		format += "Stack: (filtered)\n%s"
+		format += "\nStack: (filtered)\n%s"
 		args = append(args, trace)
 	}
 	return wrap(ErrAssertionFailure, format, args...)
