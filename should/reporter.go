@@ -28,6 +28,7 @@ func Report(reporters ...Reporter) *T {
 	return &T{Reporter: NewCompositeReporter(reporters...)}
 }
 func (this *T) So(actual any, assertion Func, expected ...any) (ok bool) {
+	this.Helper()
 	err := assertion(actual, expected...)
 	this.Reporter.Report(err)
 	return err == nil
