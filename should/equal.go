@@ -76,6 +76,14 @@ func report(a, b any) string {
 	_, _ = fmt.Fprintf(builder, "Actual:   %s %s\n", aType, aFormat)
 	_, _ = fmt.Fprintf(builder, "          %s %s", typeDiff, valueDiff)
 
+	if firstDiffIndex := strings.Index(valueDiff, "^"); firstDiffIndex > 40 {
+		start := firstDiffIndex - 20
+		_, _ = fmt.Fprintf(builder, "\nInitial discrepancy at index %d:\n", firstDiffIndex)
+		_, _ = fmt.Fprintf(builder, "... %s\n", bFormat[start:])
+		_, _ = fmt.Fprintf(builder, "... %s\n", aFormat[start:])
+		_, _ = fmt.Fprintf(builder, "    %s", valueDiff[start:])
+	}
+
 	return builder.String()
 }
 func format(v any) string {
