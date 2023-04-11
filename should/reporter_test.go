@@ -49,13 +49,13 @@ func TestReporterIsWriter(t *testing.T) {
 		should.NewLogReporter(log.New(&writer2, "", 0)),
 	)
 
-	const message = "Hello, world!"
+	const message = "Hello, world!\n"
 	n, err := io.WriteString(reporter, message)
 
 	should.So(t, err, should.BeNil)
 	should.So(t, n, should.Equal, len(message))
 	should.So(t, writer1.String(), should.Equal, message)
-	should.So(t, writer2.String(), should.Equal, message+"\n")
+	should.So(t, writer2.String(), should.Equal, message)
 }
 func TestReporterFmtOperations(t *testing.T) {
 	var writer bytes.Buffer

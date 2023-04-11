@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -59,7 +60,7 @@ func (this *TestingReporter) Report(err error) {
 }
 func (this *TestingReporter) Write(p []byte) (n int, err error) {
 	this.Helper()
-	this.Log(string(p))
+	this.Log(strings.TrimSpace(string(p)))
 	return len(p), nil
 }
 
@@ -113,7 +114,7 @@ func (this LogReporter) Report(err error) {
 	}
 }
 func (this LogReporter) Write(p []byte) (n int, err error) {
-	this.logger.Print(string(p))
+	this.logger.Print(strings.TrimSpace(string(p)))
 	return len(p), nil
 }
 func (this LogReporter) Helper() {}
