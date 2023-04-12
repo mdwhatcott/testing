@@ -36,6 +36,10 @@ func Run(fixture any, options ...Option) {
 	fixtureType := reflect.TypeOf(fixture)
 	t := fixtureValue.Elem().FieldByName("T").Elem().FieldByName("Reporter").Interface().(*TestingReporter)
 
+	if config.longRunning && testing.Short() {
+		t.Skip("Skipping long-running test in -short mode.")
+	}
+
 	var (
 		testNames        []string
 		skippedTestNames []string
