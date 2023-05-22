@@ -46,6 +46,10 @@ func (this *T) Println(v ...any) {
 	this.Reporter.Helper()
 	_, _ = this.Write([]byte(fmt.Sprintln(v...)))
 }
+func (this *T) Log(v ...any) {
+	this.Reporter.Helper()
+	_, _ = this.Write([]byte(fmt.Sprint(v...)))
+}
 
 type TestingReporter struct{ *testing.T }
 
