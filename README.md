@@ -1,7 +1,6 @@
 # github.com/mdwhatcott/testing
 
 
-
 	package should // import "github.com/mdwhatcott/testing/should"
 	
 	Package should
@@ -137,6 +136,12 @@
 	    time.Time.Equal method for the details. This function defers to Equal to do
 	    the work.
 	
+	func HappenWithin(actual any, expected ...any) error
+	    HappenWithin ensures that the first time value happens within a specified
+	    duration of the other time value. The actual value should be a time.Time.
+	    The first expected value should be a time.Duration. The second expected
+	    value should be a time.Time.
+	
 	func HaveLength(actual any, expected ...any) error
 	    HaveLength uses reflection to verify that len(actual) == 0.
 	
@@ -162,7 +167,7 @@
 	    The methods provided by Options may be supplied to this function to tweak
 	    the execution.
 	
-	func So(t t, actual any, assertion Func, expected ...any)
+	func So(t *testing.T, actual any, assertion Func, expected ...any)
 	func StartWith(actual any, expected ...any) error
 	    StartWith verified that actual starts with expected[0]. The actual value may
 	    be an array, slice, or string.
@@ -174,19 +179,31 @@
 	
 	TYPES
 	
-	type Fmt struct{}
+	type CompositeReporter struct {
+		// Has unexported fields.
+	}
 	
-	func (Fmt) Error(a ...any)
+	func NewCompositeReporter(reporters ...Reporter) *CompositeReporter
 	
-	func (Fmt) Helper()
+	func (this *CompositeReporter) Helper()
+	
+	func (this *CompositeReporter) Report(err error)
+	
+	func (this *CompositeReporter) Write(p []byte) (n int, err error)
 	
 	type Func func(actual any, expected ...any) error
 	
-	type Log struct{}
+	type LogReporter struct {
+		// Has unexported fields.
+	}
 	
-	func (Log) Error(a ...any)
+	func NewLogReporter(logger *log.Logger) *LogReporter
 	
-	func (Log) Helper()
+	func (this LogReporter) Helper()
+	
+	func (this LogReporter) Report(err error)
+	
+	func (this LogReporter) Write(p []byte) (n int, err error)
 	
 	type Opt struct{}
 	
@@ -206,6 +223,10 @@
 	    suite should be treated as an integration test suite, avoiding parallelism
 	    and utilizing shared fixtures to allow reuse of potentially expensive
 	    resources.
+	
+	func (Opt) LongRunning() Option
+	    LongRunning signals to Run that the provided fixture is long-running and
+	    should be skipped entirely in the case that testing.Short() returns true.
 	
 	func (Opt) ParallelFixture() Option
 	    ParallelFixture signals to Run that the provided fixture instance can be
@@ -231,23 +252,42 @@
 	    Option is a function that modifies a config. See Options for provided
 	    behaviors.
 	
-	type T struct{ *testing.T }
-	    T embeds *testing.T and provides convenient hooks for making assertions and
-	    other operations.
+	type Reporter interface {
+		Helper()
+		Report(error)
+		io.Writer
+	}
+	
+	type T struct{ Reporter }
 	
 	func New(t *testing.T) *T
-	    New prepares a *T for use with the fixture passed to Run.
 	
-	func (this *T) FatalSo(actual any, assertion assertion, expected ...any) bool
-	    FatalSo is like So but in the event of an assertion failure it calls
-	    *testing.T.Fatal.
+	func Report(reporters ...Reporter) *T
 	
-	func (this *T) So(actual any, assertion assertion, expected ...any) bool
-	    So invokes the provided assertion with the provided args. In the event of an
-	    assertion failure it calls *testing.T.Error.
+	func (this *T) Log(v ...any)
 	
-	func (this *T) Write(p []byte) (n int, err error)
-	    Write implements io.Writer allowing for the suite to serve as a convenient
-	    log target, among other use cases.
+	func (this *T) Print(v ...any)
+	
+	func (this *T) Printf(f string, v ...any)
+	
+	func (this *T) Println(v ...any)
+	
+	func (this *T) So(actual any, assertion Func, expected ...any) (ok bool)
+	
+	type TestingReporter struct{ *testing.T }
+	
+	func NewTestingReporter(t *testing.T) *TestingReporter
+	
+	func (this *TestingReporter) Report(err error)
+	
+	func (this *TestingReporter) Write(p []byte) (n int, err error)
+	
+	type WriterReporter struct{ io.Writer }
+	
+	func NewWriterReporter(writer io.Writer) *WriterReporter
+	
+	func (this *WriterReporter) Helper()
+	
+	func (this *WriterReporter) Report(err error)
 	
 
