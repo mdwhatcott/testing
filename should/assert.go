@@ -9,13 +9,17 @@ import (
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"testing"
 	"time"
 )
 
 type Func func(actual any, expected ...any) error
 
-func So(t *testing.T, actual any, assertion Func, expected ...any) {
+type testingT interface {
+	Helper()
+	Error(...any)
+}
+
+func So(t testingT, actual any, assertion Func, expected ...any) {
 	t.Helper()
 	if err := assertion(actual, expected...); err != nil {
 		t.Error(err)
@@ -61,9 +65,6 @@ func stack() string {
 
 		}
 	}
-	if len(filtered) == 0 {
-		return ""
-	}
 	return "> " + strings.Join(filtered, "\n> ")
 }
 func readSourceCodeLine(fileLineRaw string) (string, bool) {
@@ -73,9 +74,7 @@ func readSourceCodeLine(fileLineRaw string) (string, bool) {
 	sourceCodeLines := strings.Split(string(sourceCode), "\n")
 	lineNumber, _ := strconv.Atoi(fileLine[1])
 	lineNumber--
-	if len(sourceCodeLines) <= lineNumber {
-		return "", false
-	}
+	lineNumber = max(len(sourceCodeLines)-1, lineNumber)
 	return sourceCodeLines[lineNumber], true
 }
 func wrap(inner error, format string, args ...any) error {

@@ -12,6 +12,27 @@ import (
 	"github.com/mdwhatcott/testing/should"
 )
 
+type fakeT struct {
+	errs []any
+}
+
+func (this *fakeT) Helper() {}
+func (this *fakeT) Error(a ...any) {
+	this.errs = a
+}
+
+func TestSoFailure(t *testing.T) {
+	fakeT := &fakeT{}
+	should.So(fakeT, 1, should.Equal, 2)
+	if len(fakeT.errs) != 1 {
+		t.Fatal("expected 1 err, got:", len(fakeT.errs))
+	}
+	err := fakeT.errs[0].(error)
+	if !errors.Is(err, should.ErrAssertionFailure) {
+		t.Error("expected assertion failure, got:", err)
+	}
+}
+
 type Assertion struct{ *testing.T }
 
 func NewAssertion(t *testing.T) *Assertion {
