@@ -120,6 +120,9 @@
 	     6. fixture.Teardown()
 	
 	func So(t testingT, actual any, assertion Func, expected ...any)
+	    So is the basic assertion mechanism in the general form: should.So(t, 1,
+	    should.Equal, 2)
+	
 	func WrapError(actual any, expected ...any) error
 	    WrapError uses errors.Is to verify that actual is an error value that wraps
 	    expected[0] (also an error value).
