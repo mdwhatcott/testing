@@ -7,7 +7,7 @@ import (
 )
 
 func TestGameFixture(t *testing.T) {
-	should.Run(&GameFixture{T: t}, should.Options.UnitTests())
+	should.Run(&GameFixture{T: t})
 }
 
 type GameFixture struct {
