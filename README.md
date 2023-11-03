@@ -1,6 +1,7 @@
 # github.com/mdwhatcott/testing
 
 
+
 	package should // import "github.com/mdwhatcott/testing/should"
 	
 	Package should
@@ -36,11 +37,11 @@
 	helpful:
 	
 	    func Test$NAME$Suite(t *testing.T) {
-	    	should.Run(&$NAME$Suite{T: should.New(t)}, should.Options.UnitTests())
+	    	should.Run(&$NAME$Suite{T: t}, should.Options.UnitTests())
 	    }
 	
 	    type $NAME$Suite struct {
-	    	*should.T
+	    	*testing.T
 	    }
 	
 	    func (this *$NAME$Suite) Setup() {
@@ -72,35 +73,15 @@
 	
 	FUNCTIONS
 	
-	func BeChronological(actual any, expected ...any) error
-	    BeChronological asserts whether actual is a []time.Time and whether the
-	    values are in chronological order.
-	
 	func BeEmpty(actual any, expected ...any) error
 	    BeEmpty uses reflection to verify that len(actual) == 0.
 	
 	func BeFalse(actual any, expected ...any) error
 	    BeFalse verifies that actual is the boolean false value.
 	
-	func BeGreaterThan(actual any, EXPECTED ...any) error
-	    BeGreaterThan verifies that actual is greater than expected. Both actual and
-	    expected must be strings or numeric in type.
-	
-	func BeGreaterThanOrEqualTo(actual any, expected ...any) error
-	    BeGreaterThanOrEqualTo verifies that actual is less than or equal to
-	    expected. Both actual and expected must be strings or numeric in type.
-	
 	func BeIn(actual any, expected ...any) error
 	    BeIn determines whether actual is a member of expected[0]. It defers to
 	    Contain.
-	
-	func BeLessThan(actual any, EXPECTED ...any) error
-	    BeLessThan verifies that actual is less than expected. Both actual and
-	    expected must be strings or numeric in type.
-	
-	func BeLessThanOrEqualTo(actual any, expected ...any) error
-	    BeLessThanOrEqualTo verifies that actual is less than or equal to expected.
-	    Both actual and expected must be strings or numeric in type.
 	
 	func BeNil(actual any, expected ...any) error
 	    BeNil verifies that actual is the nil value.
@@ -116,34 +97,10 @@
 	        member.
 	      - In the case of strings the expected value may be a rune or substring.
 	
-	func EndWith(actual any, expected ...any) error
-	    EndWith verifies that actual ends with expected[0]. The actual value may be
-	    an array, slice, or string.
-	
 	func Equal(actual any, EXPECTED ...any) error
 	    Equal verifies that the actual value is equal to the expected value. It uses
 	    reflect.DeepEqual in most cases, but also compares numerics regardless of
 	    specific type and compares time.Time values using the time.Equal method.
-	
-	func HappenAfter(actual any, expected ...any) error
-	    HappenAfter ensures that the first time value happens after the second.
-	
-	func HappenBefore(actual any, expected ...any) error
-	    HappenBefore ensures that the first time value happens before the second.
-	
-	func HappenOn(actual any, expected ...any) error
-	    HappenOn ensures that two time values happen at the same instant. See the
-	    time.Time.Equal method for the details. This function defers to Equal to do
-	    the work.
-	
-	func HappenWithin(actual any, expected ...any) error
-	    HappenWithin ensures that the first time value happens within a specified
-	    duration of the other time value. The actual value should be a time.Time.
-	    The first expected value should be a time.Duration. The second expected
-	    value should be a time.Time.
-	
-	func HaveLength(actual any, expected ...any) error
-	    HaveLength uses reflection to verify that len(actual) == 0.
 	
 	func Panic(actual any, expected ...any) (err error)
 	    Panic invokes the func() provided as actual and recovers from any panic.
@@ -155,23 +112,17 @@
 	    *suite.T. Assuming a fixture struct with test methods 'Test1' and 'Test2'
 	    execution would proceed as follows:
 	
-	     1. fixture.SetupSuite()
 	     2. fixture.Setup()
 	     3. fixture.Test1()
 	     4. fixture.Teardown()
 	     5. fixture.Setup()
 	     6. fixture.Test2()
 	     7. fixture.Teardown()
-	     8. fixture.TeardownSuite()
 	
 	    The methods provided by Options may be supplied to this function to tweak
 	    the execution.
 	
-	func So(t *testing.T, actual any, assertion Func, expected ...any)
-	func StartWith(actual any, expected ...any) error
-	    StartWith verified that actual starts with expected[0]. The actual value may
-	    be an array, slice, or string.
-	
+	func So(t testingT, actual any, assertion Func, expected ...any)
 	func WrapError(actual any, expected ...any) error
 	    WrapError uses errors.Is to verify that actual is an error value that wraps
 	    expected[0] (also an error value).
@@ -179,31 +130,7 @@
 	
 	TYPES
 	
-	type CompositeReporter struct {
-		// Has unexported fields.
-	}
-	
-	func NewCompositeReporter(reporters ...Reporter) *CompositeReporter
-	
-	func (this *CompositeReporter) Helper()
-	
-	func (this *CompositeReporter) Report(err error)
-	
-	func (this *CompositeReporter) Write(p []byte) (n int, err error)
-	
 	type Func func(actual any, expected ...any) error
-	
-	type LogReporter struct {
-		// Has unexported fields.
-	}
-	
-	func NewLogReporter(logger *log.Logger) *LogReporter
-	
-	func (this LogReporter) Helper()
-	
-	func (this LogReporter) Report(err error)
-	
-	func (this LogReporter) Write(p []byte) (n int, err error)
 	
 	type Opt struct{}
 	
@@ -223,10 +150,6 @@
 	    suite should be treated as an integration test suite, avoiding parallelism
 	    and utilizing shared fixtures to allow reuse of potentially expensive
 	    resources.
-	
-	func (Opt) LongRunning() Option
-	    LongRunning signals to Run that the provided fixture is long-running and
-	    should be skipped entirely in the case that testing.Short() returns true.
 	
 	func (Opt) ParallelFixture() Option
 	    ParallelFixture signals to Run that the provided fixture instance can be
@@ -251,43 +174,5 @@
 	type Option func(*config)
 	    Option is a function that modifies a config. See Options for provided
 	    behaviors.
-	
-	type Reporter interface {
-		Helper()
-		Report(error)
-		io.Writer
-	}
-	
-	type T struct{ Reporter }
-	
-	func New(t *testing.T) *T
-	
-	func Report(reporters ...Reporter) *T
-	
-	func (this *T) Log(v ...any)
-	
-	func (this *T) Print(v ...any)
-	
-	func (this *T) Printf(f string, v ...any)
-	
-	func (this *T) Println(v ...any)
-	
-	func (this *T) So(actual any, assertion Func, expected ...any) (ok bool)
-	
-	type TestingReporter struct{ *testing.T }
-	
-	func NewTestingReporter(t *testing.T) *TestingReporter
-	
-	func (this *TestingReporter) Report(err error)
-	
-	func (this *TestingReporter) Write(p []byte) (n int, err error)
-	
-	type WriterReporter struct{ io.Writer }
-	
-	func NewWriterReporter(writer io.Writer) *WriterReporter
-	
-	func (this *WriterReporter) Helper()
-	
-	func (this *WriterReporter) Report(err error)
 	
 
