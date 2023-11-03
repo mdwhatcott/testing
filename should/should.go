@@ -31,11 +31,11 @@ For those using an IDE by JetBrains, you may
 find the following "live template" helpful:
 
 	func Test$NAME$Suite(t *testing.T) {
-		should.Run(&$NAME$Suite{T: t})
+		should.Run(&$NAME$Suite{T: should.New(t)})
 	}
 
 	type $NAME$Suite struct {
-		*testing.T
+		*should.T
 	}
 
 	func (this *$NAME$Suite) Setup() {
@@ -67,10 +67,20 @@ import (
 	"time"
 )
 
+// T is wrapper over *testing.T.
+type T struct{ *testing.T }
+
+func New(t *testing.T) *T { return &T{T: t} }
+
+func (this *T) So(actual any, assertion Func, expected ...any) {
+	this.Helper()
+	So(this, actual, assertion, expected...)
+}
+
 // Run accepts a fixture with Test* methods and
 // optional setup/teardown methods and executes
 // the suite. Fixtures must be struct types which
-// embed a *testing.T. Assuming a fixture struct
+// embed a *should.T. Assuming a fixture struct
 // with test methods 'Test1' and 'Test2' execution
 // would proceed as follows:
 //
@@ -83,7 +93,7 @@ import (
 func Run(fixture any) {
 	fixtureValue := reflect.ValueOf(fixture)
 	fixtureType := reflect.TypeOf(fixture)
-	t := fixtureValue.Elem().FieldByName("T").Interface().(*testing.T)
+	t := fixtureValue.Elem().FieldByName("T").Interface().(*T)
 
 	var (
 		testNames        []string
@@ -111,7 +121,7 @@ func Run(fixture any) {
 }
 
 type testCase struct {
-	*testing.T
+	*T
 	name         string
 	manualSkip   bool
 	fixtureType  reflect.Type
@@ -133,7 +143,7 @@ func (this testCase) skipFunc(message string) func(*testing.T) {
 func (this testCase) runTest(t *testing.T) {
 	fixtureValue := this.fixtureValue
 	fixtureValue = reflect.New(this.fixtureType.Elem())
-	fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(t))
+	fixtureValue.Elem().FieldByName("T").Set(reflect.ValueOf(New(t)))
 
 	setup, hasSetup := fixtureValue.Interface().(setupTest)
 	if hasSetup {

@@ -37,11 +37,11 @@
 	helpful:
 	
 	    func Test$NAME$Suite(t *testing.T) {
-	    	should.Run(&$NAME$Suite{T: t})
+	    	should.Run(&$NAME$Suite{T: should.New(t)})
 	    }
 	
 	    type $NAME$Suite struct {
-	    	*testing.T
+	    	*should.T
 	    }
 	
 	    func (this *$NAME$Suite) Setup() {
@@ -109,7 +109,7 @@
 	func Run(fixture any)
 	    Run accepts a fixture with Test* methods and optional setup/teardown
 	    methods and executes the suite. Fixtures must be struct types which embed a
-	    *testing.T. Assuming a fixture struct with test methods 'Test1' and 'Test2'
+	    *should.T. Assuming a fixture struct with test methods 'Test1' and 'Test2'
 	    execution would proceed as follows:
 	
 	     1. fixture.Setup()
@@ -131,5 +131,12 @@
 	TYPES
 	
 	type Func func(actual any, expected ...any) error
+	
+	type T struct{ *testing.T }
+	    T is wrapper over *testing.T.
+	
+	func New(t *testing.T) *T
+	
+	func (this *T) So(actual any, assertion Func, expected ...any)
 	
 

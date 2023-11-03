@@ -20,7 +20,7 @@ var (
 )
 
 func TestRunSuite(t *testing.T) {
-	should.Run(&Suite{T: t})
+	should.Run(&Suite{T: should.New(t)})
 
 	mutex.Lock()
 	defer mutex.Unlock()
@@ -30,11 +30,11 @@ func TestRunSuite(t *testing.T) {
 	})
 }
 
-type Suite struct{ *testing.T }
+type Suite struct{ *should.T }
 
 func (this *Suite) Setup()     { this.record("Setup") }
 func (this *Suite) Teardown()  { this.record("Teardown") }
-func (this *Suite) Test1()     { this.record("Test1") }
+func (this *Suite) Test1()     { this.record("Test1"); this.So(1, should.Equal, 1) }
 func (this *Suite) SkipTest2() { this.record("SkipTest2") }
 func (this *Suite) Test3()     { this.record("Test3") }
 
@@ -48,10 +48,8 @@ type fakeT struct {
 	errs []any
 }
 
-func (this *fakeT) Helper() {}
-func (this *fakeT) Error(a ...any) {
-	this.errs = a
-}
+func (this *fakeT) Helper()        {}
+func (this *fakeT) Error(a ...any) { this.errs = a }
 
 func TestSoFailure(t *testing.T) {
 	fakeT := &fakeT{}

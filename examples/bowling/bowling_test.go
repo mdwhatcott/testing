@@ -8,11 +8,11 @@ import (
 
 func TestGameFixture(t *testing.T) {
 	t.Parallel()
-	should.Run(&GameFixture{T: t})
+	should.Run(&GameFixture{T: should.New(t)})
 }
 
 type GameFixture struct {
-	*testing.T
+	*should.T
 	game *game
 }
 
@@ -22,7 +22,7 @@ func (this *GameFixture) Setup() {
 }
 func (this *GameFixture) assertScore(expected int) {
 	this.Helper()
-	should.So(this, this.game.calculateScore(), should.Equal, expected)
+	this.So(this.game.calculateScore(), should.Equal, expected)
 }
 func (this *GameFixture) rollMany(times, pins int) {
 	for x := 0; x < times; x++ {
