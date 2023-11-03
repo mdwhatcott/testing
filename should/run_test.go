@@ -57,7 +57,7 @@ func TestSkip(t *testing.T) {
 type Suite03 struct{ *testing.T }
 
 func (this *Suite03) SkipTestThatFails() {
-	should.So(this.T, 1, should.Equal, 2)
+	should.So(this, 1, should.Equal, 2)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
