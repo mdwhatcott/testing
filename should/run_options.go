@@ -1,7 +1,6 @@
 package should
 
 type config struct {
-	longRunning     bool
 	freshFixture    bool
 	parallelFixture bool
 	parallelTests   bool
@@ -17,16 +16,6 @@ type Opt struct{}
 // to the option functions provided by
 // this package.
 var Options Opt
-
-// LongRunning signals to Run that the
-// provided fixture is long-running and
-// should be skipped entirely in the case
-// that testing.Short() returns true.
-func (Opt) LongRunning() Option {
-	return func(c *config) {
-		c.longRunning = true
-	}
-}
 
 // FreshFixture signals to Run that the
 // new instances of the provided fixture
@@ -103,6 +92,5 @@ func (Opt) UnitTests() Option {
 func (Opt) IntegrationTests() Option {
 	return func(c *config) {
 		Options.SharedFixture()(c)
-		Options.LongRunning()(c)
 	}
 }

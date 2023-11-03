@@ -7,20 +7,18 @@ import (
 )
 
 func TestSuiteWithSetupsAndTeardownsSkippedEntirelyIfAllTestsSkipped(t *testing.T) {
-	fixture := &Suite06{T: should.New(t)}
+	fixture := &Suite06{T: t}
 
 	should.Run(fixture, should.Options.SharedFixture())
 
-	fixture.So(fixture.events, should.BeNil)
+	should.So(t, fixture.events, should.BeNil)
 }
 
 type Suite06 struct {
-	*should.T
+	*testing.T
 	events []string
 }
 
-func (this *Suite06) SetupSuite()         { this.record("SetupSuite") }
-func (this *Suite06) TeardownSuite()      { this.record("TeardownSuite") }
 func (this *Suite06) Setup()              { this.record("Setup") }
 func (this *Suite06) Teardown()           { this.record("Teardown") }
 func (this *Suite06) SkipTest()           { this.record("SkipTest") }

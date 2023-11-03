@@ -7,17 +7,17 @@ import (
 )
 
 func TestFreshFixture(t *testing.T) {
-	fixture := &Suite02{T: should.New(t)}
+	fixture := &Suite02{T: t}
 	should.Run(fixture, should.Options.UnitTests())
-	fixture.So(fixture.counter, should.Equal, 0)
+	should.So(t, fixture.counter, should.Equal, 0)
 }
 
 type Suite02 struct {
-	*should.T
+	*testing.T
 	counter int
 }
 
 func (this *Suite02) TestSomething() {
-	_, _ = this.Write([]byte("*** this should appear in the test log!"))
+	this.T.Log("*** this should appear in the test log!")
 	this.counter++
 }

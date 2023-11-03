@@ -8,5 +8,4 @@ import (
 
 func TestSo(t *testing.T) {
 	should.So(t, 1, should.Equal, 1)
-	should.New(t).So(1, should.Equal, 1)
 }

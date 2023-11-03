@@ -7,16 +7,13 @@ import (
 )
 
 func TestSkip(t *testing.T) {
-	fixture := &Suite03{T: should.New(t)}
+	fixture := &Suite03{T: t}
 	should.Run(fixture)
-	fixture.So(t.Failed(), should.BeFalse)
+	should.So(t, t.Failed(), should.BeFalse)
 }
 
-type Suite03 struct{ *should.T }
+type Suite03 struct{ *testing.T }
 
 func (this *Suite03) SkipTestThatFails() {
-	this.So(1, should.Equal, 2)
-}
-func (this *Suite03) SkipLongTestThatFails() {
-	this.So(1, should.Equal, 2)
+	should.So(this.T, 1, should.Equal, 2)
 }

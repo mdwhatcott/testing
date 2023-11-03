@@ -7,26 +7,22 @@ import (
 )
 
 func TestSuiteWithSetupsAndTeardowns(t *testing.T) {
-	fixture := &Suite01{T: should.New(t)}
+	fixture := &Suite01{T: t}
 
 	should.Run(fixture, should.Options.IntegrationTests())
 
-	fixture.So(fixture.events, should.Equal, []string{
-		"SetupSuite",
+	should.So(t, fixture.events, should.Equal, []string{
 		"Setup",
 		"Test",
 		"Teardown",
-		"TeardownSuite",
 	})
 }
 
 type Suite01 struct {
-	*should.T
+	*testing.T
 	events []string
 }
 
-func (this *Suite01) SetupSuite()         { this.record("SetupSuite") }
-func (this *Suite01) TeardownSuite()      { this.record("TeardownSuite") }
 func (this *Suite01) Setup()              { this.record("Setup") }
 func (this *Suite01) Teardown()           { this.record("Teardown") }
 func (this *Suite01) Test()               { this.record("Test") }

@@ -7,11 +7,11 @@ import (
 )
 
 func TestGameFixture(t *testing.T) {
-	should.Run(&GameFixture{T: should.New(t)}, should.Options.UnitTests())
+	should.Run(&GameFixture{T: t}, should.Options.UnitTests())
 }
 
 type GameFixture struct {
-	*should.T
+	*testing.T
 	game *game
 }
 
@@ -19,7 +19,8 @@ func (this *GameFixture) Setup() {
 	this.game = new(game)
 }
 func (this *GameFixture) assertScore(expected int) {
-	this.So(this.game.calculateScore(), should.Equal, expected)
+	this.Helper()
+	should.So(this.T, this.game.calculateScore(), should.Equal, expected)
 }
 func (this *GameFixture) rollMany(times, pins int) {
 	for x := 0; x < times; x++ {

@@ -7,26 +7,22 @@ import (
 )
 
 func TestSuiteWithSkippedTests(t *testing.T) {
-	fixture := &Suite07{T: should.New(t)}
+	fixture := &Suite07{T: t}
 
 	should.Run(fixture, should.Options.SharedFixture())
 
-	fixture.So(fixture.events, should.Equal, []string{
-		"SetupSuite",
+	should.So(t, fixture.events, should.Equal, []string{
 		"Setup",
 		"Test1",
 		"Teardown",
-		"TeardownSuite",
 	})
 }
 
 type Suite07 struct {
-	*should.T
+	*testing.T
 	events []string
 }
 
-func (this *Suite07) SetupSuite()         { this.record("SetupSuite") }
-func (this *Suite07) TeardownSuite()      { this.record("TeardownSuite") }
 func (this *Suite07) Setup()              { this.record("Setup") }
 func (this *Suite07) Teardown()           { this.record("Teardown") }
 func (this *Suite07) Test1()              { this.record("Test1") }
