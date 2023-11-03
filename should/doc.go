@@ -31,7 +31,7 @@ For those using an IDE by JetBrains, you may
 find the following "live template" helpful:
 
 	func Test$NAME$Suite(t *testing.T) {
-		should.Run(&$NAME$Suite{T: t}, should.Options.UnitTests())
+		should.Run(&$NAME$Suite{T: t})
 	}
 
 	type $NAME$Suite struct {
