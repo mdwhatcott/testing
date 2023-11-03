@@ -1,8 +1,10 @@
 #!/usr/bin/make -f
 
-test:
-	@go version && go fmt ./... && go mod tidy && \
-	go test -cover -timeout=1s -race -count=1 ./...
+test: fmt
+	@go test -cover -short -timeout=1s -race -count=1 ./...
+
+fmt:
+	@go version && go fmt ./... && go mod tidy
 
 onefile:
 	go install github.com/mdwhatcott/go-mergepkg@latest && \
