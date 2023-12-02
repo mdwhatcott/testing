@@ -17,10 +17,13 @@ type Reporter interface {
 	io.Writer
 }
 
-type T struct{ Reporter }
+type T struct {
+	Reporter
+	name string
+}
 
 func New(t *testing.T) *T {
-	return &T{Reporter: NewTestingReporter(t)}
+	return &T{Reporter: NewTestingReporter(t), name: t.Name()}
 }
 func Report(reporters ...Reporter) *T {
 	if len(reporters) == 0 {
@@ -28,6 +31,7 @@ func Report(reporters ...Reporter) *T {
 	}
 	return &T{Reporter: NewCompositeReporter(reporters...)}
 }
+func (this *T) Name() string { return this.name }
 func (this *T) So(actual any, assertion Func, expected ...any) (ok bool) {
 	this.Helper()
 	err := assertion(actual, expected...)
