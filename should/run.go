@@ -34,7 +34,7 @@ func Run(fixture any, options ...Option) {
 
 	fixtureValue := reflect.ValueOf(fixture)
 	fixtureType := reflect.TypeOf(fixture)
-	t := fixtureValue.Elem().FieldByName("T").Elem().FieldByName("Reporter").Interface().(*TestingReporter)
+	t := fixtureValue.Elem().FieldByName("T").Elem().FieldByName("T").Interface().(*testing.T)
 
 	if config.longRunning && testing.Short() {
 		t.Skip("Skipping long-running test in -short mode.")
@@ -103,7 +103,7 @@ func Run(fixture any, options ...Option) {
 }
 
 type testCase struct {
-	t            *TestingReporter
+	t            *testing.T
 	name         string
 	config       *config
 	manualSkip   bool

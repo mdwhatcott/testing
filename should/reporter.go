@@ -1,128 +1,106 @@
 package should
 
 import (
-	"fmt"
+	"errors"
 	"io"
 	"log"
-	"os"
-	"strings"
 	"testing"
 )
 
-type Func func(actual any, expected ...any) error
+// TODO (future): remove upon moving to v2 module version
 
+// Deprecated
 type Reporter interface {
 	Helper()
 	Report(error)
 	io.Writer
 }
 
-type T struct {
-	Reporter
-	name string
-}
-
-func New(t *testing.T) *T {
-	return &T{Reporter: NewTestingReporter(t), name: t.Name()}
-}
+// Deprecated
 func Report(reporters ...Reporter) *T {
-	if len(reporters) == 0 {
-		reporters = append(reporters, NewWriterReporter(os.Stdout))
-	}
-	return &T{Reporter: NewCompositeReporter(reporters...)}
-}
-func (this *T) Name() string { return this.name }
-func (this *T) So(actual any, assertion Func, expected ...any) (ok bool) {
-	this.Helper()
-	err := assertion(actual, expected...)
-	this.Reporter.Report(err)
-	return err == nil
-}
-func (this *T) Print(v ...any) {
-	this.Reporter.Helper()
-	_, _ = this.Write([]byte(fmt.Sprint(v...)))
-}
-func (this *T) Printf(f string, v ...any) {
-	this.Reporter.Helper()
-	_, _ = this.Write([]byte(fmt.Sprintf(f, v...)))
-}
-func (this *T) Println(v ...any) {
-	this.Reporter.Helper()
-	_, _ = this.Write([]byte(fmt.Sprintln(v...)))
-}
-func (this *T) Log(v ...any) {
-	this.Reporter.Helper()
-	_, _ = this.Write([]byte(fmt.Sprint(v...)))
+	panic(errNotSupported)
 }
 
+// Deprecated
 type TestingReporter struct{ *testing.T }
 
-func NewTestingReporter(t *testing.T) *TestingReporter {
-	return &TestingReporter{T: t}
-}
-func (this *TestingReporter) Report(err error) {
-	if err != nil {
-		this.Helper()
-		this.Error(err)
-	}
-}
-func (this *TestingReporter) Write(p []byte) (n int, err error) {
-	this.Helper()
-	this.Log(strings.TrimSpace(string(p)))
-	return len(p), nil
+// Deprecated
+func NewTestingReporter(*testing.T) *TestingReporter {
+	panic(errNotSupported)
 }
 
+// Deprecated
+func (this *TestingReporter) Report(error) {
+	panic(errNotSupported)
+}
+
+// Deprecated
+func (this *TestingReporter) Write([]byte) (n int, err error) {
+	panic(errNotSupported)
+}
+
+// Deprecated
 type CompositeReporter struct{ reporters []Reporter }
 
+// Deprecated
 func (this *CompositeReporter) Helper() {
-	for _, reporter := range this.reporters {
-		reporter.Helper()
-	}
+	panic(errNotSupported)
 }
 
+// Deprecated
 func NewCompositeReporter(reporters ...Reporter) *CompositeReporter {
-	return &CompositeReporter{reporters: reporters}
-}
-func (this *CompositeReporter) Report(err error) {
-	for _, reporter := range this.reporters {
-		reporter.Report(err)
-	}
-}
-func (this *CompositeReporter) Write(p []byte) (n int, err error) {
-	for _, reporter := range this.reporters {
-		n, err = reporter.Write(p)
-		if err != nil {
-			break
-		}
-	}
-	return n, err
+	panic(errNotSupported)
 }
 
+// Deprecated
+func (this *CompositeReporter) Report(err error) {
+	panic(errNotSupported)
+}
+
+// Deprecated
+func (this *CompositeReporter) Write(p []byte) (n int, err error) {
+	panic(errNotSupported)
+}
+
+// Deprecated
 type WriterReporter struct{ io.Writer }
 
-func (this *WriterReporter) Helper() {}
-
-func NewWriterReporter(writer io.Writer) *WriterReporter {
-	return &WriterReporter{Writer: writer}
+// Deprecated
+func (this *WriterReporter) Helper() {
+	panic(errNotSupported)
 }
+
+// Deprecated
+func NewWriterReporter(io.Writer) *WriterReporter {
+	panic(errNotSupported)
+}
+
+// Deprecated
 func (this *WriterReporter) Report(err error) {
-	if err != nil {
-		_, _ = fmt.Fprintln(this, err.Error())
-	}
+	panic(errNotSupported)
 }
 
+// Deprecated
 type LogReporter struct{ logger *log.Logger }
 
+// Deprecated
 func NewLogReporter(logger *log.Logger) *LogReporter {
-	return &LogReporter{logger: logger}
+	panic(errNotSupported)
 }
+
+// Deprecated
 func (this LogReporter) Report(err error) {
-	if err != nil {
-		this.logger.Print(err.Error())
-	}
+	panic(errNotSupported)
 }
+
+// Deprecated
 func (this LogReporter) Write(p []byte) (n int, err error) {
-	this.logger.Print(strings.TrimSpace(string(p)))
-	return len(p), nil
+	panic(errNotSupported)
 }
-func (this LogReporter) Helper() {}
+
+// Deprecated
+func (this LogReporter) Helper() {
+	panic(errNotSupported)
+}
+
+var errNotSupported = errors.New("no longer supported")
