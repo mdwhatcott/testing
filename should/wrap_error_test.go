@@ -16,6 +16,7 @@ func TestShouldWrapError(t *testing.T) {
 
 	assert.TypeMismatch(inner, should.WrapError, 42)
 	assert.TypeMismatch(42, should.WrapError, inner)
+	assert.TypeMismatch(nil, should.WrapError, inner)
 
 	assert.Pass(outer, should.WrapError, inner)
 	assert.Fail(inner, should.WrapError, outer)

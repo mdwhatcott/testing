@@ -39,7 +39,7 @@ func WrapError(actual any, expected ...any) error {
 
 func errTypeMismatch(v any) error {
 	return fmt.Errorf(
-		"%w: got %s, want error",
+		"%w: got %v, want error",
 		ErrTypeMismatch,
 		reflect.TypeOf(v),
 	)
